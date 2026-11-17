@@ -1,0 +1,98 @@
+import { listInvoices, getSetting } from "@/lib/db";
+import { STEPS, daysLate, euros } from "@/lib/reminders";
+import { addInvoice, deleteInvoice, markPaid, saveSettings, sendNow } from "./actions";
+
+export const dynamic = "force-dynamic";
+
+function Status({ status, late, sent }: { status: string; late: number; sent: number }) {
+  if (status === "paid") return <span className="badge ok">Payée</span>;
+  if (late <= 0) return <span className="badge">À venir · J{late === 0 ? "" : late}</span>;
+  return (
+    <span className="badge late">
+      {late} j de retard{sent ? ` · ${sent} relance${sent > 1 ? "s" : ""}` : ""}
+    </span>
+  );
+}
+
+export default function Home() {
+  const invoices = listInvoices();
+  const pending = invoices.filter((i) => i.status === "pending");
+  const overdue = pending.filter((i) => daysLate(i.due_date) > 0);
+  const paid = invoices.filter((i) => i.status === "paid");
+  const sum = (a: typeof invoices) => euros(a.reduce((s, i) => s + i.amount_cents, 0));
+  const today = new Date().toISOString().slice(0, 10);
+
+  return (
+    <main>
+      <header>
+        <h1>Relances</h1>
+        <p className="muted">Vos factures impayées relancées automatiquement à J+1, J+7 et J+15.</p>
+      </header>
+
+      <section className="stats">
+        <div className="stat"><span>À encaisser</span><strong>{sum(pending)}</strong></div>
+        <div className="stat warn"><span>En retard</span><strong>{sum(overdue)}</strong><em>{overdue.length} facture(s)</em></div>
+        <div className="stat good"><span>Récupéré</span><strong>{sum(paid)}</strong></div>
+      </section>
+
+      <section className="card">
+        <h2>Nouvelle facture</h2>
+        <form action={addInvoice} className="grid">
+          <input name="number" placeholder="N° facture (ex. F-2026-042)" required />
+          <input name="client_name" placeholder="Nom du client" required />
+          <input name="client_email" type="email" placeholder="E-mail du client" required />
+          <input name="amount" inputMode="decimal" placeholder="Montant TTC (€)" required />
+          <input name="due_date" type="date" defaultValue={today} required />
+          <button type="submit">Ajouter</button>
+        </form>
+      </section>
+
+      <section className="card">
+        <div className="row">
+          <h2>Factures</h2>
+          <form action={sendNow}><button className="secondary">Envoyer les relances dues maintenant</button></form>
+        </div>
+        {invoices.length === 0 ? (
+          <p className="muted">Aucune facture pour l&apos;instant. Ajoutez-en une ci-dessus.</p>
+        ) : (
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr><th>N°</th><th>Client</th><th className="num">Montant</th><th>Échéance</th><th>Statut</th><th></th></tr>
+              </thead>
+              <tbody>
+                {invoices.map((i) => (
+                  <tr key={i.id} className={i.status === "paid" ? "dim" : ""}>
+                    <td>{i.number}</td>
+                    <td>{i.client_name}<div className="muted small">{i.client_email}</div></td>
+                    <td className="num">{euros(i.amount_cents)}</td>
+                    <td>{new Date(i.due_date + "T00:00:00").toLocaleDateString("fr-FR")}</td>
+                    <td><Status status={i.status} late={daysLate(i.due_date)} sent={i.reminders_sent} /></td>
+                    <td><div className="actions">
+                      {i.status === "pending" && (
+                        <form action={markPaid}><input type="hidden" name="id" value={i.id} /><button className="small">Payée ✓</button></form>
+                      )}
+                      <form action={deleteInvoice}><input type="hidden" name="id" value={i.id} /><button className="small ghost" title="Supprimer">✕</button></form>
+                    </div></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      <section className="card">
+        <h2>Paramètres</h2>
+        <form action={saveSettings} className="grid">
+          <input name="company_name" placeholder="Nom de votre entreprise (signature)" defaultValue={getSetting("company_name")} />
+          <input name="iban" placeholder="IBAN (affiché dans les relances)" defaultValue={getSetting("iban")} />
+          <button type="submit" className="secondary">Enregistrer</button>
+        </form>
+        <p className="muted small">
+          Scénario : {STEPS.map((s) => `${s.label} (J+${s.daysAfterDue})`).join(" → ")}
+        </p>
+      </section>
+    </main>
+  );
+}
