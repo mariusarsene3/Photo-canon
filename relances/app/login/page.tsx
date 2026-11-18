@@ -19,6 +19,11 @@ function BrandPanel() {
           <span>Récupéré ce mois-ci</span>
           <strong>4 930 €</strong>
           <div className="auth-mock-bar"><i /></div>
+          <ul className="auth-mock-list">
+            <li><b>Boulangerie Dupont</b><em>1 250 €</em><i className="ok">Payée</i></li>
+            <li><b>SARL Leroy</b><em>480 €</em><i>Relance envoyée</i></li>
+            <li><b>Garage Bernard</b><em>3 200 €</em><i className="late">Dernier avis</i></li>
+          </ul>
         </div>
         <div className="auth-mock-toast"><b>✓</b> Boulangerie Dupont a payé 1 250 €</div>
       </div>
@@ -28,6 +33,22 @@ function BrandPanel() {
         <li>Données hébergées en Europe</li>
       </ul>
     </aside>
+  );
+}
+
+/** Version compacte du panneau de marque, en haut de l'écran sur téléphone. */
+function MobileBrand() {
+  return (
+    <div className="auth-mbrand" aria-hidden>
+      <Link href="/" className="auth-logo">{BRAND.name}</Link>
+      <p className="auth-mbrand-title">Vos factures impayées, relancées automatiquement.</p>
+      <div className="auth-mock-card">
+        <span>Récupéré ce mois-ci</span>
+        <strong>4 930 €</strong>
+        <div className="auth-mock-bar"><i /></div>
+      </div>
+      <div className="auth-mock-toast"><b>✓</b> Boulangerie Dupont a payé 1 250 €</div>
+    </div>
   );
 }
 
@@ -49,7 +70,7 @@ export default async function LoginPage({
     <div className="auth-wrap">
       <BrandPanel />
       <main className="auth-main">
-        <Link href="/" className="auth-logo auth-logo-mobile">{BRAND.name}</Link>
+        <MobileBrand />
         <div className="auth-box">
           <h1>{title}</h1>
           <p className="muted">{sub}</p>
@@ -90,6 +111,12 @@ export default async function LoginPage({
             </form>
           )}
 
+          <ul className="auth-trust">
+            <li>{BRAND.trialDays} jours gratuits, sans carte bancaire</li>
+            <li>Relances signées à votre nom</li>
+            <li>Données hébergées en Europe</li>
+          </ul>
+
           <p className="auth-switch">
             {view === "signup" ? (
               <>Déjà un compte ? <Link href="/login">Se connecter</Link></>
@@ -100,6 +127,11 @@ export default async function LoginPage({
             )}
           </p>
         </div>
+        <nav className="auth-legal" aria-label="Informations légales">
+          <Link href="/cgv">CGV</Link>
+          <Link href="/confidentialite">Confidentialité</Link>
+          <Link href="/mentions-legales">Mentions légales</Link>
+        </nav>
       </main>
     </div>
   );
