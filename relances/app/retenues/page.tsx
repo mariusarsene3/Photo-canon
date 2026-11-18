@@ -59,23 +59,23 @@ export default async function Retenues({ searchParams }: { searchParams: Promise
           <section className="card">
             <h2>Ajouter une retenue</h2>
             <form action={addGuarantee} className="grid">
-              <input name="site" placeholder="Chantier (ex. Rénovation cuisine, 12 rue…)" required />
-              <input name="client_name" placeholder="Client (maître d'ouvrage)" required />
+              <input name="site" placeholder="Chantier" required />
+              <input name="client_name" placeholder="Client" required />
               <input name="client_email" type="email" placeholder="E-mail du client" />
-              <input name="contract_amount" inputMode="decimal" placeholder="Montant des travaux (€) — facultatif" />
-              <input name="amount" inputMode="decimal" placeholder="Montant retenu (€) — sinon 5 %" />
+              <input name="contract_amount" inputMode="decimal" placeholder="Montant des travaux (€)" />
+              <input name="amount" inputMode="decimal" placeholder="Montant retenu (€)" />
               <label className="field-inline">
                 <span className="muted small">Date de réception des travaux</span>
                 <input name="reception_date" type="date" max={today} required />
               </label>
               <select name="kind" defaultValue="retenue" aria-label="Type de garantie">
-                <option value="retenue">Somme retenue par le client</option>
+                <option value="retenue">Somme retenue</option>
                 <option value="caution">Caution bancaire</option>
               </select>
               <SubmitButton pending="Ajout…">Ajouter</SubmitButton>
             </form>
             <p className="muted small">
-              Indiquez le montant des travaux ou le montant retenu : sans montant retenu, {BRAND.name} calcule 5 %.
+              Indiquez le montant des travaux ou le montant retenu (sinon {BRAND.name} calcule 5 % du montant des travaux). Le client est le maître d&apos;ouvrage.
             </p>
           </section>
 
