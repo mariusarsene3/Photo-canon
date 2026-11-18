@@ -17,6 +17,11 @@ export const LEGAL = {
   editorVat: "", // facultatif : n° de TVA intracommunautaire (vide si franchise en base de TVA)
   contactEmail: "", // TODO : e-mail de contact (aussi utilisé pour les demandes RGPD)
   publicationDirector: "", // TODO : en général, le nom de l'éditeur
+  // TVA : en micro-entreprise sous le seuil, mettre « TVA non applicable, art. 293 B du CGI ».
+  // Sinon : « TVA au taux de 20 % en sus ».
+  vatMention: "", // TODO
+  // Tribunal compétent en cas de litige entre professionnels (en général, celui du siège de l'éditeur).
+  court: "", // TODO : ex. « Tribunal de commerce de Lyon »
 
   // Hébergement du site
   host: {

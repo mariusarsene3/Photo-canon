@@ -125,6 +125,7 @@ export function Landing() {
         <span className="lp-brand">{BRAND.name}</span>
         <span className="lp-footer-links">
           <Link href="/outils">Outils gratuits</Link>
+          <Link href="/cgv">CGV</Link>
           <Link href="/mentions-legales">Mentions légales</Link>
           <Link href="/confidentialite">Confidentialité</Link>
           <span>© {new Date().getFullYear()}</span>

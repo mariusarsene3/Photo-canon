@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/outils/lettre-relance", priority: 0.9 },
     { path: "/outils/mise-en-demeure", priority: 0.9 },
     { path: "/outils/calcul-penalites", priority: 0.9 },
+    { path: "/cgv", priority: 0.2 },
     { path: "/mentions-legales", priority: 0.2 },
     { path: "/confidentialite", priority: 0.2 },
   ];
