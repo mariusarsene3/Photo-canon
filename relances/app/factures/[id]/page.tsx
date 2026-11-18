@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toast } from "../../toast";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -81,7 +82,7 @@ export default async function InvoicePage({
         </div>
       </div>
 
-      {ok && <p className="alert ok">{ok}</p>}
+      <Toast message={ok} />
       {err && <p className="alert err">{err}</p>}
 
       <div className="inv-actions">

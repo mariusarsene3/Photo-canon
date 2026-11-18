@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Toast } from "./toast";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND } from "@/lib/brand";
 import { getMyAccess } from "@/lib/billing";
@@ -9,6 +10,8 @@ import { Landing } from "./landing";
 import { AppShell } from "./app-shell";
 import { InvoiceList, type Row } from "./invoice-list";
 import { NewInvoiceFab } from "./new-invoice-fab";
+import { RecoveredChart } from "./recovered-chart";
+import { kpis, recoveredByMonth } from "@/lib/stats";
 
 export const dynamic = "force-dynamic";
 
@@ -85,7 +88,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
         </form>
       </div>
 
-      {ok && <p className="alert ok">{ok}</p>}
+      <Toast message={ok} />
       {err && <p className="alert err">{err}</p>}
       {access.reason === "trial" && access.daysLeft <= 14 && (
         <p className="alert trial">
@@ -148,6 +151,38 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
           </div>
         </div>
       </section>
+
+      {invoices.length > 0 && (() => {
+        const k = kpis(invoices);
+        return (
+          <section className="perf">
+            <div className="card perf-chart">
+              <div className="perf-head">
+                <h2>Récupéré par mois</h2>
+                <span className="muted small">6 derniers mois</span>
+              </div>
+              <RecoveredChart points={recoveredByMonth(invoices)} />
+            </div>
+            <div className="perf-kpis">
+              <div className="card kpi">
+                <span>Récupéré après relance</span>
+                <strong>{euros(k.recoveredAfterReminderCents)}</strong>
+                <em>{k.recoveredAfterReminderCount} facture{k.recoveredAfterReminderCount > 1 ? "s" : ""} payée{k.recoveredAfterReminderCount > 1 ? "s" : ""} après un rappel</em>
+              </div>
+              <div className="card kpi">
+                <span>Délai moyen de paiement</span>
+                <strong>{k.avgDelay === null ? "—" : `${k.avgDelay} j`}</strong>
+                <em>{k.avgDelay === null ? "dès la première facture payée" : "après l'échéance"}</em>
+              </div>
+              <div className="card kpi">
+                <span>Relances ce mois-ci</span>
+                <strong>{k.remindersThisMonth}</strong>
+                <em>envoyées automatiquement</em>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       <details className="card new-inv" id="nouvelle" open={invoices.length === 0}>
         <summary>
