@@ -1,4 +1,4 @@
-# Relances
+# Encaissez
 
 SaaS de relance automatique des factures impayées pour artisans et TPE.
 

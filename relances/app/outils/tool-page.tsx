@@ -1,7 +1,7 @@
 import "../landing.css";
 import "./tools.css";
 import Link from "next/link";
-import { RelancesCta, SiteFooter, SiteNav } from "../site-chrome";
+import { ProductCta, SiteFooter, SiteNav } from "../site-chrome";
 
 /** Mise en page commune des outils gratuits. */
 export function ToolPage({
@@ -21,7 +21,7 @@ export function ToolPage({
         <h1>{title}</h1>
         <p className="tool-intro">{intro}</p>
         {children}
-        <RelancesCta />
+        <ProductCta />
         <section className="tool-tips">
           <h2>Bon à savoir</h2>
           {tips.map((t) => (

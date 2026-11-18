@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { BRAND } from "@/lib/brand";
 import { STEPS, daysLate, euros, type Invoice, type Profile } from "@/lib/reminders";
 import { addInvoice, deleteInvoice, markPaid, saveSettings, sendNow } from "./actions";
 import { logout } from "./login/actions";
@@ -53,7 +54,7 @@ export default async function Home({
     <main>
       <header className="row">
         <div>
-          <h1>Relances</h1>
+          <h1>{BRAND.name}</h1>
           <p className="muted">Vos factures impayées relancées automatiquement à J+1, J+7 et J+15.</p>
         </div>
         <form action={logout} className="account">
