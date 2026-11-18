@@ -2,7 +2,41 @@ import "@fontsource/inter/400.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 import "@fontsource/inter/800.css";
+import { createContext, useContext } from "react";
 import { AbsoluteFill, Easing, interpolate, random, spring, useCurrentFrame, useVideoConfig } from "remotion";
+
+/* ---------- Mise en page selon le format ---------- */
+type Box = { left: number; width: number; top: number };
+type Layout = {
+  headline: Box & { fontSize: number };
+  invoice: Box & { moveUp: number; shrink: number; settle: number };
+  mails: Box & { scale: number };
+  notif: Box;
+  burst: { x: number; y: number }; // centre de l'onde de choc et des pièces
+  endScale: number;
+};
+const LAYOUTS: Record<"vertical" | "wide", Layout> = {
+  // 1080x1920 : réseaux sociaux
+  vertical: {
+    headline: { left: 90, width: 900, top: 230, fontSize: 98 },
+    invoice: { left: 90, width: 900, top: 700, moveUp: -150, shrink: 0.82, settle: 20 },
+    mails: { left: 90, width: 900, top: 1250, scale: 1 },
+    notif: { left: 70, width: 940, top: 1330 },
+    burst: { x: 540, y: 980 },
+    endScale: 1,
+  },
+  // 1920x1080 : site web, YouTube — texte à gauche, animation à droite
+  wide: {
+    headline: { left: 130, width: 760, top: 330, fontSize: 92 },
+    invoice: { left: 1010, width: 800, top: 170, moveUp: -110, shrink: 0.78, settle: -40 },
+    mails: { left: 1010, width: 800, top: 520, scale: 0.86 },
+    notif: { left: 990, width: 840, top: 640 },
+    burst: { x: 1410, y: 380 },
+    endScale: 0.82,
+  },
+};
+const LayoutCtx = createContext<Layout>(LAYOUTS.vertical);
+const useLayout = () => useContext(LayoutCtx);
 
 /* ---------- Palette (même esprit que le site : sobre, un accent) ---------- */
 const C = {
@@ -83,13 +117,14 @@ type Word = { text: string; color?: string };
 
 function Headline({ from, to, words }: { from: number; to: number; words: Word[] }) {
   const f = useCurrentFrame();
+  const L = useLayout().headline;
   const out = lerp(f, [to - 14, to], [1, 0]);
   const outY = lerp(f, [to - 14, to], [0, -60]);
   return (
     <div
       style={{
-        position: "absolute", left: 90, right: 90, top: 230, perspective: 1000,
-        fontFamily: FONT, fontWeight: 800, fontSize: 98, lineHeight: 1.05, letterSpacing: -3.5, color: C.fg,
+        position: "absolute", left: L.left, width: L.width, top: L.top, perspective: 1000,
+        fontFamily: FONT, fontWeight: 800, fontSize: L.fontSize, lineHeight: 1.05, letterSpacing: -3.5, color: C.fg,
         opacity: out, transform: `translateY(${outY}px)`, filter: `blur(${(1 - out) * 10}px)`,
       }}
     >
@@ -140,11 +175,12 @@ function Shine({ at }: { at: number }) {
    ===================================================================== */
 function Invoice() {
   const f = useCurrentFrame();
+  const L = useLayout().invoice;
   const enter = useEnter(S1 + 16, 15, 1);
 
   // Position dans l'espace selon la scène
-  const y = lerp(f, [S2, S2 + 28, S3 + 5, S3 + 35], [0, -150, -150, 20]);
-  const scale = lerp(f, [S2, S2 + 28, S3 + 5, S3 + 35], [1, 0.82, 0.82, 0.95]);
+  const y = lerp(f, [S2, S2 + 28, S3 + 5, S3 + 35], [0, L.moveUp, L.moveUp, L.settle]);
+  const scale = lerp(f, [S2, S2 + 28, S3 + 5, S3 + 35], [1, L.shrink, L.shrink, 0.95]);
   const out = lerp(f, [S4 - 14, S4], [1, 0]);
   const outZ = lerp(f, [S4 - 14, S4], [0, 600]);
 
@@ -164,7 +200,7 @@ function Invoice() {
   const tick = days !== prevDays && f < S1 + 136 ? 1 : 0;
 
   return (
-    <div style={{ position: "absolute", left: 90, right: 90, top: 700, perspective: 1600 }}>
+    <div style={{ position: "absolute", left: L.left, width: L.width, top: L.top, perspective: 1600 }}>
       <div
         style={{
           position: "relative",
@@ -229,13 +265,14 @@ const MAILS = [
 
 function Mails() {
   const f = useCurrentFrame();
+  const L = useLayout().mails;
   const out = lerp(f, [S3, S3 + 16], [1, 0]);
   const outX = lerp(f, [S3, S3 + 16], [0, -500], Easing.in(Easing.cubic));
   return (
     <div
       style={{
-        position: "absolute", left: 90, right: 90, top: 1250, display: "grid", gap: 26,
-        perspective: 1400, opacity: out, transform: `translateX(${outX}px)`,
+        position: "absolute", left: L.left, width: L.width, top: L.top, display: "grid", gap: 26,
+        perspective: 1400, opacity: out, transform: `translateX(${outX}px) scale(${L.scale})`, transformOrigin: "50% 0%",
       }}
     >
       {MAILS.map((m, i) => (
@@ -288,10 +325,11 @@ function Mail({ start, index, day, label, subject, color }: { start: number; ind
    ===================================================================== */
 function BankNotification() {
   const f = useCurrentFrame();
+  const L = useLayout().notif;
   const enter = useEnter(S3 + 22, 13, 0.9);
   const out = lerp(f, [S4 - 14, S4], [1, 0]);
   return (
-    <div style={{ position: "absolute", left: 70, right: 70, top: 1330, perspective: 1200 }}>
+    <div style={{ position: "absolute", left: L.left, width: L.width, top: L.top, perspective: 1200 }}>
       <div
         style={{
           position: "relative", opacity: Math.min(1, enter * 1.5) * out,
@@ -323,12 +361,13 @@ function BankNotification() {
 
 function Shockwave() {
   const f = useCurrentFrame();
+  const B = useLayout().burst;
   const p = lerp(f, [PAID, PAID + 30], [0, 1], Easing.out(Easing.cubic));
   if (f < PAID || f > PAID + 32) return null;
   return (
     <div
       style={{
-        position: "absolute", left: 540 - 700, top: 980 - 700, width: 1400, height: 1400, borderRadius: "50%",
+        position: "absolute", left: B.x - 700, top: B.y - 700, width: 1400, height: 1400, borderRadius: "50%",
         border: `6px solid ${C.green}`, opacity: (1 - p) * 0.7, transform: `scale(${0.15 + p})`,
         boxShadow: `0 0 80px ${C.green}, inset 0 0 80px ${C.green}`,
       }}
@@ -339,6 +378,7 @@ function Shockwave() {
 /** Pièces « € » projetées en 3D au moment du paiement, puis retombant sous l'effet de la gravité. */
 function CoinBurst() {
   const f = useCurrentFrame();
+  const B = useLayout().burst;
   const t = f - PAID;
   if (t < 0 || t > 80) return null;
   const coins = Array.from({ length: 34 }, (_, i) => {
@@ -346,8 +386,8 @@ function CoinBurst() {
     const speed = 18 + random(`s${i}`) * 26;
     const vx = Math.cos(a) * speed;
     const vy = Math.sin(a) * speed - 22;
-    const x = 540 + vx * t;
-    const y = 980 + vy * t + 0.9 * t * t; // gravité
+    const x = B.x + vx * t;
+    const y = B.y + vy * t + 0.9 * t * t; // gravité
     const z = (random(`z${i}`) - 0.5) * 900;
     const spin = (random(`r${i}`) * 2 + 1) * t * 14;
     const size = 54 + random(`k${i}`) * 50;
@@ -391,7 +431,7 @@ function EndCard() {
 
   return (
     <AbsoluteFill style={{ opacity: o, alignItems: "center", justifyContent: "center", fontFamily: FONT, color: C.fg, textAlign: "center", perspective: 1400 }}>
-      <div style={{ transform: `rotateY(${camY}deg) rotateX(8deg)`, transformStyle: "preserve-3d" }}>
+      <div style={{ transform: `scale(${useLayout().endScale}) rotateY(${camY}deg) rotateX(8deg)`, transformStyle: "preserve-3d" }}>
         <div style={{ fontSize: 168, fontWeight: 800, letterSpacing: -7, whiteSpace: "nowrap", position: "relative" }}>
           {letters.map((l, i) => (
             <Letter key={i} ch={l} start={S4 + 4 + i * 3} depth={depth} />
@@ -437,12 +477,13 @@ function Letter({ ch, start, depth }: { ch: string; start: number; depth: string
 /* =====================================================================
    Composition : une « caméra » qui bouge doucement sur toute la scène
    ===================================================================== */
-export function Promo() {
+export function Promo({ layout = "vertical" }: { layout?: "vertical" | "wide" }) {
   const f = useCurrentFrame();
   // Mouvement de caméra : léger zoom avant continu + secousse au paiement
   const zoom = lerp(f, [0, S4], [1, 1.06], Easing.linear);
   const shake = f >= PAID && f < PAID + 14 ? Math.sin(f * 2.3) * (PAID + 14 - f) * 0.9 : 0;
   return (
+    <LayoutCtx.Provider value={LAYOUTS[layout]}>
     <AbsoluteFill>
       <Background />
       <AbsoluteFill style={{ transform: `scale(${zoom}) translate(${shake}px, ${shake * 0.6}px)` }}>
@@ -465,5 +506,6 @@ export function Promo() {
       <CoinBurst />
       <EndCard />
     </AbsoluteFill>
+    </LayoutCtx.Provider>
   );
 }
