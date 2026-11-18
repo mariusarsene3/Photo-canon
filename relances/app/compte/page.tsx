@@ -6,6 +6,9 @@ import { STATUS_LABEL, accessFrom, getMyBilling } from "@/lib/billing";
 import { stripeConfigured } from "@/lib/stripe";
 import { SubmitButton } from "../submit-button";
 import { deleteAccount, manageSubscription, savePreferences, subscribe } from "./actions";
+import { saveSettings } from "../actions";
+import { AppShell } from "../app-shell";
+import { formatIban } from "@/lib/payment";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: `Mon compte — ${BRAND.name}` };
@@ -21,14 +24,25 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   const payments = stripeConfigured();
   const { data: prefs, error: prefsErr } = await supabase.from("profiles").select("product_emails").maybeSingle();
   const productEmails = prefs?.product_emails !== false;
+  const { data: company } = await supabase.from("profiles").select("company_name, iban").maybeSingle();
 
   return (
-    <main className="account-page">
-      <p><Link href="/">← Tableau de bord</Link></p>
+    <AppShell active="compte" email={user?.email}>
+    <div className="account-page">
       <h1>Mon compte</h1>
       <p className="muted">{user?.email}</p>
       {ok && <p className="alert ok">{ok}</p>}
       {err && <p className="alert err">{err}</p>}
+
+      <section className="card" id="entreprise">
+        <h2>Mon entreprise</h2>
+        <p className="muted small">Ces informations apparaissent dans les relances et sur la page de paiement de vos clients.</p>
+        <form action={saveSettings} className="form-grid one-col">
+          <label>Nom de l&apos;entreprise<input name="company_name" placeholder="Plomberie Martin" defaultValue={company?.company_name ?? ""} /></label>
+          <label>IBAN<input name="iban" placeholder="FR76 …" defaultValue={company?.iban ? formatIban(company.iban) : ""} autoComplete="off" /></label>
+          <SubmitButton pending="Enregistrement…">Enregistrer</SubmitButton>
+        </form>
+      </section>
 
       <section className="card">
         <h2>Abonnement</h2>
@@ -106,6 +120,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         <Link href="/cgv">Conditions générales de vente</Link> · <Link href="/confidentialite">Confidentialité</Link> ·{" "}
         <Link href="/mentions-legales">Mentions légales</Link>
       </p>
-    </main>
+    </div>
+    </AppShell>
   );
 }

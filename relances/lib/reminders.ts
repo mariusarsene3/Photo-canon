@@ -5,9 +5,9 @@ import { sendEmail } from "./email";
 
 // Scénario de relance : nombre de jours APRÈS l'échéance.
 export const STEPS = [
-  { step: 1, daysAfterDue: 1, label: "Rappel amical" },
-  { step: 2, daysAfterDue: 7, label: "Relance ferme" },
-  { step: 3, daysAfterDue: 15, label: "Dernier avis" },
+  { step: 1, daysAfterDue: 1, label: "Rappel amical", sent: "Rappel amical envoyé", planned: "Rappel amical prévu" },
+  { step: 2, daysAfterDue: 7, label: "Relance ferme", sent: "Relance ferme envoyée", planned: "Relance ferme prévue" },
+  { step: 3, daysAfterDue: 15, label: "Dernier avis", sent: "Dernier avis envoyé", planned: "Dernier avis prévu" },
 ] as const;
 
 export type Invoice = {
@@ -22,6 +22,8 @@ export type Invoice = {
   paid_at: string | null;
   created_at: string;
   pay_token?: string; // présent une fois la migration 002 appliquée
+  paused?: boolean; // migration 006 : relances suspendues pour cette facture
+  notes?: string; // migration 006 : notes internes
   reminders: { step: number; sent_at: string }[];
 };
 
@@ -67,12 +69,25 @@ export function renderEmail(inv: Invoice, step: number, profile?: Profile) {
 
 /** Étape de relance à envoyer pour cette facture aujourd'hui, ou null. */
 export function stepToSend(inv: Invoice, today = new Date()) {
-  if (inv.status !== "pending") return null;
+  if (inv.status !== "pending" || inv.paused) return null;
   const late = daysLate(inv.due_date, today);
   const due = [...STEPS].reverse().find((s) => late >= s.daysAfterDue);
   if (!due) return null;
   const maxSent = Math.max(0, ...inv.reminders.map((r) => r.step));
   return maxSent >= due.step ? null : due.step;
+}
+
+/** Prochaine relance prévue pour une facture en attente (étape, libellé, date AAAA-MM-JJ), ou null. */
+export function nextReminder(inv: Invoice): { step: number; label: string; planned: string; date: string } | null {
+  if (inv.status !== "pending" || inv.paused) return null;
+  const maxSent = Math.max(0, ...inv.reminders.map((r) => r.step));
+  const next = STEPS.find((s) => s.step > maxSent);
+  if (!next) return null;
+  const d = new Date(inv.due_date + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + next.daysAfterDue);
+  const date = d.toISOString().slice(0, 10);
+  const today = new Date().toISOString().slice(0, 10);
+  return { step: next.step, label: next.label, planned: next.planned, date: date < today ? today : date };
 }
 
 /**

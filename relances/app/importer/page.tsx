@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { pdfImportAvailable } from "@/lib/pdf-extract";
 import { ImportClient } from "./import-client";
+import { AppShell } from "../app-shell";
+import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60; // la lecture de plusieurs PDF peut prendre du temps
@@ -10,9 +12,11 @@ export const metadata: Metadata = { title: "Importer des factures" };
 export default async function ImportPage({ searchParams }: { searchParams: Promise<{ mode?: string }> }) {
   const { mode: m } = await searchParams;
   const mode = m === "pdf" ? "pdf" : "table";
+  const { data: { user } } = await (await createClient()).auth.getUser();
 
   return (
-    <main className="imp-page">
+    <AppShell active="importer" email={user?.email}>
+    <div className="imp-page">
       <h1>Importer des factures</h1>
       <nav className="imp-tabs">
         <Link href="/importer" className={mode === "table" ? "active" : ""}>Excel / CSV</Link>
@@ -34,6 +38,7 @@ export default async function ImportPage({ searchParams }: { searchParams: Promi
         )}
         <ImportClient key={mode} mode={mode} pdfEnabled={pdfImportAvailable()} />
       </section>
-    </main>
+    </div>
+    </AppShell>
   );
 }
