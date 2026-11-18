@@ -49,6 +49,7 @@ export function Landing() {
         <span className="lp-brand">{BRAND.name}</span>
         <div className="lp-nav-links">
           <a href="#tarif" className="lp-hide-sm">Tarif</a>
+          <Link href="/outils" className="lp-hide-sm">Outils gratuits</Link>
           <Link href="/login">Connexion</Link>
           <Link href={SIGNUP} className="lp-btn lp-btn-sm">Essai gratuit</Link>
         </div>
@@ -123,6 +124,7 @@ export function Landing() {
       <footer className="lp-footer lp-wrap">
         <span className="lp-brand">{BRAND.name}</span>
         <span className="lp-footer-links">
+          <Link href="/outils">Outils gratuits</Link>
           <Link href="/mentions-legales">Mentions légales</Link>
           <Link href="/confidentialite">Confidentialité</Link>
           <span>© {new Date().getFullYear()}</span>
