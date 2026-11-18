@@ -1,6 +1,7 @@
 import "./landing.css";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
+import { LEGAL } from "@/lib/legal";
 import { StickyCta } from "./sticky-cta";
 import { DemoVideo } from "./demo-video";
 
@@ -87,7 +88,7 @@ export function Landing() {
 
       <div className="lp-wrap lp-duo">
         <figure>
-          <figcaption>Ce que reçoit votre client</figcaption>
+          <figcaption>Ce que reçoit votre client <span className="demo-tag">Exemple</span></figcaption>
           <div className="lp-email">
             <div className="lp-email-head">
               <p><span>De</span>Plomberie Martin</p>
@@ -97,7 +98,7 @@ export function Landing() {
           </div>
         </figure>
         <figure>
-          <figcaption>Ce que vous voyez</figcaption>
+          <figcaption>Ce que vous voyez <span className="demo-tag">Exemple</span></figcaption>
           <ProductShot />
         </figure>
       </div>
@@ -177,6 +178,7 @@ export function Landing() {
           <Link href="/cgv">CGV</Link>
           <Link href="/mentions-legales">Mentions légales</Link>
           <Link href="/confidentialite">Confidentialité</Link>
+          {LEGAL.contactEmail && <a href={`mailto:${LEGAL.contactEmail}`}>Contact</a>}
           <span>© {new Date().getFullYear()}</span>
         </span>
       </footer>

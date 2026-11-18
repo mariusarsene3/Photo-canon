@@ -567,3 +567,10 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--t
   .auth-switch { margin-top: 18px; }
 }
 @media (max-width: 959px) { .auth-mock-list { display: none; } }
+
+/* Mention « Exemple » sur les écrans de démonstration */
+.demo-tag { display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-style: normal; vertical-align: middle; background: color-mix(in srgb, currentColor 12%, transparent); color: inherit; opacity: .85; }
+.ps-bar .demo-tag { margin-left: auto; color: var(--lp-muted, #6b6b73); }
+.ps-bar { align-items: center; }
+.auth-mock-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.auth-mock-top .demo-tag { margin-left: 0; color: rgba(245,245,247,.7); }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
+import { LEGAL } from "@/lib/legal";
 
 const SIGNUP = "/login?mode=signup";
 
@@ -26,6 +27,7 @@ export function SiteFooter() {
         <Link href="/cgv">CGV</Link>
         <Link href="/mentions-legales">Mentions légales</Link>
         <Link href="/confidentialite">Confidentialité</Link>
+        {LEGAL.contactEmail && <a href={`mailto:${LEGAL.contactEmail}`}>Contact</a>}
         <span>© {new Date().getFullYear()}</span>
       </span>
     </footer>

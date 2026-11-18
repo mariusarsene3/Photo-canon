@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { login, requestReset, signup } from "./actions";
 import { BRAND } from "@/lib/brand";
+import { LEGAL } from "@/lib/legal";
 import { SubmitButton } from "../submit-button";
 
 export const metadata = { title: `Connexion — ${BRAND.name}` };
@@ -16,7 +17,7 @@ function BrandPanel() {
       </div>
       <div className="auth-mock">
         <div className="auth-mock-card">
-          <span>Récupéré ce mois-ci</span>
+          <span className="auth-mock-top">Récupéré ce mois-ci <em className="demo-tag">Exemple</em></span>
           <strong>4 930 €</strong>
           <div className="auth-mock-bar"><i /></div>
           <ul className="auth-mock-list">
@@ -43,7 +44,7 @@ function MobileBrand() {
       <Link href="/" className="auth-logo">{BRAND.name}</Link>
       <p className="auth-mbrand-title">Vos factures impayées, relancées automatiquement.</p>
       <div className="auth-mock-card">
-        <span>Récupéré ce mois-ci</span>
+        <span className="auth-mock-top">Récupéré ce mois-ci <em className="demo-tag">Exemple</em></span>
         <strong>4 930 €</strong>
         <div className="auth-mock-bar"><i /></div>
       </div>
@@ -131,6 +132,7 @@ export default async function LoginPage({
           <Link href="/cgv">CGV</Link>
           <Link href="/confidentialite">Confidentialité</Link>
           <Link href="/mentions-legales">Mentions légales</Link>
+          {LEGAL.contactEmail && <a href={`mailto:${LEGAL.contactEmail}`}>Contact</a>}
         </nav>
       </main>
     </div>
