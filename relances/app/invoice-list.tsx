@@ -26,6 +26,19 @@ const FILTERS = [
 ] as const;
 type Filter = (typeof FILTERS)[number]["id"];
 
+/** Pastille aux initiales du client, avec une teinte stable dérivée de son nom. */
+export function Avatar({ name, size = 40 }: { name: string; size?: number }) {
+  const words = name.replace(/[^\p{L}\p{N} ]/gu, " ").trim().split(/\s+/).filter(Boolean);
+  const initials = ((words[0]?.[0] ?? "?") + (words.length > 1 ? words[words.length - 1][0] : words[0]?.[1] ?? "")).toUpperCase();
+  let h = 0;
+  for (const c of name) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return (
+    <span className="avatar" style={{ width: size, height: size, ["--h" as string]: h }} aria-hidden>
+      {initials}
+    </span>
+  );
+}
+
 const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
 export function InvoiceList({ rows }: { rows: Row[] }) {
@@ -84,13 +97,14 @@ export function InvoiceList({ rows }: { rows: Row[] }) {
           {shown.map((r) => (
             <li key={r.id} className={`inv-row k-${r.kind}`}>
               <Link href={`/factures/${r.id}`} className="inv-main" aria-label={`Facture ${r.number}, ${r.client}`}>
+                <Avatar name={r.client} />
                 <span className="inv-client">
                   <b>{r.client}</b>
                   <small>N° {r.number} · échéance {r.due}</small>
                 </span>
                 <span className="inv-amount">{r.amount}</span>
                 <span className="inv-status">
-                  <span className={`badge b-${r.kind}`}>{r.status}</span>
+                  <span className={`badge b-${r.kind}`}><i className="badge-dot" />{r.status}</span>
                   {r.next && <small>{r.next}</small>}
                 </span>
               </Link>

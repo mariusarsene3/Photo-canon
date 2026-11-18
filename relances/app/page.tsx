@@ -8,6 +8,7 @@ import { SubmitButton } from "./submit-button";
 import { Landing } from "./landing";
 import { AppShell } from "./app-shell";
 import { InvoiceList, type Row } from "./invoice-list";
+import { NewInvoiceFab } from "./new-invoice-fab";
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +64,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
   const paid = invoices.filter((i) => i.status === "paid");
   const sum = (a: Invoice[]) => euros(a.reduce((s, i) => s + i.amount_cents, 0));
   const today = new Date().toISOString().slice(0, 10);
+  const total = (a: Invoice[]) => a.reduce((s, i) => s + i.amount_cents, 0);
+  const recoveredPct = total(invoices) ? Math.round((total(paid) / total(invoices)) * 100) : 0;
 
   // Premiers pas : la carte disparaît une fois tout fait.
   const steps = [
@@ -118,10 +121,32 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
         </section>
       )}
 
-      <section className="stats">
-        <div className="stat"><span>À encaisser</span><strong>{sum(pending)}</strong><em>{pending.length} facture(s)</em></div>
-        <div className="stat warn"><span>En retard</span><strong>{sum(overdue)}</strong><em>{overdue.length} facture(s)</em></div>
-        <div className="stat good"><span>Récupéré</span><strong>{sum(paid)}</strong><em>{paid.length} facture(s)</em></div>
+      <section className="hero-card" aria-label="Synthèse">
+        <div className="hero-top">
+          <span className="hero-label">À encaisser</span>
+          <span className="hero-count">{pending.length} facture{pending.length > 1 ? "s" : ""} en attente</span>
+        </div>
+        <strong className="hero-amount">{sum(pending)}</strong>
+        <div className="hero-progress" aria-hidden>
+          <i style={{ width: `${recoveredPct}%` }} />
+        </div>
+        <div className="hero-figures">
+          <div>
+            <span className="dot dot-late" />
+            <span>En retard</span>
+            <b>{sum(overdue)}</b>
+          </div>
+          <div>
+            <span className="dot dot-ok" />
+            <span>Récupéré</span>
+            <b>{sum(paid)}</b>
+          </div>
+          <div>
+            <span className="dot dot-rate" />
+            <span>Recouvrement</span>
+            <b>{recoveredPct} %</b>
+          </div>
+        </div>
       </section>
 
       <details className="card new-inv" id="nouvelle" open={invoices.length === 0}>
@@ -152,6 +177,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
           <InvoiceList rows={invoices.map(toRow)} />
         )}
       </section>
+      <NewInvoiceFab />
     </AppShell>
   );
 }
