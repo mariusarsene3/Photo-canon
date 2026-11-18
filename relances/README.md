@@ -14,6 +14,13 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
+## Mise en ligne (Vercel)
+
+1. Sur vercel.com : **Add New → Project**, importer le dépôt, **Root Directory = `relances`**.
+2. Ajouter les variables d'environnement (voir tableau plus bas), dont `CRON_SECRET` : Vercel l'envoie automatiquement au cron.
+3. Le cron défini dans `vercel.json` appelle `/api/cron` chaque jour vers 8 h (heure de Paris).
+4. Dans Supabase > Authentication > URL Configuration, mettre l'adresse Vercel dans **Site URL**.
+
 ## Fonctionnement
 
 - On ajoute ses factures : numéro, client, e-mail, montant, échéance.
