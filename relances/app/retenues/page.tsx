@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND } from "@/lib/brand";
 import { euros } from "@/lib/reminders";
@@ -7,6 +6,7 @@ import { claimLetter, daysUntilRelease, frLong, releaseDate, type Guarantee } fr
 import { SubmitButton } from "../submit-button";
 import { CopyButton } from "../payer/[token]/copy-button";
 import { addGuarantee, deleteGuarantee, markReleased, sendClaim, toInvoice } from "./actions";
+import { AppShell } from "../app-shell";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: `Retenues de garantie — ${BRAND.name}` };
@@ -24,6 +24,7 @@ function Status({ g }: { g: Guarantee }) {
 export default async function Retenues({ searchParams }: { searchParams: Promise<{ ok?: string; err?: string }> }) {
   const { ok, err } = await searchParams;
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
   const [{ data, error }, { data: prof }] = await Promise.all([
     supabase.from("guarantees").select("*").order("reception_date", { ascending: true }),
     supabase.from("profiles").select("company_name, iban").maybeSingle(),
@@ -36,8 +37,8 @@ export default async function Retenues({ searchParams }: { searchParams: Promise
   const today = new Date().toISOString().slice(0, 10);
 
   return (
-    <main className="rg-page">
-      <p><Link href="/">← Tableau de bord</Link></p>
+    <AppShell active="retenues" email={user?.email}>
+    <div className="rg-page">
       <h1>Retenues de garantie</h1>
       <p className="muted">
         Les 5 % retenus sur vos chantiers doivent vous être rendus un an après la réception des travaux. {BRAND.name} vous
@@ -59,23 +60,23 @@ export default async function Retenues({ searchParams }: { searchParams: Promise
           <section className="card">
             <h2>Ajouter une retenue</h2>
             <form action={addGuarantee} className="grid">
-              <input name="site" placeholder="Chantier (ex. Rénovation cuisine, 12 rue…)" required />
-              <input name="client_name" placeholder="Client (maître d'ouvrage)" required />
+              <input name="site" placeholder="Chantier" required />
+              <input name="client_name" placeholder="Client" required />
               <input name="client_email" type="email" placeholder="E-mail du client" />
-              <input name="contract_amount" inputMode="decimal" placeholder="Montant des travaux (€) — facultatif" />
-              <input name="amount" inputMode="decimal" placeholder="Montant retenu (€) — sinon 5 %" />
+              <input name="contract_amount" inputMode="decimal" placeholder="Montant des travaux (€)" />
+              <input name="amount" inputMode="decimal" placeholder="Montant retenu (€)" />
               <label className="field-inline">
                 <span className="muted small">Date de réception des travaux</span>
                 <input name="reception_date" type="date" max={today} required />
               </label>
               <select name="kind" defaultValue="retenue" aria-label="Type de garantie">
-                <option value="retenue">Somme retenue par le client</option>
+                <option value="retenue">Somme retenue</option>
                 <option value="caution">Caution bancaire</option>
               </select>
               <SubmitButton pending="Ajout…">Ajouter</SubmitButton>
             </form>
             <p className="muted small">
-              Indiquez le montant des travaux ou le montant retenu : sans montant retenu, {BRAND.name} calcule 5 %.
+              Indiquez le montant des travaux ou le montant retenu (sinon {BRAND.name} calcule 5 % du montant des travaux). Le client est le maître d&apos;ouvrage.
             </p>
           </section>
 
@@ -149,6 +150,7 @@ export default async function Retenues({ searchParams }: { searchParams: Promise
           </p>
         </>
       )}
-    </main>
+    </div>
+    </AppShell>
   );
 }

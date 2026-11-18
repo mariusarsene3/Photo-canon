@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { commitImport, previewImport } from "./actions";
 import type { ImportRow } from "@/lib/import";
@@ -145,7 +144,6 @@ export function ImportClient({ mode, pdfEnabled }: { mode: "table" | "pdf"; pdfE
         </>
       )}
 
-      <p className="muted small"><Link href="/">← Retour au tableau de bord</Link></p>
     </div>
   );
 }

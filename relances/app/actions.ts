@@ -82,7 +82,7 @@ export async function saveSettings(form: FormData) {
   if (!user) return;
   const iban = cleanIban(String(form.get("iban") ?? ""));
   if (iban && !isValidIban(iban)) {
-    redirect(`/?serr=${encodeURIComponent("IBAN invalide : vérifiez qu'il est complet et sans faute de frappe.")}#parametres`);
+    redirect(`/compte?err=${encodeURIComponent("IBAN invalide : vérifiez qu'il est complet et sans faute de frappe.")}#entreprise`);
   }
   await supabase.from("profiles").upsert({
     user_id: user.id,
@@ -90,5 +90,6 @@ export async function saveSettings(form: FormData) {
     iban,
   });
   revalidatePath("/");
-  redirect("/");
+  revalidatePath("/compte");
+  redirect(`/compte?ok=${encodeURIComponent("Informations de l'entreprise enregistrées.")}`);
 }
