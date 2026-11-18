@@ -8,6 +8,7 @@ import { paymentUrl } from "@/lib/payment";
 import { AppShell } from "../../app-shell";
 import { SubmitButton } from "../../submit-button";
 import { CopyButton } from "../../payer/[token]/copy-button";
+import { Avatar } from "../../invoice-list";
 import { editInvoice, removeInvoice, saveNotes, setPaid, setPaused } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -66,14 +67,17 @@ export default async function InvoicePage({
   return (
     <AppShell active="factures" email={user?.email}>
       <p className="crumb"><Link href="/">← Factures</Link></p>
-      <div className="inv-head">
-        <div>
+      <div className="inv-head card">
+        <div className="inv-head-id">
+          <Avatar name={inv.client_name} size={52} />
+          <div>
           <h1>{inv.client_name}</h1>
           <p className="muted">Facture n° {inv.number} · {inv.client_email}</p>
+          </div>
         </div>
         <div className="inv-head-amount">
           <strong>{euros(inv.amount_cents)}</strong>
-          <span className={`badge ${badge.cls}`}>{badge.text}</span>
+          <span className={`badge ${badge.cls}`}><i className="badge-dot" />{badge.text}</span>
         </div>
       </div>
 
