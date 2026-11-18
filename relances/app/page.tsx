@@ -69,7 +69,10 @@ export default async function Home({
       </section>
 
       <section className="card">
-        <h2>Nouvelle facture</h2>
+        <div className="row">
+          <h2>Nouvelle facture</h2>
+          <a href="/importer" className="small-link">Importer (Excel, CSV, PDF) →</a>
+        </div>
         <form action={addInvoice} className="grid">
           <input name="number" placeholder="N° facture (ex. F-2026-042)" required />
           <input name="client_name" placeholder="Nom du client" required />
