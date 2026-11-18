@@ -32,7 +32,7 @@ export function SiteFooter() {
 }
 
 /** Encart qui présente le service sous chaque outil gratuit. */
-export function RelancesCta() {
+export function ProductCta() {
   return (
     <aside className="tool-cta">
       <div>

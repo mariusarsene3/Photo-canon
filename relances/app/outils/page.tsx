@@ -2,7 +2,7 @@ import "../landing.css";
 import "./tools.css";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { RelancesCta, SiteFooter, SiteNav } from "../site-chrome";
+import { ProductCta, SiteFooter, SiteNav } from "../site-chrome";
 
 export const metadata: Metadata = {
   title: "Outils gratuits pour les factures impayées",
@@ -33,7 +33,7 @@ export default function Outils() {
             </Link>
           ))}
         </div>
-        <RelancesCta />
+        <ProductCta />
       </main>
       <SiteFooter />
     </div>
