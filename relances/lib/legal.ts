@@ -15,7 +15,7 @@ export const LEGAL = {
   editorAddress: "", // TODO : adresse postale
   editorSiret: "", // TODO : n° SIRET (ou RCS + ville)
   editorVat: "", // facultatif : n° de TVA intracommunautaire (vide si franchise en base de TVA)
-  contactEmail: "", // TODO : e-mail de contact (aussi utilisé pour les demandes RGPD)
+  contactEmail: "mama712du54@gmail.com", // e-mail de contact (aussi utilisé pour les demandes RGPD et les réponses aux e-mails)
   publicationDirector: "", // TODO : en général, le nom de l'éditeur
   // TVA : en micro-entreprise sous le seuil, mettre « TVA non applicable, art. 293 B du CGI ».
   // Sinon : « TVA au taux de 20 % en sus ».
