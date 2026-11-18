@@ -45,3 +45,8 @@ create policy "own reminders" on public.reminders
 drop policy if exists "own profile" on public.profiles;
 create policy "own profile" on public.profiles
   for all to authenticated using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+-- Droits d'accès pour les utilisateurs connectés (les règles RLS ci-dessus filtrent ensuite par compte).
+-- Nécessaire sur les projets Supabase récents, qui n'exposent plus les tables automatiquement.
+grant select, insert, update, delete on public.invoices, public.reminders, public.profiles to authenticated;
+grant select, insert, update, delete on public.invoices, public.reminders, public.profiles to service_role;
