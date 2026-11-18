@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { runReminders } from "@/lib/reminders";
 
@@ -24,6 +25,7 @@ export async function addInvoice(form: FormData) {
     due_date,
   });
   revalidatePath("/");
+  redirect("/");
 }
 
 export async function markPaid(form: FormData) {
@@ -33,18 +35,39 @@ export async function markPaid(form: FormData) {
     .update({ status: "paid", paid_at: new Date().toISOString() })
     .eq("id", Number(form.get("id")));
   revalidatePath("/");
+  redirect("/");
 }
 
 export async function deleteInvoice(form: FormData) {
   const supabase = await createClient();
   await supabase.from("invoices").delete().eq("id", Number(form.get("id")));
   revalidatePath("/");
+  redirect("/");
 }
 
 export async function sendNow() {
   const supabase = await createClient();
-  await runReminders(supabase);
+  let notice: string;
+  let kind = "ok";
+  try {
+    const { sent, errors } = await runReminders(supabase);
+    if (errors.length) {
+      kind = "err";
+      notice =
+        `${sent.length} relance(s) envoyée(s), ${errors.length} en échec. ` +
+        errors.map((e) => `${e.invoice} : ${e.error}`).join(" · ");
+    } else if (sent.length) {
+      notice = `${sent.length} relance(s) envoyée(s) : ${sent.map((s) => s.invoice).join(", ")}.`;
+    } else {
+      notice =
+        "Aucune relance à envoyer pour l'instant. Une relance part à partir du lendemain de l'échéance (J+1), puis à J+7 et J+15.";
+    }
+  } catch (e) {
+    kind = "err";
+    notice = "Erreur : " + (e instanceof Error ? e.message : JSON.stringify(e));
+  }
   revalidatePath("/");
+  redirect(`/?${kind}=${encodeURIComponent(notice)}`);
 }
 
 export async function saveSettings(form: FormData) {
@@ -59,4 +82,5 @@ export async function saveSettings(form: FormData) {
     iban: String(form.get("iban") ?? "").trim(),
   });
   revalidatePath("/");
+  redirect("/");
 }
