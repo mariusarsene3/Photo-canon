@@ -68,6 +68,18 @@ export async function manageSubscription() {
   redirect(url!);
 }
 
+/** Préférence : recevoir ou non les conseils et rappels d'essai par e-mail. */
+export async function savePreferences(form: FormData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+  const { error } = await supabase
+    .from("profiles")
+    .upsert({ user_id: user.id, product_emails: form.get("product_emails") === "on" });
+  if (error) back("Enregistrement impossible. Réessayez.");
+  back("Préférences enregistrées.", "ok");
+}
+
 /** Suppression définitive du compte (RGPD). Résilie d'abord l'abonnement Stripe s'il existe. */
 export async function deleteAccount(form: FormData) {
   if (String(form.get("confirm") ?? "").trim().toUpperCase() !== "SUPPRIMER") {

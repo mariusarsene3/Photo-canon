@@ -22,6 +22,15 @@ export async function createClient() {
   });
 }
 
+/** Client administrateur si la clé de service est configurée, sinon null. */
+export function adminOrNull() {
+  try {
+    return createAdminClient();
+  } catch {
+    return null;
+  }
+}
+
 /** Client administrateur (contourne RLS). Serveur uniquement, pour le cron quotidien. */
 export function createAdminClient() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;

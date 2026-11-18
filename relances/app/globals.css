@@ -119,3 +119,26 @@ td:first-child { white-space: nowrap; }
 .danger-zone form input { flex: 1; min-width: 160px; }
 button.danger { background: var(--late); }
 .alert.trial { background: var(--card); border: 1px solid var(--border); color: var(--text); }
+.prefs { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; line-height: 1.4; }
+.check input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--accent); }
+
+/* Retenues de garantie */
+.rg-page { max-width: 1000px; display: grid; gap: 14px; }
+.rg-page > p { margin: 0; }
+.rg-page .card { margin: 0; }
+.rg-list { display: grid; gap: 12px; }
+.rg-item { display: grid; gap: 10px; }
+.rg-item h3 { margin: 0; font-size: 17px; }
+.rg-item p { margin: 0; }
+.rg-item.dim { opacity: .6; }
+.rg-amount { display: grid; justify-items: end; gap: 6px; }
+.rg-amount strong { font-size: 22px; font-variant-numeric: tabular-nums; }
+.rg-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rg-actions form { margin: 0; }
+.rg-letter summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--accent); }
+.rg-letter pre { white-space: pre-wrap; font: 14px/1.6 inherit; font-family: inherit; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin: 8px 0; }
+.field-inline { display: grid; gap: 4px; }
+select { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; }
+.badge.warn-badge { background: #fef3c7; color: #b45309; border-color: transparent; }
+@media (prefers-color-scheme: dark) { .badge.warn-badge { background: #3a2a0a; color: #fbbf24; } }

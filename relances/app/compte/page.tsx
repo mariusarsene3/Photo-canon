@@ -5,7 +5,7 @@ import { BRAND } from "@/lib/brand";
 import { STATUS_LABEL, accessFrom, getMyBilling } from "@/lib/billing";
 import { stripeConfigured } from "@/lib/stripe";
 import { SubmitButton } from "../submit-button";
-import { deleteAccount, manageSubscription, subscribe } from "./actions";
+import { deleteAccount, manageSubscription, savePreferences, subscribe } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: `Mon compte — ${BRAND.name}` };
@@ -19,6 +19,8 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   const billing = await getMyBilling(supabase);
   const access = accessFrom(billing);
   const payments = stripeConfigured();
+  const { data: prefs, error: prefsErr } = await supabase.from("profiles").select("product_emails").maybeSingle();
+  const productEmails = prefs?.product_emails !== false;
 
   return (
     <main className="account-page">
@@ -74,6 +76,19 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           </>
         )}
       </section>
+
+      {!prefsErr && (
+        <section className="card">
+          <h2>E-mails</h2>
+          <form action={savePreferences} className="prefs">
+            <label className="check">
+              <input type="checkbox" name="product_emails" defaultChecked={productEmails} />
+              <span>Recevoir les conseils pour bien démarrer et les rappels de fin d&apos;essai</span>
+            </label>
+            <SubmitButton className="secondary small" pending="…">Enregistrer</SubmitButton>
+          </form>
+        </section>
+      )}
 
       <section className="card danger-zone">
         <h2>Supprimer mon compte</h2>
