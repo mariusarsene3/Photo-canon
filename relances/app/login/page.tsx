@@ -31,6 +31,22 @@ function BrandPanel() {
   );
 }
 
+/** Version compacte du panneau de marque, en haut de l'écran sur téléphone. */
+function MobileBrand() {
+  return (
+    <div className="auth-mbrand" aria-hidden>
+      <Link href="/" className="auth-logo">{BRAND.name}</Link>
+      <p className="auth-mbrand-title">Vos factures impayées, relancées automatiquement.</p>
+      <div className="auth-mock-card">
+        <span>Récupéré ce mois-ci</span>
+        <strong>4 930 €</strong>
+        <div className="auth-mock-bar"><i /></div>
+      </div>
+      <div className="auth-mock-toast"><b>✓</b> Boulangerie Dupont a payé 1 250 €</div>
+    </div>
+  );
+}
+
 export default async function LoginPage({
   searchParams,
 }: {
@@ -49,7 +65,7 @@ export default async function LoginPage({
     <div className="auth-wrap">
       <BrandPanel />
       <main className="auth-main">
-        <Link href="/" className="auth-logo auth-logo-mobile">{BRAND.name}</Link>
+        <MobileBrand />
         <div className="auth-box">
           <h1>{title}</h1>
           <p className="muted">{sub}</p>
@@ -89,6 +105,12 @@ export default async function LoginPage({
               )}
             </form>
           )}
+
+          <ul className="auth-trust">
+            <li>{BRAND.trialDays} jours gratuits, sans carte bancaire</li>
+            <li>Relances signées à votre nom</li>
+            <li>Données hébergées en Europe</li>
+          </ul>
 
           <p className="auth-switch">
             {view === "signup" ? (
