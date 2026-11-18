@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { runReminders } from "@/lib/reminders";
+import { cleanIban, isValidIban } from "@/lib/payment";
 
 // Toutes les requêtes passent par le client de l'utilisateur connecté :
 // les règles RLS de Supabase garantissent qu'il ne touche qu'à ses propres données.
@@ -76,10 +77,14 @@ export async function saveSettings(form: FormData) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return;
+  const iban = cleanIban(String(form.get("iban") ?? ""));
+  if (iban && !isValidIban(iban)) {
+    redirect(`/?serr=${encodeURIComponent("IBAN invalide : vérifiez qu'il est complet et sans faute de frappe.")}#parametres`);
+  }
   await supabase.from("profiles").upsert({
     user_id: user.id,
     company_name: String(form.get("company_name") ?? "").trim(),
-    iban: String(form.get("iban") ?? "").trim(),
+    iban,
   });
   revalidatePath("/");
   redirect("/");

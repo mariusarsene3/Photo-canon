@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { formatIban, paymentUrl } from "./payment";
 
 // Scénario de relance : nombre de jours APRÈS l'échéance.
 export const STEPS = [
@@ -18,6 +19,7 @@ export type Invoice = {
   status: "pending" | "paid";
   paid_at: string | null;
   created_at: string;
+  pay_token?: string; // présent une fois la migration 002 appliquée
   reminders: { step: number; sent_at: string }[];
 };
 
@@ -38,7 +40,10 @@ export function renderEmail(inv: Invoice, step: number, profile?: Profile) {
   const company = profile?.company_name || "Votre fournisseur";
   const amount = euros(inv.amount_cents);
   const due = frDate(inv.due_date);
-  const pay = profile?.iban ? `\n\nRèglement par virement : ${profile.iban}` : "";
+  const lines: string[] = [];
+  if (inv.pay_token) lines.push(`Régler en ligne (IBAN, QR code) : ${paymentUrl(inv.pay_token)}`);
+  if (profile?.iban) lines.push(`Règlement par virement : ${formatIban(profile.iban)}`);
+  const pay = lines.length ? "\n\n" + lines.join("\n") : "";
   const sign = `\n\nCordialement,\n${company}`;
 
   if (step === 1)

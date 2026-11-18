@@ -24,9 +24,9 @@ function Status({ inv }: { inv: Invoice }) {
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ ok?: string; err?: string }>;
+  searchParams: Promise<{ ok?: string; err?: string; serr?: string }>;
 }) {
-  const { ok, err } = await searchParams;
+  const { ok, err, serr } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -104,6 +104,9 @@ export default async function Home({
                     <td>{new Date(i.due_date + "T00:00:00").toLocaleDateString("fr-FR")}</td>
                     <td><Status inv={i} /></td>
                     <td><div className="actions">
+                      {i.status === "pending" && i.pay_token && (
+                        <a className="small-link" href={`/payer/${i.pay_token}`} target="_blank" rel="noopener" title="Page de paiement envoyée au client">Lien</a>
+                      )}
                       {i.status === "pending" && (
                         <form action={markPaid}><input type="hidden" name="id" value={i.id} /><SubmitButton className="small">Payée ✓</SubmitButton></form>
                       )}
@@ -117,8 +120,9 @@ export default async function Home({
         )}
       </section>
 
-      <section className="card">
+      <section className="card" id="parametres">
         <h2>Paramètres</h2>
+        {serr && <p className="alert err">{serr}</p>}
         <form action={saveSettings} className="grid">
           <input name="company_name" placeholder="Nom de votre entreprise (signature)" defaultValue={profile.company_name} />
           <input name="iban" placeholder="IBAN (affiché dans les relances)" defaultValue={profile.iban} />

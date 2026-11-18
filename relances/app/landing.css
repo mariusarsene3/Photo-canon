@@ -129,3 +129,4 @@
 .lp-story-who { display: inline-block; font-size: 12px; font-weight: 600; color: var(--lp-muted); margin-bottom: 4px; }
 .lp-story li.is-auto .lp-story-who { color: var(--lp-ok); }
 .lp-story p { line-height: 1.55; }
+.lp-meta-price { color: var(--lp-fg); font-weight: 600; }
