@@ -97,3 +97,15 @@ td:first-child { white-space: nowrap; }
 .imp-side button { align-self: flex-start; }
 .imp-err { color: var(--late); }
 .imp-actions { justify-content: flex-end; }
+
+/* Pages légales */
+.legal { max-width: 760px; line-height: 1.65; }
+.legal h1 { margin: 16px 0 4px; }
+.legal h2 { font-size: 19px; margin: 32px 0 8px; }
+.legal p, .legal ul { margin: 0 0 12px; }
+.legal-table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 14px; }
+.legal-table th, .legal-table td { border: 1px solid var(--border); padding: 8px 10px; vertical-align: top; }
+.legal-table th { text-transform: none; letter-spacing: 0; font-size: 13px; }
+@media (max-width: 560px) { .legal-table { font-size: 13px; } .legal-table th, .legal-table td { padding: 6px; } }
+.consent { margin: 4px 0 0; line-height: 1.5; }
+.legal-table td, .legal-table th { white-space: normal; overflow-wrap: anywhere; }

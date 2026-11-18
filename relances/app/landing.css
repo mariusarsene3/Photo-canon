@@ -130,3 +130,6 @@
 .lp-story li.is-auto .lp-story-who { color: var(--lp-ok); }
 .lp-story p { line-height: 1.55; }
 .lp-meta-price { color: var(--lp-fg); font-weight: 600; }
+.lp-footer-links { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.lp-footer-links a { color: var(--lp-muted); text-decoration: none; }
+.lp-footer-links a:hover { color: var(--lp-fg); }
