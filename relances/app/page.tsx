@@ -102,28 +102,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
         </p>
       )}
 
-      {doneCount < steps.length && (
-        <section className="card onboard">
-          <div className="onboard-head">
-            <h2>Bien démarrer</h2>
-            <span className="muted small">{doneCount} / {steps.length}</span>
-          </div>
-          <div className="onboard-bar"><i style={{ width: `${(doneCount / steps.length) * 100}%` }} /></div>
-          <ol className="onboard-steps">
-            {steps.map((s) => (
-              <li key={s.label} className={s.done ? "done" : ""}>
-                <span className="onboard-check" aria-hidden>{s.done ? "✓" : ""}</span>
-                {s.done ? (
-                  <span><b>{s.label}</b></span>
-                ) : (
-                  <a href={s.href}><b>{s.label}</b><small>{s.hint}</small></a>
-                )}
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
-
       <section className="hero-card" aria-label="Synthèse">
         <div className="hero-top">
           <span className="hero-label">À encaisser</span>
@@ -152,7 +130,29 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
         </div>
       </section>
 
-      {invoices.length > 0 && (() => {
+      {doneCount < steps.length && (
+        <section className="card onboard">
+          <div className="onboard-head">
+            <h2>Bien démarrer</h2>
+            <span className="muted small">{doneCount} / {steps.length}</span>
+          </div>
+          <div className="onboard-bar"><i style={{ width: `${(doneCount / steps.length) * 100}%` }} /></div>
+          <ol className="onboard-steps">
+            {steps.map((s) => (
+              <li key={s.label} className={s.done ? "done" : ""}>
+                <span className="onboard-check" aria-hidden>{s.done ? "✓" : ""}</span>
+                {s.done ? (
+                  <span><b>{s.label}</b></span>
+                ) : (
+                  <a href={s.href}><b>{s.label}</b><small>{s.hint}</small></a>
+                )}
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {paid.length > 0 && (() => {
         const k = kpis(invoices);
         return (
           <section className="perf">
