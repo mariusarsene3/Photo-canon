@@ -1,0 +1,20 @@
+/* ===== Guides pratiques ===== */
+.guide { max-width: 760px; }
+.guide-meta { margin-top: 14px !important; font-size: 13px; color: var(--lp-muted); }
+.guide-body { margin-top: 32px; }
+.guide-body h2 { font-size: 24px; letter-spacing: -.02em; line-height: 1.25; margin: 40px 0 12px !important; }
+.guide-body p { font-size: 17px; line-height: 1.7; margin: 0 0 14px !important; }
+.guide-body ul { margin: 0 0 16px; padding-left: 22px; }
+.guide-body li { font-size: 17px; line-height: 1.65; margin-bottom: 6px; }
+.guide-steps { list-style: none; padding: 0 !important; counter-reset: s; display: grid; gap: 12px; }
+.guide-steps li { counter-increment: s; position: relative; padding: 16px 16px 16px 56px; border: 1px solid var(--lp-line); border-radius: 12px; margin: 0 !important; }
+.guide-steps li::before { content: counter(s); position: absolute; left: 16px; top: 16px; width: 26px; height: 26px; border-radius: 50%; background: var(--lp-fg); color: var(--lp-bg); font-size: 13px; font-weight: 700; display: grid; place-items: center; }
+.guide-steps b { display: block; margin-bottom: 4px; }
+.guide-steps span { color: var(--lp-muted); font-size: 16px; }
+.guide-tip { border-left: 3px solid var(--lp-fg); background: var(--lp-soft); padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 28px 0 !important; }
+.guide-tool { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border: 1px dashed var(--lp-line); border-radius: 12px; margin: 20px 0 28px; text-decoration: none; color: var(--lp-fg); font-weight: 600; }
+.guide-tool:hover { border-color: var(--lp-fg); }
+.guide-tool small { display: block; color: var(--lp-muted); font-weight: 500; font-size: 13px; }
+.guide-disclaimer { margin-top: 32px !important; font-size: 13px; color: var(--lp-muted); }
+.guide-more { margin-top: 48px; }
+.guide-more h2 { font-size: 20px; margin-bottom: 12px !important; }

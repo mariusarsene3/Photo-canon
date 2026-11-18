@@ -7,7 +7,7 @@ import { BRAND } from "./brand";
  */
 export const LEGAL = {
   serviceName: BRAND.name,
-  siteUrl: "https://photo-canon.vercel.app",
+  // Adresse du site : voir siteUrl() dans lib/payment.ts (variable NEXT_PUBLIC_SITE_URL).
 
   // Éditeur
   editorName: "", // TODO : nom et prénom, ou raison sociale

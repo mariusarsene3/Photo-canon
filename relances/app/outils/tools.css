@@ -60,7 +60,7 @@
 .tool-tips p { color: var(--lp-muted); line-height: 1.6; }
 
 .tool-list { display: grid; gap: 14px; margin-top: 32px; }
-@media (min-width: 800px) { .tool-list { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 800px) { .tool-list { grid-template-columns: repeat(2, 1fr); } }
 .tool-card { display: grid; gap: 8px; padding: 22px; border: 1px solid var(--lp-line); border-radius: 12px; color: var(--lp-fg); text-decoration: none; }
 .tool-card:hover { border-color: var(--lp-fg); }
 .tool-card h2 { font-size: 18px; }

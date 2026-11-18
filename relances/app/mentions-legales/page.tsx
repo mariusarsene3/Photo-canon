@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LEGAL, v } from "@/lib/legal";
+import { siteUrl } from "@/lib/payment";
 
 export const metadata: Metadata = { title: `Mentions légales — ${LEGAL.serviceName}` };
 
@@ -13,7 +14,7 @@ export default function MentionsLegales() {
 
       <h2>Éditeur du site</h2>
       <p>
-        Le site {LEGAL.siteUrl} et le service {LEGAL.serviceName} sont édités par :<br />
+        Le site {siteUrl().replace(/^https?:\/\//, "")} et le service {LEGAL.serviceName} sont édités par :<br />
         <strong>{v(LEGAL.editorName)}</strong><br />
         {v(LEGAL.editorStatus)}<br />
         Adresse : {v(LEGAL.editorAddress)}<br />
