@@ -1,4 +1,4 @@
-import { db, getSetting, type Invoice } from "./db";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 // Scénario de relance : nombre de jours APRÈS l'échéance.
 export const STEPS = [
@@ -7,10 +7,26 @@ export const STEPS = [
   { step: 3, daysAfterDue: 15, label: "Dernier avis" },
 ] as const;
 
+export type Invoice = {
+  id: number;
+  user_id: string;
+  number: string;
+  client_name: string;
+  client_email: string;
+  amount_cents: number;
+  due_date: string; // AAAA-MM-JJ
+  status: "pending" | "paid";
+  paid_at: string | null;
+  created_at: string;
+  reminders: { step: number; sent_at: string }[];
+};
+
+export type Profile = { company_name: string; iban: string };
+
 export const euros = (cents: number) =>
   (cents / 100).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
 
-const frDate = (iso: string) => new Date(iso + "T00:00:00").toLocaleDateString("fr-FR");
+export const frDate = (iso: string) => new Date(iso + "T00:00:00").toLocaleDateString("fr-FR");
 
 export function daysLate(dueDate: string, today = new Date()): number {
   const due = new Date(dueDate + "T00:00:00");
@@ -18,12 +34,11 @@ export function daysLate(dueDate: string, today = new Date()): number {
   return Math.round((t.getTime() - due.getTime()) / 86_400_000);
 }
 
-export function renderEmail(inv: Invoice, step: number) {
-  const company = getSetting("company_name", "Votre entreprise");
-  const iban = getSetting("iban");
+export function renderEmail(inv: Invoice, step: number, profile?: Profile) {
+  const company = profile?.company_name || "Votre fournisseur";
   const amount = euros(inv.amount_cents);
   const due = frDate(inv.due_date);
-  const pay = iban ? `\n\nRèglement par virement : ${iban}` : "";
+  const pay = profile?.iban ? `\n\nRèglement par virement : ${profile.iban}` : "";
   const sign = `\n\nCordialement,\n${company}`;
 
   if (step === 1)
@@ -42,7 +57,7 @@ export function renderEmail(inv: Invoice, step: number) {
   };
 }
 
-async function sendEmail(to: string, subject: string, text: string) {
+async function sendEmail(to: string, subject: string, text: string, replyTo?: string) {
   const key = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   if (!key || !from) {
@@ -53,42 +68,68 @@ async function sendEmail(to: string, subject: string, text: string) {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from, to, subject, text }),
+    body: JSON.stringify({ from, to, subject, text, ...(replyTo ? { reply_to: replyTo } : {}) }),
   });
   if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
 }
 
-/** Envoie toutes les relances dues aujourd'hui. Idempotent : chaque étape n'est envoyée qu'une fois. */
-export async function runReminders(today = new Date()) {
-  const invoices = db
-    .prepare(
-      `SELECT i.*, COUNT(r.id) AS reminders_sent, MAX(r.sent_at) AS last_reminder_at
-         FROM invoices i LEFT JOIN reminders r ON r.invoice_id = i.id
-        WHERE i.status = 'pending'
-        GROUP BY i.id`
-    )
-    .all() as unknown as Invoice[];
+/** Étape de relance à envoyer pour cette facture aujourd'hui, ou null. */
+export function stepToSend(inv: Invoice, today = new Date()) {
+  if (inv.status !== "pending") return null;
+  const late = daysLate(inv.due_date, today);
+  const due = [...STEPS].reverse().find((s) => late >= s.daysAfterDue);
+  if (!due) return null;
+  const maxSent = Math.max(0, ...inv.reminders.map((r) => r.step));
+  return maxSent >= due.step ? null : due.step;
+}
+
+/**
+ * Envoie toutes les relances dues. Idempotent : chaque étape n'est envoyée qu'une fois.
+ * Avec le client de l'utilisateur → ses factures uniquement (RLS).
+ * Avec le client admin (cron) → toutes les factures de tous les comptes.
+ */
+export async function runReminders(supabase: SupabaseClient, today = new Date()) {
+  const { data, error } = await supabase
+    .from("invoices")
+    .select("*, reminders(step, sent_at)")
+    .eq("status", "pending")
+    .lte("due_date", today.toISOString().slice(0, 10));
+  if (error) throw error;
+  const invoices = (data ?? []) as Invoice[];
+
+  const userIds = [...new Set(invoices.map((i) => i.user_id))];
+  const { data: profs } = userIds.length
+    ? await supabase.from("profiles").select("user_id, company_name, iban").in("user_id", userIds)
+    : { data: [] };
+  const profiles = new Map((profs ?? []).map((p) => [p.user_id as string, p as Profile]));
 
   const sent: { invoice: string; step: number }[] = [];
   const errors: { invoice: string; error: string }[] = [];
 
   for (const inv of invoices) {
-    const late = daysLate(inv.due_date, today);
-    // Étape la plus avancée atteinte et pas encore envoyée (on n'envoie qu'un mail par facture et par passage).
-    const due = [...STEPS].reverse().find((s) => late >= s.daysAfterDue);
-    if (!due) continue;
-    const already = db
-      .prepare("SELECT 1 FROM reminders WHERE invoice_id = ? AND step >= ?")
-      .get(inv.id, due.step);
-    if (already) continue;
-
-    const { subject, text } = renderEmail(inv, due.step);
+    const step = stepToSend(inv, today);
+    if (!step) continue;
+    const { subject, text } = renderEmail(inv, step, profiles.get(inv.user_id));
     try {
-      await sendEmail(inv.client_email, subject, text);
-      db.prepare("INSERT OR IGNORE INTO reminders (invoice_id, step) VALUES (?, ?)").run(inv.id, due.step);
-      sent.push({ invoice: inv.number, step: due.step });
+      // On réserve l'étape AVANT l'envoi : si deux passages tournent en même temps,
+      // la contrainte unique empêche le doublon.
+      const { error: insErr } = await supabase
+        .from("reminders")
+        .insert({ invoice_id: inv.id, user_id: inv.user_id, step });
+      if (insErr) {
+        if (insErr.code === "23505") continue; // déjà envoyée
+        throw insErr;
+      }
+      try {
+        await sendEmail(inv.client_email, subject, text);
+      } catch (e) {
+        // Échec d'envoi : on libère l'étape pour réessayer au prochain passage.
+        await supabase.from("reminders").delete().eq("invoice_id", inv.id).eq("step", step);
+        throw e;
+      }
+      sent.push({ invoice: inv.number, step });
     } catch (e) {
-      errors.push({ invoice: inv.number, error: String(e) });
+      errors.push({ invoice: inv.number, error: e instanceof Error ? e.message : JSON.stringify(e) });
     }
   }
   return { sent, errors };
