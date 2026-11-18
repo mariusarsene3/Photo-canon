@@ -60,6 +60,7 @@ export default async function Home({
           <p className="muted">Vos factures impayées relancées automatiquement à J+1, J+7 et J+15.</p>
         </div>
         <form action={logout} className="account">
+          <a href="/retenues" className="small-link">Retenues de garantie</a>
           <a href="/compte" className="small-link">Mon compte</a>
           <SubmitButton className="small ghost">Se déconnecter</SubmitButton>
         </form>

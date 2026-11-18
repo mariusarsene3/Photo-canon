@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { runReminders } from "@/lib/reminders";
 import { createAdminClient } from "@/lib/supabase/server";
 import { runLifecycle } from "@/lib/lifecycle";
+import { runGuaranteeAlerts } from "@/lib/guarantees";
 
 export const dynamic = "force-dynamic";
 
@@ -22,5 +23,11 @@ export async function GET(req: Request) {
   } catch (e) {
     lifecycle = { error: e instanceof Error ? e.message : String(e) };
   }
-  return NextResponse.json({ reminders, lifecycle });
+  let guarantees: unknown;
+  try {
+    guarantees = await runGuaranteeAlerts(admin);
+  } catch (e) {
+    guarantees = { error: e instanceof Error ? e.message : String(e) };
+  }
+  return NextResponse.json({ reminders, lifecycle, guarantees });
 }
