@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { formatIban, paymentUrl } from "./payment";
+import { accessFrom, type Billing } from "./billing";
 
 // Scénario de relance : nombre de jours APRÈS l'échéance.
 export const STEPS = [
@@ -100,7 +101,21 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
     .eq("status", "pending")
     .lte("due_date", today.toISOString().slice(0, 10));
   if (error) throw error;
-  const invoices = (data ?? []) as Invoice[];
+  let invoices = (data ?? []) as Invoice[];
+
+  // Seuls les comptes en essai ou abonnés sont relancés. Si la table billing n'existe pas encore
+  // (migration 003 non appliquée), personne n'est bloqué.
+  let paused = 0;
+  const ids = [...new Set(invoices.map((i) => i.user_id))];
+  if (ids.length) {
+    const { data: bills, error: billErr } = await supabase.from("billing").select("*").in("user_id", ids);
+    if (!billErr) {
+      const byUser = new Map((bills as Billing[]).map((b) => [b.user_id, b]));
+      const allowed = new Set(ids.filter((id) => accessFrom(byUser.get(id) ?? null, today).ok));
+      paused = invoices.filter((i) => !allowed.has(i.user_id)).length;
+      invoices = invoices.filter((i) => allowed.has(i.user_id));
+    }
+  }
 
   const userIds = [...new Set(invoices.map((i) => i.user_id))];
   const { data: profs } = userIds.length
@@ -137,5 +152,5 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
       errors.push({ invoice: inv.number, error: e instanceof Error ? e.message : JSON.stringify(e) });
     }
   }
-  return { sent, errors };
+  return { sent, errors, paused };
 }

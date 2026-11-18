@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { BRAND } from "@/lib/brand";
+import { getMyAccess } from "@/lib/billing";
 import { STEPS, daysLate, euros, type Invoice, type Profile } from "@/lib/reminders";
 import { addInvoice, deleteInvoice, markPaid, saveSettings, sendNow } from "./actions";
 import { logout } from "./login/actions";
@@ -34,13 +35,14 @@ export default async function Home({
   } = await supabase.auth.getUser();
   if (!user) return <Landing />;
 
-  const [{ data: inv }, { data: prof }] = await Promise.all([
+  const [{ data: inv }, { data: prof }, access] = await Promise.all([
     supabase
       .from("invoices")
       .select("*, reminders(step, sent_at)")
       .order("status", { ascending: false })
       .order("due_date", { ascending: true }),
     supabase.from("profiles").select("company_name, iban").maybeSingle(),
+    getMyAccess(supabase),
   ]);
   const invoices = (inv ?? []) as Invoice[];
   const profile = (prof ?? { company_name: "", iban: "" }) as Profile;
@@ -58,10 +60,23 @@ export default async function Home({
           <p className="muted">Vos factures impayées relancées automatiquement à J+1, J+7 et J+15.</p>
         </div>
         <form action={logout} className="account">
-          <span className="muted small">{user?.email}</span>
+          <a href="/compte" className="small-link">Mon compte</a>
           <SubmitButton className="small ghost">Se déconnecter</SubmitButton>
         </form>
       </header>
+
+      {access.reason === "trial" && access.daysLeft <= 14 && (
+        <p className="alert trial">
+          Essai gratuit : encore <b>{access.daysLeft} jour{access.daysLeft > 1 ? "s" : ""}</b>.{" "}
+          <a href="/compte">S&apos;abonner</a>
+        </p>
+      )}
+      {!access.ok && (
+        <p className="alert err">
+          Votre essai gratuit est terminé : les relances automatiques sont en pause. <a href="/compte">Abonnez-vous</a> pour
+          les relancer.
+        </p>
+      )}
 
       <section className="stats">
         <div className="stat"><span>À encaisser</span><strong>{sum(pending)}</strong></div>

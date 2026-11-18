@@ -31,8 +31,8 @@ export default async function LoginPage({
           <button type="submit">{isSignup ? "Créer mon compte" : "Se connecter"}</button>
           {isSignup && (
             <p className="muted small consent">
-              En créant un compte, vous acceptez la <Link href="/confidentialite">politique de confidentialité</Link>.
-              Voir aussi les <Link href="/mentions-legales">mentions légales</Link>.
+              En créant un compte, vous acceptez les <Link href="/cgv">conditions générales de vente</Link> et la{" "}
+              <Link href="/confidentialite">politique de confidentialité</Link>.
             </p>
           )}
         </form>

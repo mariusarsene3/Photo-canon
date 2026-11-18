@@ -51,8 +51,11 @@ export async function sendNow() {
   let notice: string;
   let kind = "ok";
   try {
-    const { sent, errors } = await runReminders(supabase);
-    if (errors.length) {
+    const { sent, errors, paused } = await runReminders(supabase);
+    if (paused) {
+      kind = "err";
+      notice = "Votre essai gratuit est terminé : les relances sont en pause. Abonnez-vous depuis « Mon compte » pour les relancer.";
+    } else if (errors.length) {
       kind = "err";
       notice =
         `${sent.length} relance(s) envoyée(s), ${errors.length} en échec. ` +
