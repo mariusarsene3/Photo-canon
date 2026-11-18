@@ -19,6 +19,11 @@ function BrandPanel() {
           <span>Récupéré ce mois-ci</span>
           <strong>4 930 €</strong>
           <div className="auth-mock-bar"><i /></div>
+          <ul className="auth-mock-list">
+            <li><b>Boulangerie Dupont</b><em>1 250 €</em><i className="ok">Payée</i></li>
+            <li><b>SARL Leroy</b><em>480 €</em><i>Relance envoyée</i></li>
+            <li><b>Garage Bernard</b><em>3 200 €</em><i className="late">Dernier avis</i></li>
+          </ul>
         </div>
         <div className="auth-mock-toast"><b>✓</b> Boulangerie Dupont a payé 1 250 €</div>
       </div>
@@ -122,6 +127,11 @@ export default async function LoginPage({
             )}
           </p>
         </div>
+        <nav className="auth-legal" aria-label="Informations légales">
+          <Link href="/cgv">CGV</Link>
+          <Link href="/confidentialite">Confidentialité</Link>
+          <Link href="/mentions-legales">Mentions légales</Link>
+        </nav>
       </main>
     </div>
   );
