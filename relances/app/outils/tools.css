@@ -1,0 +1,76 @@
+/* ===== Outils gratuits (style sobre de la page d'accueil) ===== */
+.lp-brand-link { color: inherit; text-decoration: none; }
+.tool-page { padding-top: 40px; padding-bottom: 48px; }
+.tool-page h1 { font-size: clamp(28px, 5.5vw, 44px); line-height: 1.08; letter-spacing: -.035em; font-weight: 700; max-width: 820px; }
+.tool-crumbs { font-size: 13px; color: var(--lp-muted); margin-bottom: 16px !important; }
+.tool-crumbs a { color: var(--lp-muted); }
+.tool-intro { margin-top: 14px !important; color: var(--lp-muted); font-size: 17px; line-height: 1.55; max-width: 680px; }
+
+.tool { display: grid; gap: 24px; margin-top: 32px; align-items: start; }
+@media (min-width: 960px) { .tool { grid-template-columns: 1fr 1.15fr; } .tool-result { position: sticky; top: 16px; } }
+
+.tool-form { display: grid; gap: 18px; }
+.tool-form fieldset { border: 1px solid var(--lp-line); border-radius: 12px; padding: 16px; margin: 0; display: grid; gap: 12px; min-width: 0; }
+.tool-form legend { font-size: 13px; font-weight: 600; color: var(--lp-muted); padding: 0 6px; }
+.tool-field { display: grid; gap: 6px; font-size: 14px; min-width: 0; }
+.tool-field span { color: var(--lp-muted); font-size: 13px; }
+.tool-field input, .tool-radios input[type=text] {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--lp-line); border-radius: 8px;
+  background: var(--lp-bg); color: var(--lp-fg); font: inherit; font-size: 15px;
+}
+.tool-field input:focus { outline: 2px solid var(--lp-fg); outline-offset: 1px; }
+.tool-2col { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 420px) { .tool-2col { grid-template-columns: 1fr; } }
+.tool-inline { margin-left: 28px; max-width: 200px; }
+
+.tool-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.tool-seg button { background: var(--lp-bg); color: var(--lp-fg); border: 1px solid var(--lp-line); border-radius: 8px; padding: 10px; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; }
+.tool-seg button.on { background: var(--lp-fg); color: var(--lp-bg); border-color: var(--lp-fg); }
+
+.tool-radios { display: grid; gap: 10px; }
+.tool-radios > label:not(.tool-field) { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.tool-radios input[type=radio] { margin-top: 4px; accent-color: var(--lp-fg); }
+.tool-radios b { display: block; font-size: 15px; }
+.tool-radios small { display: block; color: var(--lp-muted); font-size: 13px; }
+
+.tool-result { border: 1px solid var(--lp-line); border-radius: 12px; overflow: hidden; background: var(--lp-bg); box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 24px 48px -24px rgba(0,0,0,.18); }
+.tool-result-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--lp-line); font-size: 13px; font-weight: 600; color: var(--lp-muted); flex-wrap: wrap; }
+.tool-result-bar > div { display: flex; gap: 8px; }
+.tool-ghost { background: transparent; color: var(--lp-fg); border: 1px solid var(--lp-line); border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.tool-letter { margin: 0; padding: 20px; white-space: pre-wrap; overflow-wrap: anywhere; font: 14.5px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--lp-fg); }
+.tool-hint { color: var(--lp-muted); font-size: 13px; line-height: 1.5; padding: 0 20px 16px; }
+.tool-form .tool-hint { padding: 0; }
+.tool-warn { color: var(--lp-late); font-size: 13px; }
+.tool-empty { color: var(--lp-muted); padding: 32px 20px; text-align: center; }
+
+.tool-calc { padding: 8px 0 4px; }
+.tool-calc-row { display: flex; justify-content: space-between; gap: 16px; padding: 12px 20px; border-bottom: 1px solid var(--lp-line); font-size: 15px; }
+.tool-calc-row b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tool-calc-total { font-size: 18px; border-bottom: 0; }
+.tool-calc-total b { font-size: 22px; }
+.tool-calc .tool-hint { padding-top: 8px; }
+
+.tool-cta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px 24px; margin-top: 48px; padding: 24px; border: 1px solid var(--lp-line); border-radius: 12px; background: var(--lp-soft); }
+.tool-cta-title { font-weight: 700; font-size: 18px; }
+.tool-cta-text { color: var(--lp-muted); margin-top: 4px !important; max-width: 560px; line-height: 1.5; }
+
+.tool-tips { margin-top: 56px; max-width: 760px; }
+.tool-tips h2 { font-size: 24px; letter-spacing: -.02em; margin-bottom: 16px !important; }
+.tool-tips h3 { font-size: 16px; margin: 20px 0 6px !important; }
+.tool-tips p { color: var(--lp-muted); line-height: 1.6; }
+
+.tool-list { display: grid; gap: 14px; margin-top: 32px; }
+@media (min-width: 800px) { .tool-list { grid-template-columns: repeat(3, 1fr); } }
+.tool-card { display: grid; gap: 8px; padding: 22px; border: 1px solid var(--lp-line); border-radius: 12px; color: var(--lp-fg); text-decoration: none; }
+.tool-card:hover { border-color: var(--lp-fg); }
+.tool-card h2 { font-size: 18px; }
+.tool-card p { color: var(--lp-muted); font-size: 15px; line-height: 1.5; }
+.tool-card span { font-weight: 600; font-size: 14px; margin-top: 4px; }
+
+/* Impression : uniquement la lettre */
+@media print {
+  .lp-nav, .lp-footer, .tool-crumbs, .tool-page > h1, .tool-intro, .tool-form, .tool-result-bar, .tool-cta, .tool-tips, .tool-hint, .lp-sticky { display: none !important; }
+  .tool, .tool-result { display: block; border: 0; box-shadow: none; margin: 0; }
+  .tool-letter { padding: 0; font-size: 12pt; color: #000; }
+  .lp { background: #fff; }
+}
