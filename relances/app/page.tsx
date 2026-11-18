@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { STEPS, daysLate, euros, type Invoice, type Profile } from "@/lib/reminders";
 import { addInvoice, deleteInvoice, markPaid, saveSettings, sendNow } from "./actions";
 import { logout } from "./login/actions";
+import { SubmitButton } from "./submit-button";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +20,12 @@ function Status({ inv }: { inv: Invoice }) {
   );
 }
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ ok?: string; err?: string }>;
+}) {
+  const { ok, err } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -49,7 +55,7 @@ export default async function Home() {
         </div>
         <form action={logout} className="account">
           <span className="muted small">{user?.email}</span>
-          <button className="small ghost">Se déconnecter</button>
+          <SubmitButton className="small ghost">Se déconnecter</SubmitButton>
         </form>
       </header>
 
@@ -67,15 +73,17 @@ export default async function Home() {
           <input name="client_email" type="email" placeholder="E-mail du client" required />
           <input name="amount" inputMode="decimal" placeholder="Montant TTC (€)" required />
           <input name="due_date" type="date" defaultValue={today} required />
-          <button type="submit">Ajouter</button>
+          <SubmitButton pending="Ajout…">Ajouter</SubmitButton>
         </form>
       </section>
 
       <section className="card">
         <div className="row">
           <h2>Factures</h2>
-          <form action={sendNow}><button className="secondary">Envoyer les relances dues maintenant</button></form>
+          <form action={sendNow}><SubmitButton className="secondary" pending="Envoi en cours…">Envoyer les relances dues maintenant</SubmitButton></form>
         </div>
+        {ok && <p className="alert ok">{ok}</p>}
+        {err && <p className="alert err">{err}</p>}
         {invoices.length === 0 ? (
           <p className="muted">Aucune facture pour l&apos;instant. Ajoutez-en une ci-dessus.</p>
         ) : (
@@ -94,9 +102,9 @@ export default async function Home() {
                     <td><Status inv={i} /></td>
                     <td><div className="actions">
                       {i.status === "pending" && (
-                        <form action={markPaid}><input type="hidden" name="id" value={i.id} /><button className="small">Payée ✓</button></form>
+                        <form action={markPaid}><input type="hidden" name="id" value={i.id} /><SubmitButton className="small">Payée ✓</SubmitButton></form>
                       )}
-                      <form action={deleteInvoice}><input type="hidden" name="id" value={i.id} /><button className="small ghost" title="Supprimer">✕</button></form>
+                      <form action={deleteInvoice}><input type="hidden" name="id" value={i.id} /><SubmitButton className="small ghost" title="Supprimer">✕</SubmitButton></form>
                     </div></td>
                   </tr>
                 ))}
@@ -111,7 +119,7 @@ export default async function Home() {
         <form action={saveSettings} className="grid">
           <input name="company_name" placeholder="Nom de votre entreprise (signature)" defaultValue={profile.company_name} />
           <input name="iban" placeholder="IBAN (affiché dans les relances)" defaultValue={profile.iban} />
-          <button type="submit" className="secondary">Enregistrer</button>
+          <SubmitButton className="secondary" pending="Enregistrement…">Enregistrer</SubmitButton>
         </form>
         <p className="muted small">
           Scénario : {STEPS.map((s) => `${s.label} (J+${s.daysAfterDue})`).join(" → ")}

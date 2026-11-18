@@ -50,3 +50,5 @@ tr.dim td { opacity: .55; }
 .alert.err { background: var(--late-bg); color: var(--late); }
 .alert.ok { background: var(--ok-bg); color: var(--ok); }
 a { color: var(--accent); }
+button:disabled { opacity: .6; cursor: wait; }
+td:first-child { white-space: nowrap; }
