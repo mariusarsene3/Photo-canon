@@ -1,75 +1,59 @@
 import "./landing.css";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
-import { Calculator } from "./calculator";
 import { StickyCta } from "./sticky-cta";
 
 const SIGNUP = "/login?mode=signup";
 
-const timeline = [
-  {
-    day: "J+1",
-    tone: "soft",
-    label: "Rappel amical",
-    subject: "Petit rappel : facture F-042",
-    excerpt: "Sauf erreur de notre part, la facture n'a pas encore été réglée. S'il s'agit d'un oubli…",
-  },
-  {
-    day: "J+7",
-    tone: "firm",
-    label: "Relance ferme",
-    subject: "Relance : facture F-042 en attente",
-    excerpt: "Malgré notre précédent rappel, la facture reste impayée. Merci de régulariser sous 7 jours…",
-  },
-  {
-    day: "J+15",
-    tone: "hard",
-    label: "Dernier avis",
-    subject: "Dernier avis avant mise en demeure",
-    excerpt: "Sans règlement sous 8 jours, nous engagerons une procédure de recouvrement. Indemnité de 40 €…",
-  },
+const steps = [
+  { n: "01", title: "Ajoutez vos factures", text: "Client, montant, échéance. Vingt secondes par facture, depuis votre téléphone ou votre ordinateur." },
+  { n: "02", title: "Les relances partent seules", text: "Chaque matin, les factures en retard sont relancées selon un scénario éprouvé, signé à votre nom." },
+  { n: "03", title: "Vous êtes payé", text: "Marquez la facture comme payée. Les relances s'arrêtent immédiatement." },
+];
+
+const sequence = [
+  { day: "J+1", label: "Rappel courtois", subject: "Petit rappel : facture F-042", text: "Un message cordial qui laisse au client le bénéfice du doute. La plupart des retards sont des oublis." },
+  { day: "J+7", label: "Relance ferme", subject: "Relance : facture F-042 en attente de règlement", text: "Un ton plus direct, avec un délai précis pour régulariser." },
+  { day: "J+15", label: "Dernier avis", subject: "Dernier avis avant mise en demeure", text: "Rappel des pénalités de retard et de l'indemnité forfaitaire de 40 € prévues par la loi." },
 ];
 
 const features = [
-  { icon: "⚖️", color: "violet", title: "Mentions légales incluses", text: "Pénalités de retard et indemnité de 40 € (art. L441-10) rappelées au bon moment." },
-  { icon: "🏦", color: "blue", title: "Votre IBAN dans chaque mail", text: "Le client a tout pour payer immédiatement, sans vous rappeler." },
-  { icon: "🛑", color: "green", title: "Stop dès que c'est payé", text: "Un clic sur « Payée » et plus aucune relance ne part." },
-  { icon: "📊", color: "orange", title: "Votre trésorerie en clair", text: "À encaisser, en retard, récupéré : tout en un coup d'œil." },
-  { icon: "📱", color: "pink", title: "Fait pour le téléphone", text: "Ajoutez une facture entre deux chantiers, en 20 secondes." },
-  { icon: "🔒", color: "teal", title: "Données protégées", text: "Comptes cloisonnés, données hébergées en Europe." },
+  { title: "Conforme au Code de commerce", text: "Pénalités de retard et indemnité forfaitaire de 40 € (art. L441-10) rappelées au bon moment." },
+  { title: "Votre IBAN dans chaque relance", text: "Le client dispose de tout ce qu'il faut pour payer immédiatement." },
+  { title: "Arrêt automatique", text: "Une facture marquée payée n'est plus jamais relancée." },
+  { title: "Trésorerie en un coup d'œil", text: "À encaisser, en retard, récupéré : vos chiffres, à jour." },
+  { title: "Pensé pour le mobile", text: "Ajoutez une facture entre deux rendez-vous, sans ordinateur." },
+  { title: "Données hébergées en Europe", text: "Chaque compte est strictement cloisonné." },
 ];
 
 const faq = [
   {
     q: "Mes clients vont-ils mal le prendre ?",
-    a: "Le premier message est un simple rappel aimable (« si le paiement est déjà parti, ne tenez pas compte de ce message »). La plupart des retards sont des oublis : un rappel poli suffit souvent.",
+    a: "Le premier message est un rappel courtois qui précise « si le paiement est déjà parti, ne tenez pas compte de ce message ». Le ton ne se durcit que si le client ne réagit pas.",
   },
   { q: "Les e-mails partent-ils à mon nom ?", a: "Oui, ils sont signés avec le nom de votre entreprise." },
-  { q: "Et si le client paie entre deux relances ?", a: "Marquez la facture comme payée en un clic : plus aucune relance ne part." },
-  { q: "Je peux arrêter quand je veux ?", a: "Oui, l'abonnement est sans engagement." },
+  { q: "Que se passe-t-il si le client paie entre deux relances ?", a: "Vous marquez la facture comme payée en un clic, et plus aucune relance ne part." },
+  { q: "Puis-je arrêter à tout moment ?", a: "Oui, l'abonnement est sans engagement." },
 ];
 
-function Mockup() {
+function ProductShot() {
   return (
-    <div className="mock-wrap" aria-hidden>
-      <div className="mock">
-        <div className="mock-top">
-          <span className="mock-title">{BRAND.name}</span>
-          <span className="mock-pill">Ce mois-ci</span>
+    <div className="ps" aria-hidden>
+      <div className="ps-bar"><i /><i /><i /></div>
+      <div className="ps-body">
+        <div className="ps-stats">
+          <div><span>À encaisser</span><strong>5 029 €</strong></div>
+          <div><span>En retard</span><strong className="ps-late">4 930 €</strong></div>
+          <div><span>Récupéré</span><strong className="ps-ok">12 480 €</strong></div>
         </div>
-        <div className="mock-big">
-          <span>Récupéré</span>
-          <strong>4 930 €</strong>
-          <div className="mock-bar"><i style={{ width: "78%" }} /></div>
-        </div>
-        <div className="mock-rows">
-          <div className="mock-row"><b>SARL Leroy</b><span>3 200 €</span><em className="t-ok">Payée</em></div>
-          <div className="mock-row"><b>Boulangerie Dupont</b><span>480 €</span><em className="t-firm">Relance J+7</em></div>
-          <div className="mock-row"><b>Café du Port</b><span>1 250 €</span><em className="t-soft">Rappel J+1</em></div>
+        <div className="ps-table">
+          <div className="ps-row ps-head"><span>Client</span><span>Montant</span><span>Statut</span></div>
+          <div className="ps-row"><span>SARL Leroy</span><span>3 200 €</span><span><em className="ps-b ps-b-late">Dernier avis envoyé</em></span></div>
+          <div className="ps-row"><span>Boulangerie Dupont</span><span>480 €</span><span><em className="ps-b ps-b-late">Relance envoyée</em></span></div>
+          <div className="ps-row"><span>Plomberie Martin</span><span>1 250 €</span><span><em className="ps-b ps-b-ok">Payée</em></span></div>
+          <div className="ps-row"><span>Café du Port</span><span>99 €</span><span><em className="ps-b">À venir</em></span></div>
         </div>
       </div>
-      <div className="toast toast-1">✅ <span><b>SARL Leroy</b> a payé 3 200 €</span></div>
-      <div className="toast toast-2">📧 <span>Relance envoyée à <b>Café du Port</b></span></div>
     </div>
   );
 }
@@ -77,88 +61,77 @@ function Mockup() {
 export function Landing() {
   return (
     <div className="lp">
-      <section className="lp-hero">
-        <div className="lp-glow" />
-        <nav className="lp-nav">
-          <span className="lp-brand"><span className="lp-logo">€</span>{BRAND.name}</span>
-          <div className="lp-nav-links">
-            <Link href="/login">Connexion</Link>
-            <Link href={SIGNUP} className="lp-btn lp-btn-light lp-btn-sm">Essai gratuit</Link>
-          </div>
-        </nav>
-
-        <div className="lp-hero-grid">
-          <div className="lp-hero-text">
-            <span className="lp-chip">💸 Pour artisans, indépendants &amp; TPE</span>
-            <h1>
-              Vos clients vous doivent de l&apos;argent.
-              <br />
-              <span className="lp-hl">On va le chercher.</span>
-            </h1>
-            <p className="lp-lead">
-              Vos factures impayées sont relancées automatiquement, avec le bon ton au bon moment. Vous, vous
-              travaillez. L&apos;argent rentre.
-            </p>
-            <div className="lp-cta" id="hero-cta">
-              <Link href={SIGNUP} className="lp-btn lp-btn-cta">Essayer gratuitement {BRAND.trialDays} jours →</Link>
-              <span className="lp-cta-note">Sans engagement · Prêt en 2 minutes</span>
-            </div>
-            <div className="lp-steps-inline">
-              <span><i className="d-soft" />J+1 rappel</span>
-              <span><i className="d-firm" />J+7 relance</span>
-              <span><i className="d-hard" />J+15 dernier avis</span>
-            </div>
-          </div>
-          <Mockup />
+      <nav className="lp-nav lp-wrap">
+        <span className="lp-brand">{BRAND.name}</span>
+        <div className="lp-nav-links">
+          <a href="#fonctionnement" className="lp-hide-sm">Fonctionnement</a>
+          <a href="#tarif" className="lp-hide-sm">Tarif</a>
+          <Link href="/login">Connexion</Link>
+          <Link href={SIGNUP} className="lp-btn lp-btn-sm">Essai gratuit</Link>
         </div>
-      </section>
+      </nav>
 
-      <section className="lp-section">
-        <h2 className="lp-h2">Fini de courir après votre argent</h2>
-        <div className="lp-compare">
-          <div className="lp-col lp-col-bad">
-            <h3>😩 Sans {BRAND.name}</h3>
-            <ul>
-              <li>Vous n&apos;osez pas relancer un bon client</li>
-              <li>Vous y pensez le soir… puis vous oubliez</li>
-              <li>Des semaines de retard, la trésorerie trinque</li>
-              <li>Des heures perdues à écrire des mails gênants</li>
-            </ul>
-          </div>
-          <div className="lp-col lp-col-good">
-            <h3>😎 Avec {BRAND.name}</h3>
-            <ul>
-              <li>Les relances partent toutes seules, chaque matin</li>
-              <li>Un ton pro et progressif, jamais agressif</li>
-              <li>Vous êtes payé plus vite</li>
-              <li>20 secondes par facture, et c&apos;est tout</li>
-            </ul>
-          </div>
+      <header className="lp-hero lp-wrap">
+        <p className="lp-kicker">Relance automatique des factures impayées</p>
+        <h1>Faites-vous payer.<br />Sans relancer <span className="lp-nowrap">vous-même.</span></h1>
+        <p className="lp-lead">
+          Vos clients en retard de paiement sont relancés automatiquement, avec le ton juste à chaque étape,
+          jusqu&apos;au règlement. Conçu pour les artisans, indépendants et petites entreprises.
+        </p>
+        <div className="lp-actions" id="hero-cta">
+          <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
+          <a href="#fonctionnement" className="lp-link">Voir le fonctionnement →</a>
         </div>
-      </section>
+        <p className="lp-meta">{BRAND.trialDays} jours gratuits · Sans engagement · Prêt en deux minutes</p>
+      </header>
 
-      <section className="lp-section">
-        <h2 className="lp-h2">Un ton qui monte, seulement si nécessaire</h2>
-        <p className="lp-sub">Trois e-mails prêts à l&apos;emploi, signés à votre nom. Dès que le client paie, tout s&apos;arrête.</p>
-        <div className="lp-timeline">
-          {timeline.map((t) => (
-            <div key={t.day} className={`lp-mail lp-mail-${t.tone}`}>
-              <div className="lp-mail-day">{t.day}<small>{t.label}</small></div>
-              <div className="lp-mail-body">
-                <b>{t.subject}</b>
-                <p>{t.excerpt}</p>
-              </div>
+      <div className="lp-wrap lp-shot">
+        <ProductShot />
+      </div>
+
+      <section className="lp-section lp-wrap" id="fonctionnement">
+        <div className="lp-head">
+          <p className="lp-kicker">Fonctionnement</p>
+          <h2>Trois étapes. Une seule vous demande quelque chose.</h2>
+        </div>
+        <div className="lp-cols">
+          {steps.map((s) => (
+            <div key={s.n} className="lp-col">
+              <span className="lp-num">{s.n}</span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="lp-section">
-        <h2 className="lp-h2">Tout ce qu&apos;il faut, rien de plus</h2>
-        <div className="lp-features">
+      <section className="lp-section lp-wrap">
+        <div className="lp-head">
+          <p className="lp-kicker">Le scénario</p>
+          <h2>Le bon ton, au bon moment.</h2>
+          <p className="lp-sub">Trois messages rédigés pour préserver la relation client, et ne monter en fermeté que si nécessaire.</p>
+        </div>
+        <ol className="lp-seq">
+          {sequence.map((s) => (
+            <li key={s.day}>
+              <div className="lp-seq-day">{s.day}<span>{s.label}</span></div>
+              <div className="lp-seq-body">
+                <p className="lp-seq-subject">{s.subject}</p>
+                <p>{s.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="lp-section lp-wrap">
+        <div className="lp-head">
+          <p className="lp-kicker">Inclus</p>
+          <h2>L&apos;essentiel, bien fait.</h2>
+        </div>
+        <div className="lp-grid">
           {features.map((f) => (
-            <div key={f.title} className="lp-feature">
-              <span className={`lp-ico lp-ico-${f.color}`}>{f.icon}</span>
+            <div key={f.title} className="lp-feat">
               <h3>{f.title}</h3>
               <p>{f.text}</p>
             </div>
@@ -166,27 +139,33 @@ export function Landing() {
         </div>
       </section>
 
-      <section className="lp-section" id="tarif">
-        <h2 className="lp-h2">Rentabilisé dès la première facture</h2>
-        <div className="lp-pricing">
-          <Calculator price={BRAND.price} />
-          <div className="lp-price">
-            <span className="lp-badge">Tarif de lancement</span>
-            <p className="lp-amount"><strong>{BRAND.price} €</strong> HT / mois</p>
-            <ul>
-              <li>Factures et relances illimitées</li>
-              <li>Scénario J+1 / J+7 / J+15</li>
-              <li>Tableau de bord de trésorerie</li>
-              <li>Sans engagement</li>
-            </ul>
-            <Link href={SIGNUP} className="lp-btn lp-btn-cta lp-btn-full">Commencer l&apos;essai gratuit</Link>
-            <p className="lp-small">{BRAND.trialDays} jours gratuits pour essayer.</p>
+      <section className="lp-section lp-wrap" id="tarif">
+        <div className="lp-head">
+          <p className="lp-kicker">Tarif</p>
+          <h2>Un prix simple.</h2>
+          <p className="lp-sub">Une seule facture de 800 € récupérée couvre plus de deux ans d&apos;abonnement.</p>
+        </div>
+        <div className="lp-price">
+          <div className="lp-price-top">
+            <p className="lp-plan">{BRAND.name}</p>
+            <p className="lp-amount"><strong>{BRAND.price} €</strong><span>HT / mois</span></p>
           </div>
+          <ul>
+            <li>Factures et relances illimitées</li>
+            <li>Scénario J+1, J+7, J+15</li>
+            <li>Tableau de bord de trésorerie</li>
+            <li>Sans engagement</li>
+          </ul>
+          <Link href={SIGNUP} className="lp-btn lp-btn-full">Commencer l&apos;essai gratuit</Link>
+          <p className="lp-meta lp-center">{BRAND.trialDays} jours gratuits</p>
         </div>
       </section>
 
-      <section className="lp-section">
-        <h2 className="lp-h2">Questions fréquentes</h2>
+      <section className="lp-section lp-wrap">
+        <div className="lp-head">
+          <p className="lp-kicker">Questions</p>
+          <h2>Questions fréquentes</h2>
+        </div>
         <div className="lp-faq">
           {faq.map((f) => (
             <details key={f.q}>
@@ -197,16 +176,18 @@ export function Landing() {
         </div>
       </section>
 
-      <section className="lp-final">
-        <h2>Récupérez l&apos;argent qu&apos;on vous doit.</h2>
-        <p>Créez votre compte et ajoutez votre première facture en 2 minutes.</p>
-        <Link href={SIGNUP} className="lp-btn lp-btn-light">Essayer gratuitement →</Link>
+      <section className="lp-final lp-wrap">
+        <h2>Récupérez ce qu&apos;on vous doit.</h2>
+        <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
       </section>
 
-      <footer className="lp-footer">© {new Date().getFullYear()} {BRAND.name}</footer>
+      <footer className="lp-footer lp-wrap">
+        <span className="lp-brand">{BRAND.name}</span>
+        <span>© {new Date().getFullYear()}</span>
+      </footer>
 
       <StickyCta>
-        <Link href={SIGNUP} className="lp-btn lp-btn-cta lp-btn-full">Essai gratuit {BRAND.trialDays} jours</Link>
+        <Link href={SIGNUP} className="lp-btn lp-btn-full">Commencer l&apos;essai gratuit</Link>
       </StickyCta>
     </div>
   );
