@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { euros, frDate } from "@/lib/reminders";
 import { cleanIban, formatIban, isValidIban, sepaQrSvg } from "@/lib/payment";
 import { CopyButton } from "./copy-button";
+import { Avatar } from "../../invoice-list";
+import { BRAND } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Régler une facture", robots: { index: false } };
@@ -38,18 +40,28 @@ export default async function PayPage({ params }: { params: Promise<{ token: str
     : null;
 
   return (
+    <div className="pay-wrap">
     <main className="pay">
-      <p className="pay-from">{company}</p>
-      <h1>Facture {inv.number}</h1>
+      <header className="pay-head">
+        <Avatar name={company} size={48} />
+        <div>
+          <p className="pay-from">{company}</p>
+          <h1>Facture n° {inv.number}</h1>
+        </div>
+      </header>
 
       {inv.status === "paid" ? (
-        <p className="alert ok">Cette facture est réglée. Merci !</p>
+        <div className="pay-paid">
+          <span aria-hidden>✓</span>
+          <h2>Facture réglée</h2>
+          <p className="muted">Merci ! Aucune action n&apos;est nécessaire.</p>
+        </div>
       ) : (
         <>
           <div className="pay-amount">
             <span>Montant à régler</span>
             <strong>{euros(inv.amount_cents)}</strong>
-            <span>Échéance : {frDate(inv.due_date)}</span>
+            <span>Échéance : {frDate(inv.due_date)} · {inv.client_name}</span>
           </div>
 
           {hasIban ? (
@@ -95,9 +107,14 @@ export default async function PayPage({ params }: { params: Promise<{ token: str
             </p>
           )}
 
-          <p className="muted small">Si vous avez déjà effectué le paiement, merci de ne pas tenir compte des relances.</p>
+          <p className="muted small pay-note">Si vous avez déjà effectué le paiement, merci de ne pas tenir compte des relances.</p>
         </>
       )}
+      <footer className="pay-foot">
+        <span>🔒 Page sécurisée</span>
+        <span>Lien de paiement envoyé par {company} via {BRAND.name}</span>
+      </footer>
     </main>
+    </div>
   );
 }

@@ -17,11 +17,15 @@ export async function GET(request: NextRequest) {
       ? await supabase.auth.verifyOtp({ type, token_hash })
       : { error: new Error("lien invalide") };
 
-  // E-mail confirmé : le compte est actif, on envoie la bienvenue (une seule fois).
-  if (!error) {
+  // Destination après connexion : uniquement un chemin interne (pas de redirection vers un autre site).
+  const nextParam = searchParams.get("next") ?? "";
+  const next = /^\/[a-z0-9\-/]*$/i.test(nextParam) && !nextParam.startsWith("//") ? nextParam : "/";
+
+  // E-mail confirmé : le compte est actif, on envoie la bienvenue (une seule fois). Pas pour un mot de passe oublié.
+  if (!error && type !== "recovery" && next === "/") {
     const { data: { user } } = await supabase.auth.getUser();
     if (user?.email) await sendWelcome(user.id, user.email, adminOrNull());
   }
-  const dest = error ? "/login?error=" + encodeURIComponent("Lien expiré ou invalide.") : "/";
+  const dest = error ? "/login?error=" + encodeURIComponent("Lien expiré ou invalide.") : next;
   return NextResponse.redirect(new URL(dest, request.url));
 }

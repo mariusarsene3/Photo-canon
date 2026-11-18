@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toast } from "../toast";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND } from "@/lib/brand";
 import { euros } from "@/lib/reminders";
@@ -7,6 +8,7 @@ import { SubmitButton } from "../submit-button";
 import { CopyButton } from "../payer/[token]/copy-button";
 import { addGuarantee, deleteGuarantee, markReleased, sendClaim, toInvoice } from "./actions";
 import { AppShell } from "../app-shell";
+import { Avatar } from "../invoice-list";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: `Retenues de garantie — ${BRAND.name}` };
@@ -44,7 +46,7 @@ export default async function Retenues({ searchParams }: { searchParams: Promise
         Les 5 % retenus sur vos chantiers doivent vous être rendus un an après la réception des travaux. {BRAND.name} vous
         prévient 30 jours avant et le jour J, et envoie la demande à votre client.
       </p>
-      {ok && <p className="alert ok">{ok}</p>}
+      <Toast message={ok} />
       {err && <p className="alert err">{err}</p>}
 
       {error ? (
@@ -91,11 +93,14 @@ export default async function Retenues({ searchParams }: { searchParams: Promise
                 return (
                   <article key={g.id} className={`card rg-item${g.status === "released" ? " dim" : ""}`}>
                     <div className="row">
-                      <div>
+                      <div className="rg-id">
+                        <Avatar name={g.client_name} />
+                        <div>
                         <h3>{g.site}</h3>
                         <p className="muted small">
                           {g.client_name}{g.client_email ? ` · ${g.client_email}` : ""} · {g.kind === "caution" ? "Caution bancaire" : "Somme retenue"}
                         </p>
+                        </div>
                       </div>
                       <div className="rg-amount">
                         <strong>{euros(g.amount_cents)}</strong>

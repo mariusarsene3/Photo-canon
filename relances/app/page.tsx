@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Toast } from "./toast";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND } from "@/lib/brand";
 import { getMyAccess } from "@/lib/billing";
@@ -87,7 +88,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
         </form>
       </div>
 
-      {ok && <p className="alert ok">{ok}</p>}
+      <Toast message={ok} />
       {err && <p className="alert err">{err}</p>}
       {access.reason === "trial" && access.daysLeft <= 14 && (
         <p className="alert trial">

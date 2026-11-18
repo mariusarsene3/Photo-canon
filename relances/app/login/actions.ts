@@ -44,3 +44,27 @@ export async function logout() {
   await supabase.auth.signOut();
   redirect("/login");
 }
+
+/** Mot de passe oublié : Supabase envoie un lien qui ramène vers la page de nouveau mot de passe. */
+export async function requestReset(form: FormData) {
+  const email = String(form.get("email") ?? "").trim();
+  if (!email.includes("@")) redirect(`/login?mode=reset&error=${encodeURIComponent("Indiquez votre adresse e-mail.")}`);
+  const supabase = await createClient();
+  const origin = (await headers()).get("origin") ?? "";
+  await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${origin}/auth/confirm?next=/nouveau-mot-de-passe` });
+  // Même message que le compte existe ou non : on ne révèle pas quelles adresses sont inscrites.
+  redirect(`/login?info=${encodeURIComponent("Si un compte existe pour cette adresse, un lien pour choisir un nouveau mot de passe vient d'être envoyé.")}`);
+}
+
+/** Enregistre le nouveau mot de passe (l'utilisateur est connecté via le lien reçu par e-mail). */
+export async function updatePassword(form: FormData) {
+  const password = String(form.get("password") ?? "");
+  const confirm = String(form.get("confirm") ?? "");
+  const back = (m: string) => redirect(`/nouveau-mot-de-passe?error=${encodeURIComponent(m)}`);
+  if (password.length < 8) back("8 caractères minimum.");
+  if (password !== confirm) back("Les deux mots de passe ne correspondent pas.");
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) back("Le lien a expiré : refaites une demande depuis la page de connexion.");
+  redirect(`/?ok=${encodeURIComponent("Mot de passe mis à jour.")}`);
+}

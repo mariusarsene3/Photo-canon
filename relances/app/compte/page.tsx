@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toast } from "../toast";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND } from "@/lib/brand";
@@ -31,7 +32,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
     <div className="account-page">
       <h1>Mon compte</h1>
       <p className="muted">{user?.email}</p>
-      {ok && <p className="alert ok">{ok}</p>}
+      <Toast message={ok} />
       {err && <p className="alert err">{err}</p>}
 
       <section className="card" id="entreprise">
