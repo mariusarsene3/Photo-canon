@@ -63,7 +63,7 @@ export function Landing() {
         <div className="lp-actions" id="hero-cta">
           <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
         </div>
-        <p className="lp-meta">{BRAND.trialDays} jours gratuits · Sans engagement</p>
+        <p className="lp-meta"><strong className="lp-meta-price">{BRAND.price} € HT/mois</strong> · {BRAND.trialDays} jours gratuits · Sans engagement</p>
       </header>
 
       <div className="lp-wrap lp-duo">
