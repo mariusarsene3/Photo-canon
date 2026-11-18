@@ -133,3 +133,10 @@
 .lp-footer-links { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
 .lp-footer-links a { color: var(--lp-muted); text-decoration: none; }
 .lp-footer-links a:hover { color: var(--lp-fg); }
+
+/* Vidéo de démonstration */
+.lp-video-wrap { padding-bottom: 56px; }
+.lp-video { position: relative; border-radius: 16px; overflow: hidden; background: #07070a; aspect-ratio: 16 / 9; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 30px 60px -30px rgba(0,0,0,.45); }
+.lp-video video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.lp-video-btn { position: absolute; right: 14px; bottom: 14px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(0,0,0,.45); color: #fff; font-size: 13px; cursor: pointer; backdrop-filter: blur(6px); }
+.lp-video-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }

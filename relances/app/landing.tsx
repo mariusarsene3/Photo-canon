@@ -2,6 +2,7 @@ import "./landing.css";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { StickyCta } from "./sticky-cta";
+import { DemoVideo } from "./demo-video";
 
 const SIGNUP = "/login?mode=signup";
 
@@ -66,6 +67,10 @@ export function Landing() {
         </div>
         <p className="lp-meta"><strong className="lp-meta-price">{BRAND.price} € HT/mois</strong> · {BRAND.trialDays} jours gratuits · Sans engagement</p>
       </header>
+
+      <div className="lp-wrap lp-video-wrap">
+        <DemoVideo />
+      </div>
 
       <div className="lp-wrap lp-duo">
         <figure>
