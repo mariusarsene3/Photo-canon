@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { formatIban, paymentUrl } from "./payment";
 import { accessFrom, type Billing } from "./billing";
+import { sendEmail } from "./email";
 
 // Scénario de relance : nombre de jours APRÈS l'échéance.
 export const STEPS = [
@@ -63,21 +64,6 @@ export function renderEmail(inv: Invoice, step: number, profile?: Profile) {
   };
 }
 
-async function sendEmail(to: string, subject: string, text: string, replyTo?: string) {
-  const key = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-  if (!key || !from) {
-    // Mode développement : on affiche l'e-mail au lieu de l'envoyer.
-    console.log(`\n📧 [simulation] À: ${to}\nObjet: ${subject}\n\n${text}\n`);
-    return;
-  }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from, to, subject, text, ...(replyTo ? { reply_to: replyTo } : {}) }),
-  });
-  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
-}
 
 /** Étape de relance à envoyer pour cette facture aujourd'hui, ou null. */
 export function stepToSend(inv: Invoice, today = new Date()) {
