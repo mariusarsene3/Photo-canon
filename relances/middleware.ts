@@ -51,5 +51,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  // Les fichiers statiques (modèle CSV, images…) ne passent pas par le middleware.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:csv|png|jpg|svg|ico)$).*)"],
 };

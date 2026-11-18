@@ -75,3 +75,25 @@ td:first-child { white-space: nowrap; }
 .pay-copy { background: transparent; color: var(--accent); border: 1px solid var(--border); padding: 6px 12px; font-size: 13px; }
 .pay-qr { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
 .pay-qr-img svg { width: 120px; height: 120px; display: block; background: #fff; border-radius: 8px; }
+
+/* Import */
+.imp-page { max-width: 1100px; }
+.imp-page h1 { margin-bottom: 16px; }
+.imp-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.imp-tabs a { padding: 8px 14px; border-radius: 8px; text-decoration: none; color: var(--muted); border: 1px solid var(--border); font-weight: 600; font-size: 14px; }
+.imp-tabs a.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+.imp-help { margin: 0 0 16px; line-height: 1.6; }
+.imp { display: grid; gap: 14px; }
+.imp-drop { display: grid; gap: 6px; place-items: center; text-align: center; padding: 36px 16px; border: 2px dashed var(--border); border-radius: 12px; cursor: pointer; }
+.imp-drop:hover { border-color: var(--accent); }
+.imp-drop.busy { cursor: wait; opacity: .7; }
+.imp-drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.imp-drop:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.imp-summary { margin: 0; }
+.imp-table input { width: 100%; min-width: 110px; padding: 6px 8px; font-size: 14px; }
+.imp-table td { padding: 6px 4px; }
+.imp-bad input:invalid, .imp-bad input:placeholder-shown { border-color: var(--late); }
+.imp-side { display: flex; flex-direction: column; gap: 2px; min-width: 120px; }
+.imp-side button { align-self: flex-start; }
+.imp-err { color: var(--late); }
+.imp-actions { justify-content: flex-end; }
