@@ -1,9 +1,11 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Relances — factures payées, sans y penser",
-  description: "Relance automatiquement vos factures impayées.",
+  title: `${BRAND.name} — vos factures impayées relancées automatiquement`,
+  description:
+    "Relance automatique des factures impayées pour artisans, indépendants et TPE : rappel à J+1, relance à J+7, dernier avis à J+15.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
