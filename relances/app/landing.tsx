@@ -7,9 +7,21 @@ import { DemoVideo } from "./demo-video";
 const SIGNUP = "/login?mode=signup";
 
 const steps = [
-  { n: "1", title: "Ajoutez une facture", text: "Client, montant, date limite." },
-  { n: "2", title: "On relance", text: "À J+1, J+7 et J+15 si ce n'est pas payé." },
-  { n: "3", title: "Vous êtes payé", text: "Les relances s'arrêtent." },
+  { n: "1", title: "Vous ajoutez la facture", text: "Le client, son e-mail, le montant et la date limite. Ou importez-les toutes depuis Excel." },
+  { n: "2", title: "Encaissez relance à votre place", text: "J+1 : rappel courtois. J+7 : relance ferme. J+15 : dernier avis. Signés à votre nom." },
+  { n: "3", title: "Votre client paie en un clic", text: "Chaque relance contient un lien avec votre IBAN et un QR code. Une fois payé, tout s'arrête." },
+];
+
+const benefits = [
+  { title: "Payé plus vite", text: "Le client est relancé dès le lendemain de l'échéance, sans que vous ayez à y penser." },
+  { title: "Fini les mails gênants", text: "Le ton monte progressivement et reste professionnel : vous gardez une bonne relation client." },
+  { title: "Vos retenues de garantie récupérées", text: "Dans le bâtiment, Encaissez vous prévient au bout d'un an pour réclamer vos 5 %." },
+];
+
+const faq = [
+  { q: "Mes clients vont-ils mal le prendre ?", a: "Non : le premier message est un simple rappel poli, qui précise « si le paiement est déjà parti, ne tenez pas compte de ce message ». La plupart des retards sont des oublis." },
+  { q: "Les e-mails partent-ils à mon nom ?", a: "Oui, ils sont signés avec le nom de votre entreprise. Votre client ne voit qu'un message de votre part." },
+  { q: "Et si le client paie entre deux relances ?", a: "Vous cochez « Payée » en un clic, ou vous mettez les relances en pause : plus rien ne part." },
 ];
 
 const sampleEmail = `Bonjour Boulangerie Dupont,
@@ -60,7 +72,8 @@ export function Landing() {
         <p className="lp-kicker">Pour les artisans, indépendants et petites entreprises</p>
         <h1>Vos clients ne paient pas ? On les relance à votre place.</h1>
         <p className="lp-lead">
-          Vous ajoutez vos factures. Les e-mails de rappel partent tout seuls jusqu&apos;au paiement.
+          Ajoutez une facture en retard : Encaissez envoie à votre client un rappel poli, puis plus ferme, avec un lien
+          pour payer. Vous n&apos;avez plus à relancer personne.
         </p>
         <div className="lp-actions" id="hero-cta">
           <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
@@ -104,6 +117,20 @@ export function Landing() {
         </div>
       </section>
 
+      <section className="lp-section lp-wrap">
+        <div className="lp-head">
+          <h2>Ce qui change pour vous</h2>
+        </div>
+        <div className="lp-cols">
+          {benefits.map((b) => (
+            <div key={b.title} className="lp-col">
+              <h3>{b.title}</h3>
+              <p>{b.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="lp-section lp-wrap" id="tarif">
         <div className="lp-head">
           <h2>Un prix simple.</h2>
@@ -114,10 +141,27 @@ export function Landing() {
             <p className="lp-amount"><strong>{BRAND.price} €</strong><span>HT / mois</span></p>
           </div>
           <ul>
-            <li>Factures illimitées</li>
+            <li>Factures et relances illimitées</li>
+            <li>Lien de paiement avec IBAN et QR code</li>
+            <li>Import Excel et CSV</li>
+            <li>Suivi des retenues de garantie</li>
             <li>Sans engagement</li>
           </ul>
           <Link href={SIGNUP} className="lp-btn lp-btn-full">Commencer l&apos;essai gratuit</Link>
+        </div>
+      </section>
+
+      <section className="lp-section lp-wrap">
+        <div className="lp-head">
+          <h2>Questions fréquentes</h2>
+        </div>
+        <div className="lp-faq">
+          {faq.map((f) => (
+            <details key={f.q}>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
         </div>
       </section>
 
