@@ -6,16 +6,30 @@ import { StickyCta } from "./sticky-cta";
 const SIGNUP = "/login?mode=signup";
 
 const steps = [
-  { n: "01", title: "Ajoutez vos factures", text: "Client, montant, échéance. Vingt secondes par facture, depuis votre téléphone ou votre ordinateur." },
-  { n: "02", title: "Les relances partent seules", text: "Chaque matin, les factures en retard sont relancées selon un scénario éprouvé, signé à votre nom." },
-  { n: "03", title: "Vous êtes payé", text: "Marquez la facture comme payée. Les relances s'arrêtent immédiatement." },
+  { n: "1", title: "Vous ajoutez une facture", text: "Le nom du client, son e-mail, le montant et la date limite de paiement. C'est tout." },
+  { n: "2", title: "On surveille la date", text: "Si le client n'a pas payé à temps, il reçoit automatiquement un e-mail de rappel, signé à votre nom." },
+  { n: "3", title: "Il paie, ça s'arrête", text: "Quand l'argent arrive, vous cochez « Payée ». Plus aucun e-mail ne part." },
 ];
 
-const sequence = [
-  { day: "J+1", label: "Rappel courtois", subject: "Petit rappel : facture F-042", text: "Un message cordial qui laisse au client le bénéfice du doute. La plupart des retards sont des oublis." },
-  { day: "J+7", label: "Relance ferme", subject: "Relance : facture F-042 en attente de règlement", text: "Un ton plus direct, avec un délai précis pour régulariser." },
-  { day: "J+15", label: "Dernier avis", subject: "Dernier avis avant mise en demeure", text: "Rappel des pénalités de retard et de l'indemnité forfaitaire de 40 € prévues par la loi." },
+const story = [
+  { date: "1er mars", who: "Vous", text: "Vous envoyez une facture de 1 250 € à la Boulangerie Dupont, à payer avant le 31 mars. Vous l'ajoutez dans " },
+  { date: "31 mars", who: "", text: "Date limite. La boulangerie n'a pas payé." },
+  { date: "1er avril", who: "Automatique", text: "La boulangerie reçoit un rappel poli : « Sauf erreur de notre part, la facture n'a pas encore été réglée… »" },
+  { date: "7 avril", who: "Automatique", text: "Toujours rien : une relance plus ferme, avec un délai de 7 jours pour payer." },
+  { date: "15 avril", who: "Automatique", text: "Dernier avis : rappel des pénalités de retard et de l'indemnité légale de 40 €." },
+  { date: "17 avril", who: "Vous", text: "Le virement arrive. Vous cochez « Payée ». C'est terminé." },
 ];
+
+const sampleEmail = `Bonjour Boulangerie Dupont,
+
+Sauf erreur de notre part, la facture F-042 d'un montant de 1 250,00 €, arrivée à échéance le 31/03, n'a pas encore été réglée.
+
+S'il s'agit d'un oubli, merci de procéder au règlement dès que possible. Si le paiement est déjà parti, ne tenez pas compte de ce message.
+
+Règlement par virement : FR76 •••• •••• •••• •••• •••• 189
+
+Cordialement,
+Plomberie Martin`;
 
 const features = [
   { title: "Conforme au Code de commerce", text: "Pénalités de retard et indemnité forfaitaire de 40 € (art. L441-10) rappelées au bon moment." },
@@ -49,9 +63,9 @@ function ProductShot() {
         <div className="ps-table">
           <div className="ps-row ps-head"><span>Client</span><span>Montant</span><span>Statut</span></div>
           <div className="ps-row"><span>SARL Leroy</span><span>3 200 €</span><span><em className="ps-b ps-b-late">Dernier avis envoyé</em></span></div>
-          <div className="ps-row"><span>Boulangerie Dupont</span><span>480 €</span><span><em className="ps-b ps-b-late">Relance envoyée</em></span></div>
-          <div className="ps-row"><span>Plomberie Martin</span><span>1 250 €</span><span><em className="ps-b ps-b-ok">Payée</em></span></div>
-          <div className="ps-row"><span>Café du Port</span><span>99 €</span><span><em className="ps-b">À venir</em></span></div>
+          <div className="ps-row"><span>Boulangerie Dupont</span><span>1 250 €</span><span><em className="ps-b ps-b-late">Rappel envoyé</em></span></div>
+          <div className="ps-row"><span>Café du Port</span><span>480 €</span><span><em className="ps-b ps-b-ok">Payée</em></span></div>
+          <div className="ps-row"><span>Garage Bernard</span><span>99 €</span><span><em className="ps-b">À venir</em></span></div>
         </div>
       </div>
     </div>
@@ -72,27 +86,41 @@ export function Landing() {
       </nav>
 
       <header className="lp-hero lp-wrap">
-        <p className="lp-kicker">Relance automatique des factures impayées</p>
-        <h1>Faites-vous payer.<br />Sans relancer <span className="lp-nowrap">vous-même.</span></h1>
+        <p className="lp-kicker">Pour les artisans, indépendants et petites entreprises</p>
+        <h1>Vos clients ne paient pas ? On les relance à votre place.</h1>
         <p className="lp-lead">
-          Vos clients en retard de paiement sont relancés automatiquement, avec le ton juste à chaque étape,
-          jusqu&apos;au règlement. Conçu pour les artisans, indépendants et petites entreprises.
+          Vous ajoutez vos factures. Si un client dépasse la date de paiement, il reçoit automatiquement des
+          e-mails de rappel, de plus en plus fermes, jusqu&apos;à ce qu&apos;il paie. Vous n&apos;avez plus à
+          relancer personne.
         </p>
         <div className="lp-actions" id="hero-cta">
           <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
-          <a href="#fonctionnement" className="lp-link">Voir le fonctionnement →</a>
+          <a href="#exemple" className="lp-link">Voir un exemple →</a>
         </div>
         <p className="lp-meta">{BRAND.trialDays} jours gratuits · Sans engagement · Prêt en deux minutes</p>
       </header>
 
-      <div className="lp-wrap lp-shot">
-        <ProductShot />
+      <div className="lp-wrap lp-duo">
+        <figure>
+          <figcaption>Ce que reçoit votre client</figcaption>
+          <div className="lp-email">
+            <div className="lp-email-head">
+              <p><span>De</span>Plomberie Martin</p>
+              <p><span>Objet</span><b>Petit rappel : facture F-042</b></p>
+            </div>
+            <pre>{sampleEmail}</pre>
+          </div>
+        </figure>
+        <figure>
+          <figcaption>Ce que vous voyez</figcaption>
+          <ProductShot />
+        </figure>
       </div>
 
       <section className="lp-section lp-wrap" id="fonctionnement">
         <div className="lp-head">
           <p className="lp-kicker">Fonctionnement</p>
-          <h2>Trois étapes. Une seule vous demande quelque chose.</h2>
+          <h2>Comment ça marche</h2>
         </div>
         <div className="lp-cols">
           {steps.map((s) => (
@@ -105,19 +133,22 @@ export function Landing() {
         </div>
       </section>
 
-      <section className="lp-section lp-wrap">
+      <section className="lp-section lp-wrap" id="exemple">
         <div className="lp-head">
-          <p className="lp-kicker">Le scénario</p>
-          <h2>Le bon ton, au bon moment.</h2>
-          <p className="lp-sub">Trois messages rédigés pour préserver la relation client, et ne monter en fermeté que si nécessaire.</p>
+          <p className="lp-kicker">Exemple concret</p>
+          <h2>L&apos;histoire d&apos;une facture.</h2>
+          <p className="lp-sub">Entre le 1er et le 17 avril, vous n&apos;avez rien eu à faire.</p>
         </div>
-        <ol className="lp-seq">
-          {sequence.map((s) => (
-            <li key={s.day}>
-              <div className="lp-seq-day">{s.day}<span>{s.label}</span></div>
-              <div className="lp-seq-body">
-                <p className="lp-seq-subject">{s.subject}</p>
-                <p>{s.text}</p>
+        <ol className="lp-story">
+          {story.map((e) => (
+            <li key={e.date} className={e.who === "Automatique" ? "is-auto" : ""}>
+              <span className="lp-story-date">{e.date}</span>
+              <div>
+                {e.who && <span className="lp-story-who">{e.who === "Automatique" ? `Envoyé par ${BRAND.name}` : "Vous"}</span>}
+                <p>
+                  {e.text}
+                  {e.text.endsWith("dans ") ? <>{BRAND.name}.</> : null}
+                </p>
               </div>
             </li>
           ))}
