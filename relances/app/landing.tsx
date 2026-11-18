@@ -122,7 +122,11 @@ export function Landing() {
 
       <footer className="lp-footer lp-wrap">
         <span className="lp-brand">{BRAND.name}</span>
-        <span>© {new Date().getFullYear()}</span>
+        <span className="lp-footer-links">
+          <Link href="/mentions-legales">Mentions légales</Link>
+          <Link href="/confidentialite">Confidentialité</Link>
+          <span>© {new Date().getFullYear()}</span>
+        </span>
       </footer>
 
       <StickyCta>
