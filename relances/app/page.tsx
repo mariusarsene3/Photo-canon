@@ -3,6 +3,7 @@ import { STEPS, daysLate, euros, type Invoice, type Profile } from "@/lib/remind
 import { addInvoice, deleteInvoice, markPaid, saveSettings, sendNow } from "./actions";
 import { logout } from "./login/actions";
 import { SubmitButton } from "./submit-button";
+import { Landing } from "./landing";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,8 @@ export default async function Home({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  if (!user) return <Landing />;
+
   const [{ data: inv }, { data: prof }] = await Promise.all([
     supabase
       .from("invoices")

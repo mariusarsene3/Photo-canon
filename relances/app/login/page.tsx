@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { login, signup } from "./actions";
+import { BRAND } from "@/lib/brand";
 
 export default async function LoginPage({
   searchParams,
@@ -11,7 +12,7 @@ export default async function LoginPage({
 
   return (
     <main className="auth">
-      <h1>Relances</h1>
+      <h1><Link href="/" className="brand-link">{BRAND.name}</Link></h1>
       <p className="muted">Vos factures impayées relancées automatiquement.</p>
 
       <section className="card">
