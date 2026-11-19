@@ -167,7 +167,7 @@ select { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px
   .app-top-in { justify-content: space-between; }
   .app-main { padding: 20px 14px 96px; }
   .app-tabbar {
-    display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
     background: color-mix(in srgb, var(--card) 92%, transparent); backdrop-filter: blur(12px); border-top: 1px solid var(--border);
     padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
   }
@@ -574,3 +574,52 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--t
 .ps-bar { align-items: center; }
 .auth-mock-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .auth-mock-top .demo-tag { margin-left: 0; color: rgba(245,245,247,.7); }
+
+/* ===== Mes relances ===== */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.relances-page { max-width: 900px; display: grid; gap: 14px; }
+.relances-page h1 { margin-top: 8px; }
+.relances-page > .muted { margin: 0; }
+.relances-page .card { margin: 0; }
+.flow { list-style: none; margin: 0 0 12px; padding: 0; display: grid; }
+.flow li { display: grid; grid-template-columns: 56px 1fr auto; gap: 4px 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.flow li:last-child { border-bottom: 0; }
+.flow li.off .flow-text, .flow li.off .flow-day { opacity: .45; }
+.flow-day { display: inline-grid; place-items: center; min-width: 44px; height: 26px; padding: 0 8px; border-radius: 999px; background: var(--accent); color: var(--accent-fg); font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.flow-text { display: grid; gap: 2px; min-width: 0; }
+.flow-text small { font-size: 13px; }
+.flow-edit { grid-column: 2 / -1; font-size: 13px; color: var(--muted); }
+@media (min-width: 640px) { .flow li { grid-template-columns: 56px 1fr auto auto; } .flow-edit { grid-column: auto; } }
+.switch { position: relative; display: inline-block; width: 42px; height: 24px; cursor: pointer; }
+.switch input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.switch-ui { position: absolute; inset: 0; border-radius: 999px; background: var(--border); transition: background .15s; }
+.switch-ui::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s; }
+.switch input:checked + .switch-ui { background: var(--ok); }
+.switch input:checked + .switch-ui::after { transform: translateX(18px); }
+.switch input:focus-visible + .switch-ui { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tpl-card > summary { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tpl-card[open] > summary { margin-bottom: 14px; }
+.tpl { display: grid; gap: 18px; }
+@media (min-width: 860px) { .tpl { grid-template-columns: 1fr 1fr; align-items: start; } }
+.tpl-form { display: grid; gap: 12px; }
+.tpl-form label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.tpl-form input, .tpl-form textarea { width: 100%; font: inherit; font-size: 14.5px; color: var(--text); background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.tpl-form textarea { resize: vertical; line-height: 1.55; }
+.tpl-form .row { margin: 0; justify-content: flex-start; }
+.tpl-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tpl-chips button { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.tpl-chips button small { font-weight: 400; color: var(--muted); }
+.tpl-preview .muted { margin: 0 0 6px; }
+.mail-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.mail-subject { margin: 0; padding: 10px 14px; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); background: var(--card); }
+.mail-card .mail-preview { margin: 0; border: 0; border-radius: 0; }
+
+/* Facture PDF */
+.file-field input[type=file] { font-size: 13.5px; }
+.file-field small { font-weight: 400; color: var(--muted); }
+.pdf-file { display: flex; gap: 12px; align-items: center; margin: 0 0 8px; }
+.pdf-file > span:last-child { display: grid; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
+.pdf-icon { flex: none; display: grid; place-items: center; width: 40px; height: 48px; border-radius: 6px; background: var(--late-bg); color: var(--late); font-size: 11px; font-weight: 800; letter-spacing: .5px; }
+input[type=file] { font: inherit; font-size: 13.5px; color: var(--muted); max-width: 100%; }
+input[type=file]::file-selector-button { font: inherit; font-size: 13.5px; font-weight: 600; color: var(--text); background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; margin-right: 10px; cursor: pointer; }
+input[type=file]::file-selector-button:hover { border-color: var(--text); }

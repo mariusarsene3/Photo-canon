@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { parseAmount, parseDate } from "@/lib/import";
+import { deletePdf, pdfFromForm, savePdf } from "@/lib/invoice-pdf";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIGRATION = "Fonction pas encore activée : appliquez la migration 006 dans Supabase.";
@@ -57,9 +58,37 @@ export async function saveNotes(form: FormData) {
   await update(id, { notes: String(form.get("notes") ?? "").slice(0, 2000) }, "Note enregistrée.");
 }
 
+export async function uploadPdf(form: FormData) {
+  const id = Number(form.get("id"));
+  const pdf = pdfFromForm(form);
+  if (!pdf) back(id, "Choisissez un fichier PDF.", "err");
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+  const { data: inv } = await supabase.from("invoices").select("id").eq("id", id).maybeSingle();
+  if (!inv) back(id, "Facture introuvable.", "err");
+  const err = await savePdf(supabase, user.id, id, pdf!);
+  if (err) back(id, err, "err");
+  revalidatePath(`/factures/${id}`);
+  back(id, "PDF ajouté : il sera joint à chaque relance.");
+}
+
+export async function removePdf(form: FormData) {
+  const id = Number(form.get("id"));
+  const supabase = await createClient();
+  const { data: inv } = await supabase.from("invoices").select("pdf_path").eq("id", id).maybeSingle();
+  if (!inv) back(id, "Facture introuvable.", "err");
+  await deletePdf(supabase, id, inv!.pdf_path);
+  revalidatePath(`/factures/${id}`);
+  back(id, "PDF retiré.");
+}
+
 export async function removeInvoice(form: FormData) {
   const id = Number(form.get("id"));
   const supabase = await createClient();
+  // Le fichier PDF éventuel est supprimé avec la facture.
+  const { data: inv } = await supabase.from("invoices").select("*").eq("id", id).maybeSingle();
+  if (inv?.pdf_path) await supabase.storage.from("factures").remove([inv.pdf_path]);
   await supabase.from("invoices").delete().eq("id", id);
   revalidatePath("/");
   redirect(`/?ok=${encodeURIComponent("Facture supprimée.")}`);

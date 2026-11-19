@@ -3,6 +3,7 @@ import { runReminders } from "@/lib/reminders";
 import { createAdminClient } from "@/lib/supabase/server";
 import { runLifecycle } from "@/lib/lifecycle";
 import { runGuaranteeAlerts } from "@/lib/guarantees";
+import { runWeekly } from "@/lib/weekly";
 
 export const dynamic = "force-dynamic";
 
@@ -29,5 +30,11 @@ export async function GET(req: Request) {
   } catch (e) {
     guarantees = { error: e instanceof Error ? e.message : String(e) };
   }
-  return NextResponse.json({ reminders, lifecycle, guarantees });
+  let weekly: unknown;
+  try {
+    weekly = await runWeekly(admin);
+  } catch (e) {
+    weekly = { error: e instanceof Error ? e.message : String(e) };
+  }
+  return NextResponse.json({ reminders, lifecycle, guarantees, weekly });
 }

@@ -23,8 +23,12 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   const billing = await getMyBilling(supabase);
   const access = accessFrom(billing);
   const payments = stripeConfigured();
-  const { data: prefs, error: prefsErr } = await supabase.from("profiles").select("product_emails").maybeSingle();
+  const { data: prefs, error: prefsErr } = await supabase.from("profiles").select("*").maybeSingle();
   const productEmails = prefs?.product_emails !== false;
+  // Le résumé du lundi n'apparaît qu'une fois la migration 007 appliquée (ou sans profil encore créé).
+  const probe = await supabase.from("profiles").select("weekly_summary").limit(1);
+  const hasWeekly = !prefsErr && !probe.error;
+  const weekly = prefs?.weekly_summary !== false;
   const { data: company } = await supabase.from("profiles").select("company_name, iban").maybeSingle();
 
   return (
@@ -100,6 +104,13 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
               <input type="checkbox" name="product_emails" defaultChecked={productEmails} />
               <span>Recevoir les conseils pour bien démarrer et les rappels de fin d&apos;essai</span>
             </label>
+            {hasWeekly && (
+              <label className="check">
+                <input type="hidden" name="has_weekly" value="1" />
+                <input type="checkbox" name="weekly_summary" defaultChecked={weekly} />
+                <span>Recevoir chaque lundi le résumé de mes factures (relances envoyées, paiements reçus, retards)</span>
+              </label>
+            )}
             <SubmitButton className="secondary small" pending="…">Enregistrer</SubmitButton>
           </form>
         </section>

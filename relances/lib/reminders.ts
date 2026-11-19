@@ -3,12 +3,20 @@ import { formatIban, paymentUrl } from "./payment";
 import { accessFrom, type Billing } from "./billing";
 import { sendEmail } from "./email";
 
-// Scénario de relance : nombre de jours APRÈS l'échéance.
+/** Espace de stockage Supabase des factures PDF (migration 007). */
+export const INVOICE_BUCKET = "factures";
+
+// Scénario de relance : nombre de jours par rapport à l'échéance (négatif = avant).
+// L'étape 0 (rappel avant échéance) est facultative : elle dépend de la préférence « remind_before ».
 export const STEPS = [
+  { step: 0, daysAfterDue: -3, label: "Rappel avant échéance", sent: "Rappel avant échéance envoyé", planned: "Rappel avant échéance prévu" },
   { step: 1, daysAfterDue: 1, label: "Rappel amical", sent: "Rappel amical envoyé", planned: "Rappel amical prévu" },
   { step: 2, daysAfterDue: 7, label: "Relance ferme", sent: "Relance ferme envoyée", planned: "Relance ferme prévue" },
   { step: 3, daysAfterDue: 15, label: "Dernier avis", sent: "Dernier avis envoyé", planned: "Dernier avis prévu" },
 ] as const;
+
+/** « J-3 », « J+1 »… */
+export const dayLabel = (d: number) => (d < 0 ? `J${d}` : `J+${d}`);
 
 export type Invoice = {
   id: number;
@@ -24,10 +32,23 @@ export type Invoice = {
   pay_token?: string; // présent une fois la migration 002 appliquée
   paused?: boolean; // migration 006 : relances suspendues pour cette facture
   notes?: string; // migration 006 : notes internes
+  pdf_path?: string | null; // migration 007 : facture PDF jointe aux relances
   reminders: { step: number; sent_at: string }[];
 };
 
-export type Profile = { company_name: string; iban: string };
+import { fillTemplate, type Template } from "./template-fill";
+
+export type { Template };
+
+export type Profile = {
+  company_name: string;
+  iban: string;
+  remind_before?: boolean; // migration 007
+  templates?: Partial<Record<string, Template>>; // migration 007 : textes personnalisés, par étape
+};
+
+/** Le rappel avant échéance n'est envoyé que si la préférence existe et est activée. */
+export const remindsBefore = (p?: Profile | null) => p?.remind_before === true;
 
 export const euros = (cents: number) =>
   (cents / 100).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
@@ -40,54 +61,106 @@ export function daysLate(dueDate: string, today = new Date()): number {
   return Math.round((t.getTime() - due.getTime()) / 86_400_000);
 }
 
-export function renderEmail(inv: Invoice, step: number, profile?: Profile) {
-  const company = profile?.company_name || "Votre fournisseur";
-  const amount = euros(inv.amount_cents);
-  const due = frDate(inv.due_date);
+/** Champs utilisables dans les textes des relances. */
+export const PLACEHOLDERS = [
+  { key: "client", help: "nom du client" },
+  { key: "numero", help: "n° de facture" },
+  { key: "montant", help: "montant TTC" },
+  { key: "echeance", help: "date d'échéance" },
+  { key: "entreprise", help: "votre entreprise" },
+  { key: "paiement", help: "lien de paiement et IBAN" },
+] as const;
+
+/** Textes par défaut de chaque étape. */
+export const DEFAULT_TEMPLATES: Record<number, Template> = {
+  0: {
+    subject: "Rappel : facture {numero} à régler le {echeance}",
+    body: "Bonjour {client},\n\nPour rappel, la facture {numero} d'un montant de {montant} arrive à échéance le {echeance}.\n\nSi le règlement est déjà programmé, merci, et ne tenez pas compte de ce message.\n\n{paiement}\n\nCordialement,\n{entreprise}",
+  },
+  1: {
+    subject: "Petit rappel : facture {numero}",
+    body: "Bonjour {client},\n\nSauf erreur de notre part, la facture {numero} d'un montant de {montant}, arrivée à échéance le {echeance}, n'a pas encore été réglée.\n\nS'il s'agit d'un oubli, merci de procéder au règlement dès que possible. Si le paiement est déjà parti, ne tenez pas compte de ce message.\n\n{paiement}\n\nCordialement,\n{entreprise}",
+  },
+  2: {
+    subject: "Relance : facture {numero} en attente de règlement",
+    body: "Bonjour {client},\n\nMalgré notre précédent rappel, la facture {numero} ({montant}, échue le {echeance}) reste impayée à ce jour.\n\nMerci de régulariser la situation sous 7 jours, ou de nous contacter si vous rencontrez une difficulté.\n\n{paiement}\n\nCordialement,\n{entreprise}",
+  },
+  3: {
+    subject: "Dernier avis avant mise en demeure : facture {numero}",
+    body: "Bonjour {client},\n\nLa facture {numero} ({montant}, échue le {echeance}) demeure impayée malgré nos relances.\n\nSans règlement de votre part sous 8 jours, nous serons contraints d'engager une procédure de recouvrement. Nous vous rappelons que tout retard de paiement entraîne l'application de pénalités ainsi que d'une indemnité forfaitaire de 40 € pour frais de recouvrement (art. L441-10 du Code de commerce).\n\n{paiement}\n\nCordialement,\n{entreprise}",
+  },
+};
+
+/** Texte utilisé pour une étape : le texte personnalisé s'il existe, sinon celui par défaut. */
+export function templateFor(step: number, profile?: Profile | null): Template {
+  const custom = profile?.templates?.[String(step)];
+  const def = DEFAULT_TEMPLATES[step] ?? DEFAULT_TEMPLATES[1];
+  return { subject: custom?.subject?.trim() || def.subject, body: custom?.body?.trim() || def.body };
+}
+
+export function renderEmail(inv: Invoice, step: number, profile?: Profile | null) {
   const lines: string[] = [];
   if (inv.pay_token) lines.push(`Régler en ligne (IBAN, QR code) : ${paymentUrl(inv.pay_token)}`);
   if (profile?.iban) lines.push(`Règlement par virement : ${formatIban(profile.iban)}`);
-  const pay = lines.length ? "\n\n" + lines.join("\n") : "";
-  const sign = `\n\nCordialement,\n${company}`;
-
-  if (step === 1)
-    return {
-      subject: `Petit rappel : facture ${inv.number}`,
-      text: `Bonjour ${inv.client_name},\n\nSauf erreur de notre part, la facture ${inv.number} d'un montant de ${amount}, arrivée à échéance le ${due}, n'a pas encore été réglée.\n\nS'il s'agit d'un oubli, merci de procéder au règlement dès que possible. Si le paiement est déjà parti, ne tenez pas compte de ce message.${pay}${sign}`,
-    };
-  if (step === 2)
-    return {
-      subject: `Relance : facture ${inv.number} en attente de règlement`,
-      text: `Bonjour ${inv.client_name},\n\nMalgré notre précédent rappel, la facture ${inv.number} (${amount}, échue le ${due}) reste impayée à ce jour.\n\nMerci de régulariser la situation sous 7 jours, ou de nous contacter si vous rencontrez une difficulté.${pay}${sign}`,
-    };
-  return {
-    subject: `Dernier avis avant mise en demeure : facture ${inv.number}`,
-    text: `Bonjour ${inv.client_name},\n\nLa facture ${inv.number} (${amount}, échue le ${due}) demeure impayée malgré nos relances.\n\nSans règlement de votre part sous 8 jours, nous serons contraints d'engager une procédure de recouvrement. Nous vous rappelons que tout retard de paiement entraîne l'application de pénalités ainsi que d'une indemnité forfaitaire de 40 € pour frais de recouvrement (art. L441-10 du Code de commerce).${pay}${sign}`,
+  const pay = lines.join("\n");
+  const vars: Record<string, string> = {
+    client: inv.client_name,
+    numero: inv.number,
+    montant: euros(inv.amount_cents),
+    echeance: frDate(inv.due_date),
+    entreprise: profile?.company_name || "Votre fournisseur",
+    paiement: pay,
   };
+  return fillTemplate(templateFor(step, profile), vars);
 }
 
+/** Étapes actives pour ce compte (sans le rappel avant échéance s'il est désactivé). */
+export const activeSteps = (profile?: Profile | null) => STEPS.filter((s) => s.step > 0 || remindsBefore(profile));
 
 /** Étape de relance à envoyer pour cette facture aujourd'hui, ou null. */
-export function stepToSend(inv: Invoice, today = new Date()) {
+export function stepToSend(inv: Invoice, today = new Date(), profile?: Profile | null) {
   if (inv.status !== "pending" || inv.paused) return null;
   const late = daysLate(inv.due_date, today);
-  const due = [...STEPS].reverse().find((s) => late >= s.daysAfterDue);
+  const due = [...activeSteps(profile)].reverse().find((s) => late >= s.daysAfterDue);
   if (!due) return null;
-  const maxSent = Math.max(0, ...inv.reminders.map((r) => r.step));
+  // Le rappel avant échéance n'a de sens qu'avant l'échéance.
+  if (due.step === 0 && late > 0) return null;
+  const maxSent = Math.max(-1, ...inv.reminders.map((r) => r.step));
   return maxSent >= due.step ? null : due.step;
 }
 
 /** Prochaine relance prévue pour une facture en attente (étape, libellé, date AAAA-MM-JJ), ou null. */
-export function nextReminder(inv: Invoice): { step: number; label: string; planned: string; date: string } | null {
+export function nextReminder(inv: Invoice, profile?: Profile | null): { step: number; label: string; planned: string; date: string } | null {
   if (inv.status !== "pending" || inv.paused) return null;
-  const maxSent = Math.max(0, ...inv.reminders.map((r) => r.step));
-  const next = STEPS.find((s) => s.step > maxSent);
-  if (!next) return null;
-  const d = new Date(inv.due_date + "T00:00:00Z");
-  d.setUTCDate(d.getUTCDate() + next.daysAfterDue);
-  const date = d.toISOString().slice(0, 10);
+  const maxSent = Math.max(-1, ...inv.reminders.map((r) => r.step));
   const today = new Date().toISOString().slice(0, 10);
+  const dateOf = (days: number) => {
+    const d = new Date(inv.due_date + "T00:00:00Z");
+    d.setUTCDate(d.getUTCDate() + days);
+    return d.toISOString().slice(0, 10);
+  };
+  // Un rappel avant échéance dont la date est dépassée ne partira jamais : on passe au suivant.
+  const next = activeSteps(profile).find((s) => s.step > maxSent && (s.step > 0 || dateOf(0) >= today));
+  if (!next) return null;
+  const date = dateOf(next.daysAfterDue);
   return { step: next.step, label: next.label, planned: next.planned, date: date < today ? today : date };
+}
+
+const addDays = (d: Date, n: number) => new Date(d.getTime() + n * 86_400_000).toISOString().slice(0, 10);
+
+/** Nom de fichier lisible pour la pièce jointe : « Facture F-042.pdf ». */
+export const pdfFilename = (inv: Pick<Invoice, "number">) =>
+  `Facture ${inv.number.replace(/[\\/:*?"<>|]+/g, "-")}.pdf`;
+
+/** Facture PDF à joindre, si l'utilisateur en a ajouté une. Une erreur de lecture n'empêche pas la relance. */
+async function invoicePdf(supabase: SupabaseClient, inv: Invoice) {
+  if (!inv.pdf_path) return null;
+  const { data, error } = await supabase.storage.from(INVOICE_BUCKET).download(inv.pdf_path);
+  if (error || !data) {
+    console.error("PDF introuvable pour la facture", inv.number, error?.message);
+    return null;
+  }
+  return { filename: pdfFilename(inv), content: Buffer.from(await data.arrayBuffer()).toString("base64") };
 }
 
 /**
@@ -100,7 +173,7 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
     .from("invoices")
     .select("*, reminders(step, sent_at)")
     .eq("status", "pending")
-    .lte("due_date", today.toISOString().slice(0, 10));
+    .lte("due_date", addDays(today, 3)); // le rappel avant échéance part 3 jours avant
   if (error) throw error;
   let invoices = (data ?? []) as Invoice[];
 
@@ -120,7 +193,7 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
 
   const userIds = [...new Set(invoices.map((i) => i.user_id))];
   const { data: profs } = userIds.length
-    ? await supabase.from("profiles").select("user_id, company_name, iban").in("user_id", userIds)
+    ? await supabase.from("profiles").select("*").in("user_id", userIds)
     : { data: [] };
   const profiles = new Map((profs ?? []).map((p) => [p.user_id as string, p as Profile]));
 
@@ -128,9 +201,10 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
   const errors: { invoice: string; error: string }[] = [];
 
   for (const inv of invoices) {
-    const step = stepToSend(inv, today);
-    if (!step) continue;
-    const { subject, text } = renderEmail(inv, step, profiles.get(inv.user_id));
+    const profile = profiles.get(inv.user_id);
+    const step = stepToSend(inv, today, profile);
+    if (step === null) continue;
+    const { subject, text } = renderEmail(inv, step, profile);
     try {
       // On réserve l'étape AVANT l'envoi : si deux passages tournent en même temps,
       // la contrainte unique empêche le doublon.
@@ -142,7 +216,8 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
         throw insErr;
       }
       try {
-        await sendEmail(inv.client_email, subject, text);
+        const pdf = await invoicePdf(supabase, inv);
+        await sendEmail(inv.client_email, subject, text, { attachments: pdf ? [pdf] : undefined });
       } catch (e) {
         // Échec d'envoi : on libère l'étape pour réessayer au prochain passage.
         await supabase.from("reminders").delete().eq("invoice_id", inv.id).eq("step", step);
