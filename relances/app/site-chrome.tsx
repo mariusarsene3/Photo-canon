@@ -8,7 +8,7 @@ const SIGNUP = "/login?mode=signup";
 export function SiteNav() {
   return (
     <nav className="lp-nav lp-wrap">
-      <Link href="/" className="lp-brand lp-brand-link">{BRAND.name}</Link>
+      <Link href="/" className="lp-brand lp-brand-link">{BRAND.name}<small className="lp-tagline">{BRAND.tagline}</small></Link>
       <div className="lp-nav-links">
         <Link href="/outils" className="lp-hide-sm">Outils gratuits</Link>
         <Link href="/guides" className="lp-hide-sm">Guides</Link>

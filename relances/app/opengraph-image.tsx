@@ -22,7 +22,10 @@ export default async function Image() {
     (
       <div style={{ width: "100%", height: "100%", display: "flex", background: "#0b0b0f", color: "#fff", padding: 64, fontFamily: "Inter" }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: 600 }}>
-          <div style={{ fontSize: 36, fontWeight: 800, letterSpacing: -1 }}>{BRAND.name}</div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ fontSize: 36, fontWeight: 800, letterSpacing: -1 }}>{BRAND.name}</div>
+            <div style={{ fontSize: 20, color: "#a1a1aa" }}>{BRAND.tagline}</div>
+          </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 60, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}>Vos clients ne paient pas ?</div>
             <div style={{ fontSize: 60, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2, color: "#4ade80" }}>On les relance pour vous.</div>

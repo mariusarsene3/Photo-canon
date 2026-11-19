@@ -10,7 +10,7 @@ import { siteUrl } from "@/lib/payment";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
-  title: `${BRAND.name} — vos factures impayées relancées automatiquement`,
+  title: `${BRAND.name} — relance automatique des factures impayées`,
   description:
     "Relance automatique des factures impayées pour artisans, indépendants et TPE : rappel à J+1, relance à J+7, dernier avis à J+15.",
   openGraph: { siteName: BRAND.name, locale: "fr_FR", type: "website" },

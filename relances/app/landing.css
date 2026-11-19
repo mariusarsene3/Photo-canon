@@ -24,10 +24,14 @@
 /* Navigation */
 .lp-nav { display: flex; align-items: center; justify-content: space-between; height: 68px; border-bottom: 1px solid var(--lp-line); }
 .lp-brand { font-weight: 700; font-size: 17px; letter-spacing: -.3px; }
+.lp-tagline { display: block; font-size: 11.5px; font-weight: 500; letter-spacing: 0; color: var(--lp-muted); margin-top: 1px; }
 .lp-nav-links { display: flex; align-items: center; gap: 24px; font-size: 14px; }
 .lp-nav-links a:not(.lp-btn) { color: var(--lp-muted); text-decoration: none; }
 .lp-nav-links a:not(.lp-btn):hover { color: var(--lp-fg); }
-@media (max-width: 640px) { .lp-hide-sm { display: none; } .lp-nav-links { gap: 16px; } }
+@media (max-width: 640px) { .lp-hide-sm { display: none; } .lp-nav-links { gap: 14px; } }
+.lp-nav-links .lp-btn, .lp-tagline { white-space: nowrap; }
+@media (max-width: 359px) { .lp-tagline { display: none; } }
+@media (max-width: 420px) { .lp-tagline { font-size: 10.5px; } .lp-nav-links { gap: 12px; font-size: 13.5px; } .lp-nav-links .lp-btn-sm { padding: 8px 11px; font-size: 13.5px; } }
 
 /* En-tête */
 .lp-hero { padding-top: 88px; padding-bottom: 56px; }

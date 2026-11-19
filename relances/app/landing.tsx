@@ -91,7 +91,7 @@ export function Landing() {
     <div className="lp">
       <JsonLd />
       <nav className="lp-nav lp-wrap">
-        <span className="lp-brand">{BRAND.name}</span>
+        <span className="lp-brand">{BRAND.name}<small className="lp-tagline">{BRAND.tagline}</small></span>
         <div className="lp-nav-links">
           <a href="#tarif" className="lp-hide-sm">Tarif</a>
           <Link href="/outils" className="lp-hide-sm">Outils gratuits</Link>
