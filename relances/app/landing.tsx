@@ -1,6 +1,8 @@
 import "./landing.css";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
+import { LEGAL } from "@/lib/legal";
+import { siteUrl } from "@/lib/payment";
 import { StickyCta } from "./sticky-cta";
 import { DemoVideo } from "./demo-video";
 
@@ -55,14 +57,45 @@ function ProductShot() {
   );
 }
 
+/** Données structurées pour Google : le logiciel, son prix et la FAQ. */
+function JsonLd() {
+  const data = [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: BRAND.name,
+      url: siteUrl(),
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      inLanguage: "fr-FR",
+      description:
+        "Relance automatique des factures impayées pour artisans, indépendants et petites entreprises : rappel à J+1, relance à J+7, dernier avis à J+15, avec lien de paiement.",
+      offers: {
+        "@type": "Offer",
+        price: String(BRAND.price),
+        priceCurrency: "EUR",
+        description: `${BRAND.trialDays} jours d'essai gratuit, sans engagement`,
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    },
+  ];
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }} />;
+}
+
 export function Landing() {
   return (
     <div className="lp">
+      <JsonLd />
       <nav className="lp-nav lp-wrap">
-        <span className="lp-brand">{BRAND.name}</span>
+        <span className="lp-brand">{BRAND.name}<small className="lp-tagline">{BRAND.tagline}</small></span>
         <div className="lp-nav-links">
           <a href="#tarif" className="lp-hide-sm">Tarif</a>
           <Link href="/outils" className="lp-hide-sm">Outils gratuits</Link>
+          <Link href="/guides" className="lp-hide-sm">Guides</Link>
           <Link href="/login">Connexion</Link>
           <Link href={SIGNUP} className="lp-btn lp-btn-sm">Essai gratuit</Link>
         </div>
@@ -87,7 +120,7 @@ export function Landing() {
 
       <div className="lp-wrap lp-duo">
         <figure>
-          <figcaption>Ce que reçoit votre client</figcaption>
+          <figcaption>Ce que reçoit votre client <span className="demo-tag">Exemple</span></figcaption>
           <div className="lp-email">
             <div className="lp-email-head">
               <p><span>De</span>Plomberie Martin</p>
@@ -97,7 +130,7 @@ export function Landing() {
           </div>
         </figure>
         <figure>
-          <figcaption>Ce que vous voyez</figcaption>
+          <figcaption>Ce que vous voyez <span className="demo-tag">Exemple</span></figcaption>
           <ProductShot />
         </figure>
       </div>
@@ -174,9 +207,11 @@ export function Landing() {
         <span className="lp-brand">{BRAND.name}</span>
         <span className="lp-footer-links">
           <Link href="/outils">Outils gratuits</Link>
+          <Link href="/guides">Guides</Link>
           <Link href="/cgv">CGV</Link>
           <Link href="/mentions-legales">Mentions légales</Link>
           <Link href="/confidentialite">Confidentialité</Link>
+          {LEGAL.contactEmail && <a href={`mailto:${LEGAL.contactEmail}`}>Contact</a>}
           <span>© {new Date().getFullYear()}</span>
         </span>
       </footer>

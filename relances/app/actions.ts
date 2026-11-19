@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { runReminders } from "@/lib/reminders";
 import { cleanIban, isValidIban } from "@/lib/payment";
+import { pdfFromForm, savePdf } from "@/lib/invoice-pdf";
 
 // Toutes les requêtes passent par le client de l'utilisateur connecté :
 // les règles RLS de Supabase garantissent qu'il ne touche qu'à ses propres données.
@@ -18,13 +19,19 @@ export async function addInvoice(form: FormData) {
   if (!number || !client_name || !client_email.includes("@") || !(amount > 0) || !due_date) return;
 
   const supabase = await createClient();
-  await supabase.from("invoices").insert({
-    number,
-    client_name,
-    client_email,
-    amount_cents: Math.round(amount * 100),
-    due_date,
-  });
+  const { data: created } = await supabase
+    .from("invoices")
+    .insert({ number, client_name, client_email, amount_cents: Math.round(amount * 100), due_date })
+    .select("id, user_id")
+    .single();
+  const pdf = pdfFromForm(form);
+  if (created && pdf) {
+    const err = await savePdf(supabase, created.user_id, created.id, pdf);
+    if (err) {
+      revalidatePath("/");
+      redirect(`/factures/${created.id}?err=${encodeURIComponent("Facture ajoutée, mais sans le PDF : " + err)}`);
+    }
+  }
   revalidatePath("/");
   redirect("/");
 }
@@ -64,7 +71,7 @@ export async function sendNow() {
       notice = `${sent.length} relance(s) envoyée(s) : ${sent.map((s) => s.invoice).join(", ")}.`;
     } else {
       notice =
-        "Aucune relance à envoyer pour l'instant. Une relance part à partir du lendemain de l'échéance (J+1), puis à J+7 et J+15.";
+        "Aucune relance à envoyer pour l'instant. Les relances partent le lendemain de l'échéance (J+1), puis à J+7 et J+15 (et 3 jours avant l'échéance si ce rappel est activé).";
     }
   } catch (e) {
     kind = "err";

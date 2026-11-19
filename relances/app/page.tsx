@@ -3,7 +3,7 @@ import { Toast } from "./toast";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND } from "@/lib/brand";
 import { getMyAccess } from "@/lib/billing";
-import { STEPS, daysLate, euros, nextReminder, type Invoice, type Profile } from "@/lib/reminders";
+import { STEPS, activeSteps, dayLabel, daysLate, euros, nextReminder, type Invoice, type Profile } from "@/lib/reminders";
 import { addInvoice, sendNow } from "./actions";
 import { SubmitButton } from "./submit-button";
 import { Landing } from "./landing";
@@ -18,11 +18,11 @@ export const dynamic = "force-dynamic";
 const frShort = (iso: string) => new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
 
 /** Prépare une ligne de la liste : statut lisible et prochaine relance. */
-function toRow(i: Invoice): Row {
+function toRow(i: Invoice, profile: Profile): Row {
   const late = daysLate(i.due_date);
-  const lastStep = Math.max(0, ...i.reminders.map((r) => r.step));
+  const lastStep = Math.max(-1, ...i.reminders.map((r) => r.step));
   const lastSent = STEPS.find((s) => s.step === lastStep)?.sent;
-  const next = nextReminder(i);
+  const next = nextReminder(i, profile);
   let kind: Row["kind"], status: string;
   if (i.status === "paid") { kind = "paid"; status = "Payée"; }
   else if (i.paused) { kind = "paused"; status = "Relances en pause"; }
@@ -57,7 +57,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
       .select("*, reminders(step, sent_at)")
       .order("status", { ascending: false })
       .order("due_date", { ascending: true }),
-    supabase.from("profiles").select("company_name, iban").maybeSingle(),
+    supabase.from("profiles").select("*").maybeSingle(),
     getMyAccess(supabase),
   ]);
   const invoices = (inv ?? []) as Invoice[];
@@ -194,11 +194,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
           <label>E-mail du client<input name="client_email" type="email" placeholder="contact@client.fr" required /></label>
           <label>Montant TTC (€)<input name="amount" inputMode="decimal" placeholder="1250" required /></label>
           <label>Échéance<input name="due_date" type="date" defaultValue={today} required /></label>
+          <label className="file-field" title="Jointe automatiquement aux relances">Facture PDF (facultatif)<input name="pdf" type="file" accept="application/pdf" /></label>
           <SubmitButton pending="Ajout…">Ajouter la facture</SubmitButton>
         </form>
         <p className="muted small">
           Plusieurs factures ? <Link href="/importer">Importez-les depuis Excel, CSV ou PDF</Link>. Relances automatiques :{" "}
-          {STEPS.map((s) => `${s.label.toLowerCase()} à J+${s.daysAfterDue}`).join(", ")}.
+          {activeSteps(profile).map((s) => `${s.label.toLowerCase()} à ${dayLabel(s.daysAfterDue)}`).join(", ")}.{" "}
+          <Link href="/relances">Personnaliser</Link>
         </p>
       </details>
 
@@ -209,7 +211,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
             <p className="muted">Ajoutez une facture en retard : {BRAND.name} s&apos;occupe des relances.</p>
           </div>
         ) : (
-          <InvoiceList rows={invoices.map(toRow)} />
+          <InvoiceList rows={invoices.map((i) => toRow(i, profile))} />
         )}
       </section>
       <NewInvoiceFab />

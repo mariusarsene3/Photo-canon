@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getMyBilling } from "@/lib/billing";
 import { stripe, stripeConfigured } from "@/lib/stripe";
+import { INVOICE_BUCKET } from "@/lib/reminders";
 
 async function origin() {
   const h = await headers();
@@ -75,7 +76,11 @@ export async function savePreferences(form: FormData) {
   if (!user) redirect("/login");
   const { error } = await supabase
     .from("profiles")
-    .upsert({ user_id: user.id, product_emails: form.get("product_emails") === "on" });
+    .upsert({
+      user_id: user.id,
+      product_emails: form.get("product_emails") === "on",
+      ...(form.get("has_weekly") ? { weekly_summary: form.get("weekly_summary") === "on" } : {}),
+    });
   if (error) back("Enregistrement impossible. Réessayez.");
   back("Préférences enregistrées.", "ok");
 }
@@ -98,6 +103,10 @@ export async function deleteAccount(form: FormData) {
       back("La résiliation de l'abonnement a échoué : contactez-nous pour supprimer votre compte.");
     }
   }
+
+  // Factures PDF : le stockage n'est pas effacé automatiquement avec le compte.
+  const { data: files } = await supabase.storage.from(INVOICE_BUCKET).list(user.id, { limit: 1000 });
+  if (files?.length) await supabase.storage.from(INVOICE_BUCKET).remove(files.map((f) => `${user.id}/${f.name}`));
 
   const { error } = await supabase.rpc("delete_my_account");
   if (error) back("La suppression a échoué. Réessayez ou contactez-nous.");

@@ -4,13 +4,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND } from "@/lib/brand";
-import { STEPS, daysLate, euros, nextReminder, renderEmail, type Invoice, type Profile } from "@/lib/reminders";
+import { INVOICE_BUCKET, STEPS, daysLate, euros, nextReminder, pdfFilename, renderEmail, type Invoice, type Profile } from "@/lib/reminders";
 import { paymentUrl } from "@/lib/payment";
 import { AppShell } from "../../app-shell";
 import { SubmitButton } from "../../submit-button";
 import { CopyButton } from "../../payer/[token]/copy-button";
 import { Avatar } from "../../invoice-list";
 import { editInvoice, removeInvoice, saveNotes, setPaid, setPaused } from "./actions";
+import { PdfCard } from "./pdf-card";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: `Facture — ${BRAND.name}` };
@@ -35,14 +36,14 @@ export default async function InvoicePage({
   const { data: { user } } = await supabase.auth.getUser();
   const [{ data }, { data: prof }] = await Promise.all([
     supabase.from("invoices").select("*, reminders(step, sent_at)").eq("id", Number(id)).maybeSingle(),
-    supabase.from("profiles").select("company_name, iban").maybeSingle(),
+    supabase.from("profiles").select("*").maybeSingle(),
   ]);
   if (!data) notFound();
   const inv = data as Invoice;
   const profile = (prof ?? { company_name: "", iban: "" }) as Profile;
   const paid = inv.status === "paid";
   const late = daysLate(inv.due_date);
-  const next = nextReminder(inv);
+  const next = nextReminder(inv, profile);
   const hasPauseColumn = "paused" in inv;
 
   // Historique
@@ -58,6 +59,10 @@ export default async function InvoicePage({
   events.sort((a, b) => a.date.slice(0, 10).localeCompare(b.date.slice(0, 10)));
 
   const preview = next ? renderEmail(inv, next.step, profile) : null;
+  const hasPdfColumn = "pdf_path" in inv;
+  const pdfUrl = inv.pdf_path
+    ? (await supabase.storage.from(INVOICE_BUCKET).createSignedUrl(inv.pdf_path, 600)).data?.signedUrl
+    : null;
 
   let badge: { cls: string; text: string };
   if (paid) badge = { cls: "b-paid", text: "Payée" };
@@ -125,6 +130,8 @@ export default async function InvoicePage({
         </section>
 
         <div className="detail-side">
+          {hasPdfColumn && <PdfCard inv={inv} pdfUrl={pdfUrl} />}
+
           {hasPauseColumn && (
             <section className="card">
               <h2>Notes</h2>
@@ -153,7 +160,7 @@ export default async function InvoicePage({
           {preview && (
             <details className="card">
               <summary className="summary-title">Aperçu de la prochaine relance</summary>
-              <p className="muted small">Objet : {preview.subject}</p>
+              <p className="muted small">Objet : {preview.subject}{inv.pdf_path ? ` · Pièce jointe : ${pdfFilename(inv)}` : ""}</p>
               <pre className="mail-preview">{preview.text}</pre>
             </details>
           )}

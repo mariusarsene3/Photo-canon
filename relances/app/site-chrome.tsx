@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
+import { LEGAL } from "@/lib/legal";
 
 const SIGNUP = "/login?mode=signup";
 
@@ -7,9 +8,10 @@ const SIGNUP = "/login?mode=signup";
 export function SiteNav() {
   return (
     <nav className="lp-nav lp-wrap">
-      <Link href="/" className="lp-brand lp-brand-link">{BRAND.name}</Link>
+      <Link href="/" className="lp-brand lp-brand-link">{BRAND.name}<small className="lp-tagline">{BRAND.tagline}</small></Link>
       <div className="lp-nav-links">
         <Link href="/outils" className="lp-hide-sm">Outils gratuits</Link>
+        <Link href="/guides" className="lp-hide-sm">Guides</Link>
         <Link href="/login">Connexion</Link>
         <Link href={SIGNUP} className="lp-btn lp-btn-sm">Essai gratuit</Link>
       </div>
@@ -23,9 +25,11 @@ export function SiteFooter() {
       <span className="lp-brand">{BRAND.name}</span>
       <span className="lp-footer-links">
         <Link href="/outils">Outils gratuits</Link>
+        <Link href="/guides">Guides</Link>
         <Link href="/cgv">CGV</Link>
         <Link href="/mentions-legales">Mentions légales</Link>
         <Link href="/confidentialite">Confidentialité</Link>
+        {LEGAL.contactEmail && <a href={`mailto:${LEGAL.contactEmail}`}>Contact</a>}
         <span>© {new Date().getFullYear()}</span>
       </span>
     </footer>

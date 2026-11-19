@@ -3,6 +3,9 @@ import { BRAND } from "./brand";
 import { sendEmail } from "./email";
 import { formatIban, siteUrl } from "./payment";
 import { euros } from "./reminders";
+import { daysUntilRelease, frLong, releaseDate } from "./guarantee-dates";
+
+export { daysUntilRelease, frLong, releaseDate };
 
 /**
  * Retenue de garantie (loi n° 71-584 du 16 juillet 1971, art. 1er) : au plus 5 % du montant des travaux.
@@ -28,23 +31,6 @@ export type Guarantee = {
 };
 
 export const MAX_RATE = 5; // %
-
-/** Date de libération : même jour, un an plus tard (29 février → 1er mars). */
-export function releaseDate(reception: string): string {
-  const [y, m, d] = reception.split("-").map(Number);
-  // Date.UTC fait déborder le 29 février d'une année non bissextile sur le 1er mars.
-  return new Date(Date.UTC(y + 1, m - 1, d)).toISOString().slice(0, 10);
-}
-
-/** Jours restants avant la libération (négatif si la date est passée). */
-export function daysUntilRelease(reception: string, now = new Date()): number {
-  const rel = Date.parse(releaseDate(reception) + "T00:00:00Z");
-  const today = Date.parse(now.toISOString().slice(0, 10) + "T00:00:00Z");
-  return Math.round((rel - today) / 86_400_000);
-}
-
-export const frLong = (iso: string) =>
-  new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }).replace(/^1 /, "1er ");
 
 /** Alerte à envoyer à l'artisan aujourd'hui : 30 jours avant, puis le jour J (ou après, si ratée). */
 export function dueAlert(g: Guarantee, now = new Date()): "30" | "0" | null {
