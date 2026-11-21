@@ -1,3 +1,4 @@
+import "server-only"; // ce fichier manipule des clés secrètes : interdit dans le navigateur
 import Stripe from "stripe";
 import { createAdminClient } from "./supabase/server";
 

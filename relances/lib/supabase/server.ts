@@ -1,3 +1,4 @@
+import "server-only"; // ce fichier manipule des clés secrètes : interdit dans le navigateur
 import { createServerClient } from "@supabase/ssr";
 import { createClient as createPlainClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
