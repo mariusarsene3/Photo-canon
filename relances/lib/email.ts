@@ -1,3 +1,4 @@
+import "server-only"; // ce fichier manipule des clés secrètes : interdit dans le navigateur
 /** Envoi d'un e-mail texte via Resend. Sans clé (développement), l'e-mail est affiché dans la console. */
 export type Attachment = { filename: string; content: string }; // contenu en base64
 

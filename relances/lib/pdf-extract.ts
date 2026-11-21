@@ -1,3 +1,4 @@
+import "server-only"; // ce fichier manipule des clés secrètes : interdit dans le navigateur
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
