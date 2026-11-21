@@ -1,6 +1,7 @@
 import "./landing.css";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
+import { founderSeatsLeft } from "@/lib/founder";
 import { LEGAL } from "@/lib/legal";
 import { siteUrl } from "@/lib/payment";
 import { StickyCta } from "./sticky-cta";
@@ -22,7 +23,7 @@ const benefits = [
 
 const faq = [
   { q: "Mes clients vont-ils mal le prendre ?", a: "Non : le premier message est un simple rappel poli, qui précise « si le paiement est déjà parti, ne tenez pas compte de ce message ». La plupart des retards sont des oublis." },
-  { q: "Les e-mails partent-ils à mon nom ?", a: "Oui, ils sont signés avec le nom de votre entreprise. Votre client ne voit qu'un message de votre part." },
+  { q: "Les e-mails partent-ils à mon nom ?", a: "Oui : votre client voit le nom de votre entreprise comme expéditeur, et le message est signé à votre nom. S'il répond, sa réponse arrive directement dans votre boîte mail." },
   { q: "Et si le client paie entre deux relances ?", a: "Vous cochez « Payée » en un clic, ou vous mettez les relances en pause : plus rien ne part." },
 ];
 
@@ -86,10 +87,17 @@ function JsonLd() {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }} />;
 }
 
-export function Landing() {
+export async function Landing() {
+  const seats = await founderSeatsLeft();
   return (
     <div className="lp">
       <JsonLd />
+      {seats > 0 && (
+        <Link href="/fondateur" className="fd-banner">
+          <span><b>Offre fondateur</b> : -{BRAND.founder.discount} % à vie pour les {BRAND.founder.seats} premiers clients</span>
+          <span>{seats} place{seats > 1 ? "s" : ""} restante{seats > 1 ? "s" : ""} →</span>
+        </Link>
+      )}
       <nav className="lp-nav lp-wrap">
         <span className="lp-brand">{BRAND.name}<small className="lp-tagline">{BRAND.tagline}</small></span>
         <div className="lp-nav-links">
@@ -208,6 +216,7 @@ export function Landing() {
         <span className="lp-footer-links">
           <Link href="/outils">Outils gratuits</Link>
           <Link href="/guides">Guides</Link>
+          <Link href="/fondateur">Offre fondateur</Link>
           <Link href="/cgv">CGV</Link>
           <Link href="/mentions-legales">Mentions légales</Link>
           <Link href="/confidentialite">Confidentialité</Link>

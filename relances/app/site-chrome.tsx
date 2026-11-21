@@ -26,6 +26,7 @@ export function SiteFooter() {
       <span className="lp-footer-links">
         <Link href="/outils">Outils gratuits</Link>
         <Link href="/guides">Guides</Link>
+        <Link href="/fondateur">Offre fondateur</Link>
         <Link href="/cgv">CGV</Link>
         <Link href="/mentions-legales">Mentions légales</Link>
         <Link href="/confidentialite">Confidentialité</Link>

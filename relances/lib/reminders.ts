@@ -146,6 +146,17 @@ export function nextReminder(inv: Invoice, profile?: Profile | null): { step: nu
   return { step: next.step, label: next.label, planned: next.planned, date: date < today ? today : date };
 }
 
+/**
+ * E-mail du compte. Avec le client admin (cron) : lu dans Supabase Auth.
+ * Avec le client de l'utilisateur (bouton « Envoyer les relances dues ») : c'est son propre compte.
+ */
+export async function accountEmail(supabase: SupabaseClient, userId: string): Promise<string | undefined> {
+  const admin = await supabase.auth.admin.getUserById(userId).catch(() => null);
+  if (admin && !admin.error && admin.data.user?.email) return admin.data.user.email;
+  const { data } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }));
+  return data.user?.id === userId ? data.user.email ?? undefined : undefined;
+}
+
 const addDays = (d: Date, n: number) => new Date(d.getTime() + n * 86_400_000).toISOString().slice(0, 10);
 
 /** Nom de fichier lisible pour la pièce jointe : « Facture F-042.pdf ». */
@@ -197,6 +208,13 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
     : { data: [] };
   const profiles = new Map((profs ?? []).map((p) => [p.user_id as string, p as Profile]));
 
+  // Adresse e-mail de chaque artisan, pour que les réponses de ses clients lui arrivent directement.
+  const owners = new Map<string, string | undefined>();
+  const ownerEmail = async (userId: string) => {
+    if (!owners.has(userId)) owners.set(userId, await accountEmail(supabase, userId));
+    return owners.get(userId);
+  };
+
   const sent: { invoice: string; step: number }[] = [];
   const errors: { invoice: string; error: string }[] = [];
 
@@ -217,7 +235,12 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
       }
       try {
         const pdf = await invoicePdf(supabase, inv);
-        await sendEmail(inv.client_email, subject, text, { attachments: pdf ? [pdf] : undefined });
+        // Le client voit le nom de l'artisan comme expéditeur, et ses réponses arrivent chez l'artisan.
+        await sendEmail(inv.client_email, subject, text, {
+          fromName: profile?.company_name || undefined,
+          replyTo: await ownerEmail(inv.user_id),
+          attachments: pdf ? [pdf] : undefined,
+        });
       } catch (e) {
         // Échec d'envoi : on libère l'étape pour réessayer au prochain passage.
         await supabase.from("reminders").delete().eq("invoice_id", inv.id).eq("step", step);
