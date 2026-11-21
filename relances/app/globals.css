@@ -623,3 +623,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--t
 input[type=file] { font: inherit; font-size: 13.5px; color: var(--muted); max-width: 100%; }
 input[type=file]::file-selector-button { font: inherit; font-size: 13.5px; font-weight: 600; color: var(--text); background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; margin-right: 10px; cursor: pointer; }
 input[type=file]::file-selector-button:hover { border-color: var(--text); }
+
+.founder-note { background: var(--ok-bg); color: var(--text); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.founder-note code { font-weight: 700; background: var(--card); border: 1px dashed var(--border); border-radius: 6px; padding: 1px 6px; }

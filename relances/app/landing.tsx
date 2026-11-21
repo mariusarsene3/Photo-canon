@@ -1,6 +1,7 @@
 import "./landing.css";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
+import { founderSeatsLeft } from "@/lib/founder";
 import { LEGAL } from "@/lib/legal";
 import { siteUrl } from "@/lib/payment";
 import { StickyCta } from "./sticky-cta";
@@ -86,10 +87,17 @@ function JsonLd() {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }} />;
 }
 
-export function Landing() {
+export async function Landing() {
+  const seats = await founderSeatsLeft();
   return (
     <div className="lp">
       <JsonLd />
+      {seats > 0 && (
+        <Link href="/fondateur" className="fd-banner">
+          <span><b>Offre fondateur</b> : -{BRAND.founder.discount} % à vie pour les {BRAND.founder.seats} premiers clients</span>
+          <span>{seats} place{seats > 1 ? "s" : ""} restante{seats > 1 ? "s" : ""} →</span>
+        </Link>
+      )}
       <nav className="lp-nav lp-wrap">
         <span className="lp-brand">{BRAND.name}<small className="lp-tagline">{BRAND.tagline}</small></span>
         <div className="lp-nav-links">
@@ -208,6 +216,7 @@ export function Landing() {
         <span className="lp-footer-links">
           <Link href="/outils">Outils gratuits</Link>
           <Link href="/guides">Guides</Link>
+          <Link href="/fondateur">Offre fondateur</Link>
           <Link href="/cgv">CGV</Link>
           <Link href="/mentions-legales">Mentions légales</Link>
           <Link href="/confidentialite">Confidentialité</Link>

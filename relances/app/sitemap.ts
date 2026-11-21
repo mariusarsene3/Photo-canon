@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/outils/calcul-penalites", priority: 0.9 },
     { path: "/outils/retenue-de-garantie", priority: 0.9 },
     { path: "/guides", priority: 0.7 },
+    { path: "/fondateur", priority: 0.8 },
     ...GUIDES.map((g) => ({ path: `/guides/${g.slug}`, priority: 0.8 })),
     { path: "/cgv", priority: 0.2 },
     { path: "/mentions-legales", priority: 0.2 },

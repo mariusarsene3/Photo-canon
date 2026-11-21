@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Toast } from "../toast";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { BRAND } from "@/lib/brand";
+import { BRAND, founderPrice } from "@/lib/brand";
+import { founderSeatsLeft } from "@/lib/founder";
 import { STATUS_LABEL, accessFrom, getMyBilling } from "@/lib/billing";
 import { stripeConfigured } from "@/lib/stripe";
 import { SubmitButton } from "../submit-button";
@@ -23,6 +24,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   const billing = await getMyBilling(supabase);
   const access = accessFrom(billing);
   const payments = stripeConfigured();
+  const founderLeft = await founderSeatsLeft();
   const { data: prefs, error: prefsErr } = await supabase.from("profiles").select("*").maybeSingle();
   const productEmails = prefs?.product_emails !== false;
   // Le résumé du lundi n'apparaît qu'une fois la migration 007 appliquée (ou sans profil encore créé).
@@ -85,6 +87,12 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
             )}
             {billing.status === "canceled" && <p className="muted">Votre précédent abonnement a été résilié.</p>}
             <p className="muted">{BRAND.price} € HT / mois · sans engagement · résiliable à tout moment.</p>
+            {payments && founderLeft > 0 && (
+              <p className="founder-note">
+                <b>Offre fondateur</b> : entrez le code <code>{BRAND.founder.code}</code> sur la page de paiement pour payer{" "}
+                {founderPrice()} HT / mois à vie ({founderLeft} place{founderLeft > 1 ? "s" : ""} restante{founderLeft > 1 ? "s" : ""}).
+              </p>
+            )}
             {payments ? (
               <form action={subscribe}>
                 <SubmitButton pending="Ouverture du paiement…">S&apos;abonner</SubmitButton>
