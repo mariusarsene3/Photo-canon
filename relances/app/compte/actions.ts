@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { requireUser } from "@/lib/auth";
 import { getMyBilling } from "@/lib/billing";
 import { stripe, stripeConfigured } from "@/lib/stripe";
 import { INVOICE_BUCKET } from "@/lib/reminders";
@@ -50,7 +51,7 @@ export async function subscribe() {
 /** Ouvre l'espace client Stripe : carte bancaire, factures, résiliation. */
 export async function manageSubscription() {
   if (!stripeConfigured()) back("Le paiement en ligne n'est pas encore activé.");
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   const billing = await getMyBilling(supabase);
   if (!billing?.stripe_customer_id) back("Aucun abonnement à gérer.");
 

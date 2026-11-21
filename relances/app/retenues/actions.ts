@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { requireUser } from "@/lib/auth";
 import { MAX_RATE, claimLetter, type Guarantee } from "@/lib/guarantees";
 import { parseAmount, parseDate } from "@/lib/import";
 import { sendEmail } from "@/lib/email";
@@ -27,7 +27,7 @@ export async function addGuarantee(form: FormData) {
   if (!amount) back("Indiquez le montant de la retenue ou le montant des travaux.", "err");
   if (!reception) back("Indiquez la date de réception des travaux.", "err");
 
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   const { error } = await supabase.from("guarantees").insert({
     site, client_name, client_email, kind,
     contract_amount_cents: contract, amount_cents: amount, reception_date: reception,
@@ -38,7 +38,7 @@ export async function addGuarantee(form: FormData) {
 }
 
 async function load(id: number) {
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   const { data } = await supabase.from("guarantees").select("*").eq("id", id).maybeSingle();
   if (!data) back("Retenue introuvable.", "err");
   return { supabase, g: data as Guarantee };
@@ -88,14 +88,14 @@ export async function toInvoice(form: FormData) {
 }
 
 export async function markReleased(form: FormData) {
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   await supabase.from("guarantees").update({ status: "released", released_at: new Date().toISOString() }).eq("id", Number(form.get("id")));
   revalidatePath("/retenues");
   back("Bravo, retenue récupérée ✓");
 }
 
 export async function deleteGuarantee(form: FormData) {
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   await supabase.from("guarantees").delete().eq("id", Number(form.get("id")));
   revalidatePath("/retenues");
   back("Retenue supprimée.");
