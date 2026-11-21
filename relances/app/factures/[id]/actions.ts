@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { requireUser } from "@/lib/auth";
 import { parseAmount, parseDate } from "@/lib/import";
 import { deletePdf, pdfFromForm, savePdf } from "@/lib/invoice-pdf";
 
@@ -14,7 +14,7 @@ function back(id: number, msg: string, kind: "ok" | "err" = "ok"): never {
 }
 
 async function update(id: number, fields: Record<string, unknown>, okMsg: string) {
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   const { error, data } = await supabase.from("invoices").update(fields).eq("id", id).select("id");
   if (error) back(id, /column|schema cache/i.test(error.message) ? MIGRATION : "Enregistrement impossible : " + error.message, "err");
   if (!data?.length) back(id, "Facture introuvable.", "err");
@@ -62,7 +62,7 @@ export async function uploadPdf(form: FormData) {
   const id = Number(form.get("id"));
   const pdf = pdfFromForm(form);
   if (!pdf) back(id, "Choisissez un fichier PDF.", "err");
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
   const { data: inv } = await supabase.from("invoices").select("id").eq("id", id).maybeSingle();
@@ -75,7 +75,7 @@ export async function uploadPdf(form: FormData) {
 
 export async function removePdf(form: FormData) {
   const id = Number(form.get("id"));
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   const { data: inv } = await supabase.from("invoices").select("pdf_path").eq("id", id).maybeSingle();
   if (!inv) back(id, "Facture introuvable.", "err");
   await deletePdf(supabase, id, inv!.pdf_path);
@@ -85,7 +85,7 @@ export async function removePdf(form: FormData) {
 
 export async function removeInvoice(form: FormData) {
   const id = Number(form.get("id"));
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   // Le fichier PDF éventuel est supprimé avec la facture.
   const { data: inv } = await supabase.from("invoices").select("*").eq("id", id).maybeSingle();
   if (inv?.pdf_path) await supabase.storage.from("factures").remove([inv.pdf_path]);

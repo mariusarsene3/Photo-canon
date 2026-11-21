@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { INVOICE_BUCKET } from "./reminders";
+import { isPdf } from "./file-check";
 
 export const MAX_PDF_BYTES = 10 * 1024 * 1024;
 const MIGRATION = "Fonction pas encore activée : appliquez la migration 007 dans Supabase.";
@@ -15,10 +16,11 @@ export function pdfFromForm(form: FormData): File | null {
  * Renvoie un message d'erreur lisible, ou null si tout s'est bien passé.
  */
 export async function savePdf(supabase: SupabaseClient, userId: string, invoiceId: number, file: File): Promise<string | null> {
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  // Un vrai PDF commence toujours par « %PDF ».
+  // Taille vérifiée avant de lire le fichier, puis vrai type d'après le contenu (pas le nom).
   if (file.size > MAX_PDF_BYTES) return "Le PDF dépasse 10 Mo.";
-  if (String.fromCharCode(...bytes.slice(0, 4)) !== "%PDF") return "Ce fichier n'est pas un PDF.";
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  if (!isPdf(bytes)) return "Ce fichier n'est pas un vrai PDF.";
+  // Nom choisi par le serveur : le nom d'origine n'est jamais utilisé pour l'enregistrement.
   const path = `${userId}/${invoiceId}.pdf`;
   const up = await supabase.storage.from(INVOICE_BUCKET).upload(path, bytes, { contentType: "application/pdf", upsert: true });
   if (up.error) {

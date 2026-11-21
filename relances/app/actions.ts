@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { requireUser } from "@/lib/auth";
 import { runReminders } from "@/lib/reminders";
 import { cleanIban, isValidIban } from "@/lib/payment";
 import { pdfFromForm, savePdf } from "@/lib/invoice-pdf";
@@ -18,7 +18,7 @@ export async function addInvoice(form: FormData) {
   const due_date = String(form.get("due_date") ?? "");
   if (!number || !client_name || !client_email.includes("@") || !(amount > 0) || !due_date) return;
 
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   const { data: created } = await supabase
     .from("invoices")
     .insert({ number, client_name, client_email, amount_cents: Math.round(amount * 100), due_date })
@@ -37,7 +37,7 @@ export async function addInvoice(form: FormData) {
 }
 
 export async function markPaid(form: FormData) {
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   await supabase
     .from("invoices")
     .update({ status: "paid", paid_at: new Date().toISOString() })
@@ -47,14 +47,14 @@ export async function markPaid(form: FormData) {
 }
 
 export async function deleteInvoice(form: FormData) {
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   await supabase.from("invoices").delete().eq("id", Number(form.get("id")));
   revalidatePath("/");
   redirect("/");
 }
 
 export async function sendNow() {
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   let notice: string;
   let kind = "ok";
   try {
@@ -82,7 +82,7 @@ export async function sendNow() {
 }
 
 export async function saveSettings(form: FormData) {
-  const supabase = await createClient();
+  const { supabase } = await requireUser();
   const {
     data: { user },
   } = await supabase.auth.getUser();

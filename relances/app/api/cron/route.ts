@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { runReminders } from "@/lib/reminders";
 import { createAdminClient } from "@/lib/supabase/server";
@@ -7,12 +8,18 @@ import { runWeekly } from "@/lib/weekly";
 
 export const dynamic = "force-dynamic";
 
+/** Comparaison en temps constant : ne laisse pas deviner le secret caractère par caractère. */
+function sameSecret(a: string, b: string) {
+  const x = Buffer.from(a), y = Buffer.from(b);
+  return x.length === y.length && timingSafeEqual(x, y);
+}
+
 // À appeler une fois par jour (cron Vercel, cron-job.org...).
 // Traite les factures de TOUS les comptes. Protégé par CRON_SECRET :
 //   Authorization: Bearer <CRON_SECRET>
 export async function GET(req: Request) {
   const secret = process.env.CRON_SECRET;
-  if (!secret || req.headers.get("authorization") !== `Bearer ${secret}`) {
+  if (!secret || !sameSecret(req.headers.get("authorization") ?? "", `Bearer ${secret}`)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   const admin = createAdminClient();
