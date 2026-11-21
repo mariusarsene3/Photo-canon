@@ -54,7 +54,11 @@ export async function sendClaim(form: FormData) {
   const { data: prof } = await supabase.from("profiles").select("company_name, iban").maybeSingle();
   const { subject, body } = claimLetter(g, prof?.company_name ?? "", prof?.iban ?? "");
   try {
-    await sendEmail(g.client_email, subject, body);
+    const { data: { user } } = await supabase.auth.getUser();
+    await sendEmail(g.client_email, subject, body, {
+      fromName: prof?.company_name || undefined,
+      replyTo: user?.email ?? undefined,
+    });
   } catch (e) {
     back("L'e-mail n'a pas pu partir : " + (e instanceof Error ? e.message : String(e)), "err");
   }

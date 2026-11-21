@@ -23,7 +23,7 @@ const benefits = [
 
 const faq = [
   { q: "Mes clients vont-ils mal le prendre ?", a: "Non : le premier message est un simple rappel poli, qui précise « si le paiement est déjà parti, ne tenez pas compte de ce message ». La plupart des retards sont des oublis." },
-  { q: "Les e-mails partent-ils à mon nom ?", a: "Oui, ils sont signés avec le nom de votre entreprise. Votre client ne voit qu'un message de votre part." },
+  { q: "Les e-mails partent-ils à mon nom ?", a: "Oui : votre client voit le nom de votre entreprise comme expéditeur, et le message est signé à votre nom. S'il répond, sa réponse arrive directement dans votre boîte mail." },
   { q: "Et si le client paie entre deux relances ?", a: "Vous cochez « Payée » en un clic, ou vous mettez les relances en pause : plus rien ne part." },
 ];
 
