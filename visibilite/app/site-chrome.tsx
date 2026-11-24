@@ -16,8 +16,9 @@ export function Header() {
       <div className="wrap top-in">
         <Logo />
         <nav>
-          <a href="/#comment">Comment je travaille</a>
-          <a href="/#tarifs">Tarifs</a>
+          <a href="/#services">Services</a>
+          <a href="/guides">Guides</a>
+          <a href="/contact">Contact</a>
           <a href="/#test" className="nav-cta">
             Faire le test
           </a>
@@ -33,10 +34,12 @@ export function Footer() {
       <div className="wrap foot-in">
         <div>
           <Logo />
-          <p>Je rends les commerces {BRAND.region} visibles sur Google et dans les réponses de ChatGPT.</p>
+          <p>Visibilité sur Google et dans ChatGPT, sites vitrines et réseaux sociaux pour les commerçants, {BRAND.area}.</p>
         </div>
         <p className="links">
           <a href={`mailto:${BRAND.contactEmail}`}>{BRAND.contactEmail}</a>
+          <Link href="/contact">Contact</Link>
+          <Link href="/guides">Guides</Link>
           <Link href="/exemple">Exemple de résultat</Link>
           <Link href="/mentions-legales">Mentions légales</Link>
           <Link href="/confidentialite">Confidentialité</Link>

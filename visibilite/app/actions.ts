@@ -4,6 +4,7 @@ import { runCheck, providersAvailable, type CheckResult } from "@/lib/check";
 import { allowCheck, allowLead } from "@/lib/rate-limit";
 import { saveLead, leadsAvailable } from "@/lib/leads";
 import { BRAND } from "@/lib/brand";
+import { SERVICES } from "@/lib/services";
 
 export type CheckState = { result?: CheckResult; error?: string; values?: Record<string, string> };
 
@@ -47,7 +48,13 @@ const LeadInput = z.object({
 export async function leadAction(_prev: LeadState, form: FormData): Promise<LeadState> {
   if (form.get("website")) return { ok: true }; // champ piège invisible : rempli seulement par les robots
   const parsed = LeadInput.safeParse(Object.fromEntries(["business", "trade", "city", "contact_name", "phone", "email", "message", "cited"].map((k) => [k, String(form.get(k) ?? "")])));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message === "trop court" ? "Indiquez votre nom." : `Vérifiez le formulaire : ${parsed.error.issues[0]?.message}.` };
+  // Services cochés : ajoutés en tête du message (pas besoin de nouvelle colonne en base).
+  const names: Record<string, string> = Object.fromEntries(SERVICES.map((s) => [s.id, s.name]));
+  const interests = form.getAll("interests").map(String).filter((i) => i in names).map((i) => names[i]);
+  if (parsed.success && interests.length) {
+    parsed.data.message = `[Intéressé par : ${interests.join(", ")}]${parsed.data.message ? ` ${parsed.data.message}` : ""}`.slice(0, 1000);
+  }
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message === "trop court" ? "Remplissez les champs obligatoires (nom, activité, ville)." : `Vérifiez le formulaire : ${parsed.error.issues[0]?.message}.` };
   if (!parsed.data.phone && !parsed.data.email) return { error: "Laissez un téléphone ou un e-mail pour qu'on puisse vous recontacter." };
   if (!leadsAvailable()) return { error: `Le formulaire est momentanément indisponible : écrivez-nous à ${BRAND.contactEmail}.` };
   if (!(await allowLead())) return { error: "Vous avez déjà envoyé plusieurs demandes : on vous recontacte très vite." };

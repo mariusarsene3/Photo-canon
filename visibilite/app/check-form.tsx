@@ -27,7 +27,7 @@ function Progress() {
   );
 }
 
-export function CheckForm() {
+export function CheckForm({ defaultTrade }: { defaultTrade?: string } = {}) {
   const [state, action, pending] = useActionState<CheckState, FormData>(checkAction, {});
   const v = state.values ?? {};
   return (
@@ -40,7 +40,7 @@ export function CheckForm() {
         <div className="form-row">
           <label>
             Votre activité
-            <input name="trade" defaultValue={v.trade} placeholder="ex. : un fleuriste" required maxLength={60} />
+            <input name="trade" defaultValue={v.trade ?? defaultTrade} placeholder="ex. : un fleuriste" required maxLength={60} />
           </label>
           <label>
             Ville
