@@ -4,7 +4,7 @@
 
 | Élément | Valeur |
 |---|---|
-| **Style** | **Vert profond** : sombre et élégant comme un carnet relié, sans faire « appli de finance » |
+| **Style** | **La facture sur vert profond** : chaque post est une feuille de facture crème, numérotée, posée sur un fond vert profond, avec un tampon vert |
 | **Logo** | L'enveloppe validée (`logo.svg`) : une relance qui a abouti |
 | **Fond** | Vert profond `#0F2A1D`, avec un léger halo vert en haut |
 | **Vert vif** | `#4ADE80` : chiffres clés, mots importants, « payé ». Le vert du logo reste `#22C55E` |
@@ -16,6 +16,15 @@
 **Le ton :** simple, direct, rassurant. On parle comme un artisan à un autre artisan, sans jargon. On vouvoie. On ne culpabilise jamais le client qui paie en retard.
 
 **Une règle :** un message par visuel, en gros. Si on doit plisser les yeux, c'est raté.
+
+**Comment faire un nouveau post :**
+1. Une feuille de facture crème (`#F6F2E9`), légèrement penchée, sur le fond vert profond.
+2. En haut à gauche, le sujet en petites capitales (« LE SAVIEZ-VOUS ? », « ARTISANS DU BÂTIMENT »…). En haut à droite, le **numéro du post** (N° 004, N° 005…) : ça crée une série.
+3. Un titre très gras, puis le chiffre ou le contenu, si possible présenté comme des lignes de facture.
+4. **Un tampon vert** qui résume l'action : « À RÉCLAMER », « À RÉCUPÉRER », « PAYÉE ✓ », « J+7 »…
+5. En bas, le lien (encaissez.fr…) et le logo.
+
+Les posts se modifient dans `posts-facture.html` (ou en demandant à Claude).
 
 ---
 
@@ -31,7 +40,7 @@
 | `post-produit.png` | Post de présentation d'Encaissez | 1080 × 1350 |
 | `../../video/out/encaissez-pub-vertical.mp4` | Reels, TikTok, Stories | 1080 × 1920 |
 
-Pour modifier un visuel, ouvrez `kit.html` dans un navigateur (ou demandez à Claude).
+Pour modifier un visuel : la photo de profil et les bannières sont dans `kit.html`, les posts dans `posts-facture.html` (ou demandez à Claude).
 
 ---
 

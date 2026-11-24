@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face { font-family: Inter; font-weight: 500; src: url("../../relances/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("../../relances/node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("../../relances/node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2"); }
+*{box-sizing:border-box;margin:0} body{font-family:Inter,sans-serif;background:#ccc;display:flex;flex-wrap:wrap;gap:30px;padding:30px;width:3500px}
+.p{width:1080px;height:1350px;position:relative;overflow:hidden;flex:none}
+.light{background:#eceae4}
+.deep{background:radial-gradient(900px 600px at 80% 5%,rgba(74,222,128,.18),transparent 60%),#0f2a1d}
+.sheet{position:absolute;left:70px;right:70px;top:70px;bottom:70px;background:#fffdf8;border-radius:12px;box-shadow:0 40px 80px -30px rgba(0,0,0,.55);color:#1c1917;overflow:hidden}
+.deep .sheet{transform:rotate(-1.2deg);background:#f6f2e9}
+.lines{position:absolute;inset:0;background-image:repeating-linear-gradient(transparent 0 63px,#e3e9ee 63px 65px)}
+.deep .lines{background-image:repeating-linear-gradient(transparent 0 63px,#e3dccd 63px 65px)}
+.edge{position:absolute;left:0;top:0;bottom:0;width:10px;background:#22c55e}
+.hd{position:absolute;left:70px;right:70px;top:56px;display:flex;justify-content:space-between;font-size:26px;font-weight:700;color:#78716c;letter-spacing:.08em}
+.body{position:absolute;left:70px;right:70px;top:150px}
+.w{font-weight:800;letter-spacing:-.04em;line-height:1.04}
+.stamp{position:absolute;border:9px solid #16a34a;color:#16a34a;border-radius:16px;padding:6px 26px;font-weight:800;letter-spacing:4px;opacity:.92;mix-blend-mode:multiply}
+.stamp.red{border-color:#dc2626;color:#dc2626}
+.ft{position:absolute;left:70px;right:70px;bottom:56px;display:flex;justify-content:space-between;align-items:center;font-size:28px;font-weight:700}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:22px 0;border-bottom:3px dashed #d6d3cb;font-size:38px;font-weight:600}
+.row b{font-weight:800}
+.tot{border-bottom:none;border-top:4px solid #1c1917;font-size:46px}
+</style></head><body>
+<script>
+const posts = [
+ { id:"facture-40", hd:["LE SAVIEZ-VOUS ?","N° 001"], body:`
+    <div class="w" style="font-size:80px">Un client pro qui paie en retard vous doit</div>
+    <div class="w" style="font-size:300px;letter-spacing:-.06em;margin-top:10px">40 €</div>
+    <div class="w" style="font-size:54px;margin-top:6px">d'indemnité. <span style="color:#78716c">En plus des pénalités de retard.</span></div>`,
+   stamp:`<div class="stamp" style="right:80px;top:880px;transform:rotate(-10deg);font-size:72px">À RÉCLAMER</div>`,
+   ft:`<span>Calcul gratuit : encaissez.fr/outils</span>` },
+ { id:"facture-retenue", hd:["ARTISANS DU BÂTIMENT","N° 002"], body:`
+    <div class="w" style="font-size:84px">Vos 5 % dorment chez vos clients.</div>
+    <div style="font-size:36px;color:#57534e;margin:28px 0 30px;line-height:1.35;font-weight:500">La retenue de garantie doit vous être rendue un an après la réception des travaux.</div>
+    <div class="row"><span>Réception des travaux</span><b>03/10/2025</b></div>
+    <div class="row"><span>Libération</span><b style="color:#15803d">03/10/2026</b></div>
+    <div class="row tot"><span>À récupérer</span><b>1 200,00 €</b></div>`,
+   stamp:`<div class="stamp" style="right:90px;top:950px;transform:rotate(-9deg);font-size:64px">À RÉCUPÉRER</div>`,
+   ft:`<span>Calculateur gratuit : encaissez.fr</span>` },
+ { id:"facture-produit", hd:["RELANCES AUTOMATIQUES","N° 003"], body:`
+    <div class="w" style="font-size:84px">Vos relances partent toutes seules.</div>
+    <div style="margin-top:40px">
+      <div class="row"><span><b>J-3</b> · Rappel avant échéance</span><span style="color:#15803d">✓</span></div>
+      <div class="row"><span><b>J+1</b> · Rappel amical + facture PDF</span><span style="color:#15803d">✓</span></div>
+      <div class="row"><span><b>J+7</b> · Relance ferme</span><span style="color:#15803d">✓</span></div>
+      <div class="row"><span><b>J+15</b> · Dernier avis</span><span style="color:#a8a29e">—</span></div>
+    </div>`,
+   stamp:`<div class="stamp" style="right:90px;top:760px;transform:rotate(-12deg);font-size:96px">PAYÉE ✓</div>`,
+   ft:`<span style="background:#1c1917;color:#fff;border-radius:999px;padding:16px 30px">Essai gratuit · encaissez.fr</span>` },
+];
+for (const mode of ["light","deep"]) for (const p of posts) document.body.insertAdjacentHTML("beforeend", `
+  <div class="p ${mode}" id="${mode}-${p.id}"><div class="sheet"><div class="lines"></div><div class="edge"></div>
+    <div class="hd"><span>${p.hd[0]}</span><span>${p.hd[1]}</span></div>
+    <div class="body">${p.body}</div>${p.stamp}
+    <div class="ft">${p.ft}<img src="logo.svg" width="84" height="84"></div></div></div>`);
+</script></body></html>
