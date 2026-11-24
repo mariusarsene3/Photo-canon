@@ -236,3 +236,34 @@
 .lp-nav { border-bottom: 0; }
 .lp-hero { margin-top: -1px; } /* évite un fin trait clair entre le menu et le titre (arrondi au demi-pixel) */
 .fd-banner .fd-long { text-decoration: none; }
+
+/* =====================================================================
+   Version blanche : le vert devient un accent (boutons, logo, mots importants)
+   ===================================================================== */
+.lp {
+  --lp-bg: #ffffff; --lp-fg: #14211a; --lp-muted: #5f6b64; --lp-line: #e6e9e6; --lp-soft: #f6f8f6;
+  --lp-accent: #0f2a1d; --lp-accent-fg: #ffffff; --lp-ok: #15803d; --lp-late: #b91c1c;
+  background: #ffffff; color-scheme: light;
+}
+.lp-nav, .lp-hero, .lp-footer {
+  --lp-bg: #ffffff; --lp-fg: #14211a; --lp-muted: #5f6b64; --lp-line: #e6e9e6; --lp-soft: #f6f8f6;
+  --lp-accent: #0f2a1d; --lp-accent-fg: #ffffff; --lp-ok: #15803d; --lp-late: #b91c1c;
+  background: #ffffff; color: #14211a; box-shadow: none; clip-path: none;
+}
+.lp-nav { border-bottom: 1px solid #e6e9e6; }
+.lp-hero { margin-top: 0; }
+.lp-hero h1 em { color: #15803d; }
+.lp-footer { border-top: 1px solid #e6e9e6; }
+/* Bandeau final : un encart vert clair, pas une bande pleine largeur */
+.lp-final {
+  --lp-bg: #ecf7ef; --lp-fg: #0f2a1d; --lp-muted: #4b6355; --lp-accent: #0f2a1d; --lp-accent-fg: #ffffff;
+  background: #ecf7ef; color: #0f2a1d; box-shadow: none; clip-path: none;
+  border-radius: 20px; padding-left: clamp(24px, 5vw, 56px); padding-right: clamp(24px, 5vw, 56px); margin-bottom: 48px;
+}
+.fd-banner { background: #ecf7ef; color: #0f2a1d; }
+/* Feuilles : blanches, avec un fin contour */
+.lp-email, .ps, .lp-price, .tool-result, .tool-card, .fd-card, .tool-form fieldset, .guide-steps li, .guide-tool {
+  --lp-bg: #ffffff; --lp-line: #e6e9e6; --lp-soft: #f6f8f6;
+  border: 1px solid #e6e9e6; box-shadow: 0 20px 40px -28px rgba(15, 42, 29, .28);
+}
+.fd-banner span.fd-long { text-decoration: none; }

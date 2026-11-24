@@ -111,7 +111,7 @@ export async function Landing() {
 
       <header className="lp-hero lp-wrap">
         <p className="lp-kicker">Pour les artisans, indépendants et petites entreprises</p>
-        <h1>Vos clients ne paient pas ? On les relance à votre place.</h1>
+        <h1>Vos clients ne paient pas ? <em>On les relance à votre place.</em></h1>
         <p className="lp-lead">
           Ajoutez une facture en retard : Encaissez envoie à votre client un rappel poli, puis plus ferme, avec un lien
           pour payer. Vous n&apos;avez plus à relancer personne.
