@@ -15,7 +15,7 @@ export const LEGAL = {
   editorAddress: "", // TODO : adresse postale
   editorSiret: "", // TODO : n° SIRET (ou RCS + ville)
   editorVat: "", // facultatif : n° de TVA intracommunautaire (vide si franchise en base de TVA)
-  contactEmail: "contact@encaissez.fr", // e-mail de contact (redirigé chez OVH vers la boîte personnelle) ; (aussi utilisé pour les demandes RGPD et les réponses aux e-mails)
+  contactEmail: "mama712du54@gmail.com", // TODO : passer à contact@encaissez.fr une fois la redirection OVH créée ; (aussi utilisé pour les demandes RGPD et les réponses aux e-mails)
   publicationDirector: "", // TODO : en général, le nom de l'éditeur
   // TVA : en micro-entreprise sous le seuil, mettre « TVA non applicable, art. 293 B du CGI ».
   // Sinon : « TVA au taux de 20 % en sus ».
