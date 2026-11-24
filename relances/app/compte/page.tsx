@@ -3,7 +3,7 @@ import { Toast } from "../toast";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND, founderPrice } from "@/lib/brand";
-import { founderSeatsLeft } from "@/lib/founder";
+import { founderSeatsLeft, showSeatCounter } from "@/lib/founder";
 import { STATUS_LABEL, accessFrom, getMyBilling } from "@/lib/billing";
 import { stripeConfigured } from "@/lib/stripe";
 import { SubmitButton } from "../submit-button";
@@ -90,7 +90,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
             {payments && founderLeft > 0 && (
               <p className="founder-note">
                 <b>Offre fondateur</b> : entrez le code <code>{BRAND.founder.code}</code> sur la page de paiement pour payer{" "}
-                {founderPrice()} HT / mois à vie ({founderLeft} place{founderLeft > 1 ? "s" : ""} restante{founderLeft > 1 ? "s" : ""}).
+                {founderPrice()} HT / mois à vie{showSeatCounter(founderLeft) ? ` (${founderLeft} place${founderLeft > 1 ? "s" : ""} restante${founderLeft > 1 ? "s" : ""})` : ""}.
               </p>
             )}
             {payments ? (

@@ -3,47 +3,16 @@ import { Toast } from "./toast";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND } from "@/lib/brand";
 import { getMyAccess } from "@/lib/billing";
-import { STEPS, activeSteps, dayLabel, daysLate, euros, nextReminder, type Invoice, type Profile } from "@/lib/reminders";
+import { activeSteps, dayLabel, daysLate, type Invoice, type Profile } from "@/lib/reminders";
 import { addInvoice, sendNow } from "./actions";
 import { SubmitButton } from "./submit-button";
 import { Landing } from "./landing";
 import { AppShell } from "./app-shell";
-import { InvoiceList, type Row } from "./invoice-list";
+import { InvoiceList } from "./invoice-list";
+import { HeroCard, PerfSection, toRow } from "./dashboard-parts";
 import { NewInvoiceFab } from "./new-invoice-fab";
-import { RecoveredChart } from "./recovered-chart";
-import { kpis, recoveredByMonth } from "@/lib/stats";
 
 export const dynamic = "force-dynamic";
-
-const frShort = (iso: string) => new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
-
-/** Prépare une ligne de la liste : statut lisible et prochaine relance. */
-function toRow(i: Invoice, profile: Profile): Row {
-  const late = daysLate(i.due_date);
-  const lastStep = Math.max(-1, ...i.reminders.map((r) => r.step));
-  const lastSent = STEPS.find((s) => s.step === lastStep)?.sent;
-  const next = nextReminder(i, profile);
-  let kind: Row["kind"], status: string;
-  if (i.status === "paid") { kind = "paid"; status = "Payée"; }
-  else if (i.paused) { kind = "paused"; status = "Relances en pause"; }
-  else if (late > 0) { kind = "late"; status = `${late} j de retard`; }
-  else if (late === 0) { kind = "today"; status = "Échéance aujourd'hui"; }
-  else { kind = "upcoming"; status = `Dans ${-late} j`; }
-  return {
-    id: i.id,
-    number: i.number,
-    client: i.client_name,
-    email: i.client_email,
-    amount: euros(i.amount_cents),
-    due: frShort(i.due_date),
-    kind,
-    status,
-    next:
-      kind === "paid" ? null
-      : next ? `${next.label} le ${frShort(next.date)}`
-      : lastSent ?? null,
-  };
-}
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ ok?: string; err?: string; nouvelle?: string }> }) {
   const { ok, err, nouvelle } = await searchParams;
@@ -63,13 +32,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
   ]);
   const invoices = (inv ?? []) as Invoice[];
   const profile = (prof ?? { company_name: "", iban: "" }) as Profile;
-  const pending = invoices.filter((i) => i.status === "pending");
-  const overdue = pending.filter((i) => daysLate(i.due_date) > 0);
   const paid = invoices.filter((i) => i.status === "paid");
-  const sum = (a: Invoice[]) => euros(a.reduce((s, i) => s + i.amount_cents, 0));
   const today = new Date().toISOString().slice(0, 10);
-  const total = (a: Invoice[]) => a.reduce((s, i) => s + i.amount_cents, 0);
-  const recoveredPct = total(invoices) ? Math.round((total(paid) / total(invoices)) * 100) : 0;
 
   // Premiers pas : la carte disparaît une fois tout fait.
   const steps = [
@@ -103,33 +67,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
         </p>
       )}
 
-      <section className="hero-card" aria-label="Synthèse">
-        <div className="hero-top">
-          <span className="hero-label">À encaisser</span>
-          <span className="hero-count">{pending.length} facture{pending.length > 1 ? "s" : ""} en attente</span>
-        </div>
-        <strong className="hero-amount">{sum(pending)}</strong>
-        <div className="hero-progress" aria-hidden>
-          <i style={{ width: `${recoveredPct}%` }} />
-        </div>
-        <div className="hero-figures">
-          <div>
-            <span className="dot dot-late" />
-            <span>En retard</span>
-            <b>{sum(overdue)}</b>
-          </div>
-          <div>
-            <span className="dot dot-ok" />
-            <span>Récupéré</span>
-            <b>{sum(paid)}</b>
-          </div>
-          <div>
-            <span className="dot dot-rate" />
-            <span>Recouvrement</span>
-            <b>{recoveredPct} %</b>
-          </div>
-        </div>
-      </section>
+      <HeroCard invoices={invoices} />
 
       {doneCount < steps.length && (
         <section className="card onboard">
@@ -153,37 +91,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
         </section>
       )}
 
-      {paid.length > 0 && (() => {
-        const k = kpis(invoices);
-        return (
-          <section className="perf">
-            <div className="card perf-chart">
-              <div className="perf-head">
-                <h2>Récupéré par mois</h2>
-                <span className="muted small">6 derniers mois</span>
-              </div>
-              <RecoveredChart points={recoveredByMonth(invoices)} />
-            </div>
-            <div className="perf-kpis">
-              <div className="card kpi">
-                <span>Récupéré après relance</span>
-                <strong>{euros(k.recoveredAfterReminderCents)}</strong>
-                <em>{k.recoveredAfterReminderCount} facture{k.recoveredAfterReminderCount > 1 ? "s" : ""} payée{k.recoveredAfterReminderCount > 1 ? "s" : ""} après un rappel</em>
-              </div>
-              <div className="card kpi">
-                <span>Délai moyen de paiement</span>
-                <strong>{k.avgDelay === null ? "—" : `${k.avgDelay} j`}</strong>
-                <em>{k.avgDelay === null ? "dès la première facture payée" : "après l'échéance"}</em>
-              </div>
-              <div className="card kpi">
-                <span>Relances ce mois-ci</span>
-                <strong>{k.remindersThisMonth}</strong>
-                <em>envoyées automatiquement</em>
-              </div>
-            </div>
-          </section>
-        );
-      })()}
+      {paid.length > 0 && <PerfSection invoices={invoices} />}
 
       <details className="card new-inv" id="nouvelle" open={invoices.length === 0 || wantsNew}>
         <summary>

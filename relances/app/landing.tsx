@@ -1,7 +1,7 @@
 import "./landing.css";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
-import { founderSeatsLeft } from "@/lib/founder";
+import { founderSeatsLeft, showSeatCounter } from "@/lib/founder";
 import { LEGAL } from "@/lib/legal";
 import { siteUrl } from "@/lib/payment";
 import { StickyCta } from "./sticky-cta";
@@ -115,7 +115,7 @@ export async function Landing() {
       {seats > 0 && (
         <Link href="/fondateur" className="fd-banner">
           <span><b>Offre fondateur</b> : -{BRAND.founder.discount} % à vie<span className="fd-long"> pour les {BRAND.founder.seats} premiers clients</span></span>
-          <span>{seats} place{seats > 1 ? "s" : ""} restante{seats > 1 ? "s" : ""} →</span>
+          <span>{showSeatCounter(seats) ? `${seats} place${seats > 1 ? "s" : ""} restante${seats > 1 ? "s" : ""}` : "En profiter"} →</span>
         </Link>
       )}
       <nav className="lp-nav lp-wrap">
@@ -139,6 +139,7 @@ export async function Landing() {
         </p>
         <div className="lp-actions" id="hero-cta">
           <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
+          <Link href="/demo" className="lp-btn lp-btn-ghost">Voir une démo</Link>
         </div>
         <p className="lp-meta"><strong className="lp-meta-price">{BRAND.price} € HT/mois</strong> · {BRAND.trialDays} jours gratuits · Sans engagement</p>
       </header>
@@ -273,7 +274,10 @@ export async function Landing() {
 
       <section className="lp-final lp-wrap">
         <h2>Récupérez ce qu&apos;on vous doit.</h2>
-        <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
+        <div className="lp-actions">
+          <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
+          <Link href="/demo" className="lp-btn lp-btn-ghost">Voir une démo</Link>
+        </div>
       </section>
 
       <footer className="lp-footer lp-wrap">

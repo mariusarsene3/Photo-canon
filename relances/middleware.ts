@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const path = request.nextUrl.pathname;
-  const isPublic = path === "/" || path === "/cgv" || path.startsWith("/api/stripe/") || path.startsWith("/outils") || path.startsWith("/guides") || path === "/fondateur" || path.startsWith("/opengraph-image") || path === "/sitemap.xml" || path === "/robots.txt" || path === "/mentions-legales" || path === "/confidentialite" || path.startsWith("/payer/") || path.startsWith("/login") || path.startsWith("/auth") || path.startsWith("/api/cron");
+  const isPublic = path === "/" || path === "/cgv" || path.startsWith("/api/stripe/") || path.startsWith("/outils") || path.startsWith("/guides") || path === "/fondateur" || path === "/demo" || path.startsWith("/opengraph-image") || path === "/sitemap.xml" || path === "/robots.txt" || path === "/mentions-legales" || path === "/confidentialite" || path.startsWith("/payer/") || path.startsWith("/login") || path.startsWith("/auth") || path.startsWith("/api/cron");
   if (!user && !isPublic) {
     return NextResponse.redirect(new URL("/login", request.url));
   }

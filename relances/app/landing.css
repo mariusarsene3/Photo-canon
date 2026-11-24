@@ -304,3 +304,7 @@
 .lp-video { background: #ffffff; border: 1px solid #e6e9e6; box-shadow: 0 30px 60px -36px rgba(15, 42, 29, .35); }
 .lp-video-btn { border-color: #e6e9e6; background: rgba(255, 255, 255, .9); color: #14211a; }
 .lp-video-btn:focus-visible { outline-color: #0f2a1d; }
+/* Bouton secondaire « Voir une démo » */
+.lp-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.lp-btn-ghost { background: transparent; color: var(--lp-fg); border: 1.5px solid var(--lp-line); }
+.lp-btn-ghost:hover { border-color: var(--lp-fg); opacity: 1; }

@@ -41,7 +41,7 @@ export function Avatar({ name, size = 40 }: { name: string; size?: number }) {
 
 const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
-export function InvoiceList({ rows }: { rows: Row[] }) {
+export function InvoiceList({ rows, demo = false }: { rows: Row[]; demo?: boolean }) {
   const [filter, setFilter] = useState<Filter>("all");
   const [q, setQ] = useState("");
 
@@ -96,7 +96,7 @@ export function InvoiceList({ rows }: { rows: Row[] }) {
         <ul className="inv-list">
           {shown.map((r) => (
             <li key={r.id} className={`inv-row k-${r.kind}`}>
-              <Link href={`/factures/${r.id}`} className="inv-main" aria-label={`Facture ${r.number}, ${r.client}`}>
+              <Link href={demo ? `/demo?f=${r.id}#apercu` : `/factures/${r.id}`} className="inv-main" aria-label={`Facture ${r.number}, ${r.client}`}>
                 <Avatar name={r.client} />
                 <span className="inv-client">
                   <b>{r.client}</b>
@@ -108,7 +108,12 @@ export function InvoiceList({ rows }: { rows: Row[] }) {
                   {r.next && <small>{r.next}</small>}
                 </span>
               </Link>
-              {r.kind !== "paid" && (
+              {r.kind !== "paid" && demo && (
+                <div className="inv-quick">
+                  <Link href="/login?mode=signup" className="demo-quick" title="Créez votre compte pour essayer">Payée ✓</Link>
+                </div>
+              )}
+              {r.kind !== "paid" && !demo && (
                 <form action={markPaid} className="inv-quick">
                   <input type="hidden" name="id" value={r.id} />
                   <SubmitButton className="small secondary" pending="…" title="Marquer comme payée">Payée ✓</SubmitButton>
