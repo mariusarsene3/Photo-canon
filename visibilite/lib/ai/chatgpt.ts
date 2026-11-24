@@ -11,13 +11,15 @@ type OutputItem = {
   content?: { type: string; text?: string; annotations?: { type: string; url?: string; title?: string }[] }[];
 };
 
-const model = () => process.env.OPENAI_MODEL || "gpt-5";
+// Modèle de la réponse « client » (le plus proche de ChatGPT) et modèle de l'analyse (plus léger).
+const ANSWER_MODEL = () => process.env.OPENAI_MODEL || "gpt-5.5";
+const ANALYSIS_MODEL = () => process.env.OPENAI_ANALYSIS_MODEL || "gpt-5.4-mini";
 
 async function callResponses(body: Record<string, unknown>): Promise<OutputItem[]> {
   const res = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-    body: JSON.stringify({ model: model(), ...body }),
+    body: JSON.stringify(body),
     signal: AbortSignal.timeout(120_000),
   });
   if (!res.ok) throw new Error(`ChatGPT : erreur ${res.status} ${(await res.text()).slice(0, 300)}`);
@@ -35,6 +37,7 @@ const outputText = (output: OutputItem[]) =>
 
 export async function askChatGPT(question: string, city: string): Promise<AiAnswer> {
   const output = await callResponses({
+    model: ANSWER_MODEL(),
     input: question,
     tools: [{ type: "web_search", user_location: { type: "approximate", country: "FR", city } }],
   });
@@ -48,7 +51,7 @@ export async function askChatGPT(question: string, city: string): Promise<AiAnsw
       if (c.type !== "output_text") continue;
       text += c.text ?? "";
       for (const a of c.annotations ?? []) {
-        if (a.type === "url_citation" && a.url) sources.push({ url: a.url, title: a.title ?? a.url });
+        if (a.type === "url_citation" && a.url) sources.push({ url: a.url.replace(/[?&]utm_source=openai$/, ""), title: a.title ?? a.url });
       }
     }
   }
@@ -70,6 +73,7 @@ const ANALYSIS_SCHEMA = {
 /** Analyse faite par ChatGPT, utilisée quand aucune clé Claude n'est configurée. */
 export async function analyseWithChatGPT(answer: string, business: string, city: string): Promise<Analysis> {
   const output = await callResponses({
+    model: ANALYSIS_MODEL(),
     instructions: ANALYSIS_SYSTEM,
     input: analysisPrompt(answer, business, city),
     text: { format: { type: "json_schema", name: "analyse", strict: true, schema: ANALYSIS_SCHEMA } },
