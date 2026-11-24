@@ -8,7 +8,7 @@ export const BRAND = {
     audit: "offert",
     setup: 149, // € une fois : visibilité Google + IA
     followUp: 19, // € par mois : suivi, sans engagement
-    website: 490, // € une fois : site vitrine 1 à 3 pages
+    pack: 590, // € une fois : « Site + être trouvé » (site vitrine + visibilité)
     social: 149, // € par mois : réseaux sociaux, 8 publications
     socialPosts: 8,
     socialSeats: 3, // nombre maximum de commerces suivis en même temps pour les réseaux sociaux

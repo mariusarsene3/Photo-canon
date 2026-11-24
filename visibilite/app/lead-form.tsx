@@ -56,7 +56,7 @@ export function LeadForm({ business, trade, city, cited = null, defaultInterests
 
       <fieldset className="interests">
         <legend>Ce qui vous intéresse</legend>
-        {SERVICES.filter((s) => s.id !== "suivi").map((s) => (
+        {SERVICES.map((s) => (
           <label key={s.id} className="check">
             <input type="checkbox" name="interests" value={s.id} defaultChecked={defaultInterests.includes(s.id)} />
             {s.name}
