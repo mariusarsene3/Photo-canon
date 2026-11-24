@@ -661,3 +661,66 @@ input[type=file]::file-selector-button:hover { border-color: var(--text); }
 .app-main-in { max-width: 1080px; margin: 0 auto; }
 /* Tablette : la barre du haut a 5 onglets, on masque l'e-mail pour qu'elle tienne. */
 @media (min-width: 721px) and (max-width: 999px) { .app-email { display: none; } .app-top-in { gap: 16px; } .app-nav a { padding: 7px 10px; } }
+
+/* =====================================================================
+   DA « facture sur vert profond » (application, connexion, pages légales, paiement)
+   Contenu sur papier crème, structure (barre latérale, en-têtes) en vert profond.
+   ===================================================================== */
+:root {
+  --deep: #0f2a1d; --deep-2: #163826; --deep-line: #1f4231; --cream: #f3efe6; --sage: #9fb5a7;
+  --bg: #f4f1ea; --card: #fffdf8; --border: #e7e1d4; --text: #1c1917; --muted: #6f6a60;
+  --accent: #0f2a1d; --accent-fg: #f3efe6; --link: #0f2a1d;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0b1d14; --card: #12301f; --border: #1f4231; --text: #f3efe6; --muted: #9fb5a7; --accent: #f3efe6; --accent-fg: #0f2a1d; --link: #f3efe6; }
+}
+.app { background: radial-gradient(1200px 420px at 15% -10%, rgba(74, 222, 128, .08), transparent 70%), var(--bg); }
+
+/* Carte « À encaisser » */
+.hero-card {
+  color: var(--cream);
+  background:
+    radial-gradient(500px 220px at 85% -20%, rgba(74, 222, 128, .30), transparent 60%),
+    radial-gradient(400px 200px at 0% 120%, rgba(74, 222, 128, .10), transparent 60%),
+    linear-gradient(150deg, #163826, #0f2a1d);
+  box-shadow: 0 20px 40px -20px rgba(15, 42, 29, .55), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+/* Barre latérale */
+.app-side { background: var(--deep); border-right-color: var(--deep-line); color: var(--cream); }
+.side-brand { color: var(--cream); }
+.side-brand small, .side-email { color: var(--sage); }
+.side-label { color: #6f8f7c; }
+.side-new { background: var(--cream); color: var(--deep); }
+.side-nav a { color: var(--sage); }
+.side-nav a:hover { color: var(--cream); background: rgba(243, 239, 230, .07); }
+.side-nav a.on { color: var(--cream); background: rgba(243, 239, 230, .13); }
+.side-user { border-top-color: var(--deep-line); }
+.side-logout { color: var(--sage); }
+.side-logout:hover { color: var(--cream); background: rgba(243, 239, 230, .1); }
+
+/* Barre du haut (téléphone et tablette) */
+.app-top { background: color-mix(in srgb, var(--deep) 94%, transparent); border-bottom-color: var(--deep-line); }
+.app-brand { color: var(--cream); }
+.app-nav a, .app-email, .app-top .link-btn { color: var(--sage); }
+.app-nav a:hover { color: var(--cream); background: rgba(243, 239, 230, .08); }
+.app-nav a.on, .app-nav a.on:hover { background: var(--cream); color: var(--deep); }
+@media (max-width: 720px) {
+  .fab { background: linear-gradient(145deg, #1f4a33, #0f2a1d); color: var(--cream); }
+}
+
+/* Connexion */
+.auth-brand, .auth-mbrand {
+  background:
+    radial-gradient(600px 300px at 90% 0%, rgba(74, 222, 128, .22), transparent 60%),
+    radial-gradient(500px 300px at 0% 100%, rgba(74, 222, 128, .08), transparent 60%),
+    linear-gradient(160deg, #163826, #0f2a1d);
+  color: var(--cream);
+}
+.auth-mbrand .auth-logo { color: var(--cream); }
+.auth-mock-toast { background: #fffdf8; color: #1c1917; }
+/* DA vert profond : on retire les dernières touches violettes */
+.dot-rate { background: #f3efe6; box-shadow: 0 0 8px rgba(243, 239, 230, .7); }
+.alert.trial { background: color-mix(in srgb, #22c55e 9%, var(--card)); border-color: color-mix(in srgb, #15803d 22%, transparent); }
+.onboard { background: linear-gradient(var(--card), var(--card)) padding-box, linear-gradient(135deg, #15803d, #4ade80) border-box; }
+.onboard-bar i { background: linear-gradient(90deg, #15803d, #4ade80); }
