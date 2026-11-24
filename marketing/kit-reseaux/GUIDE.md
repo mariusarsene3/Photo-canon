@@ -4,11 +4,12 @@
 
 | Élément | Valeur |
 |---|---|
+| **Style** | **Vert profond** : sombre et élégant comme un carnet relié, sans faire « appli de finance » |
 | **Logo** | L'enveloppe validée (`logo.svg`) : une relance qui a abouti |
-| **Vert Encaissez** | `#22C55E` : la couleur du « payé » |
-| **Vert foncé** | `#15803D` : textes verts sur fond clair |
-| **Noir** | `#0A0A0B` : fonds sombres, textes |
-| **Blanc cassé** | `#FAFAF9` : fonds clairs |
+| **Fond** | Vert profond `#0F2A1D`, avec un léger halo vert en haut |
+| **Vert vif** | `#4ADE80` : chiffres clés, mots importants, « payé ». Le vert du logo reste `#22C55E` |
+| **Crème** | `#F3EFE6` : textes et cartes (au lieu du blanc pur, plus chaleureux) |
+| **Texte secondaire** | Vert-gris `#9FB5A7` |
 | **Rouge** | `#EF4444` : seulement pour « impayé » ou « en retard », jamais ailleurs |
 | **Police** | Inter : très grasse (800) pour les titres, normale (500) pour le texte |
 

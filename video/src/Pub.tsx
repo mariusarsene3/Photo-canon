@@ -15,11 +15,11 @@ import { AbsoluteFill, Easing, Sequence, interpolate, random, spring, useCurrent
  */
 
 const C = {
-  bg: "#07070a",
-  card: "#141418",
-  line: "#2a2a31",
-  fg: "#f5f5f5",
-  muted: "#9a9aa3",
+  bg: "#0f2a1d", // vert profond (DA Encaissez)
+  card: "#163826",
+  line: "#1f4231",
+  fg: "#f3efe6",
+  muted: "#9fb5a7",
   green: "#22c55e",
   greenDeep: "#15803d",
   red: "#ef4444",
@@ -60,7 +60,7 @@ function Background() {
   return (
     <AbsoluteFill style={{ background: C.bg, overflow: "hidden" }}>
       <div style={orb(300 + Math.sin(f / 45) * 90, 500 + Math.cos(f / 55) * 80, 1100, C.red, 0.22 * redMix)} />
-      <div style={orb(760 + Math.cos(f / 40) * 90, 1400 + Math.sin(f / 50) * 90, 1200, "#4f46e5", 0.2 * (1 - redMix) * (1 - greenMix))} />
+      <div style={orb(760 + Math.cos(f / 40) * 90, 1400 + Math.sin(f / 50) * 90, 1200, "#4ade80", 0.12 * (1 - redMix) * (1 - greenMix))} />
       <div style={orb(540 + Math.sin(f / 30) * 60, 900, 1300, C.green, 0.26 * greenMix)} />
       {/* Grille discrète */}
       <AbsoluteFill
@@ -73,7 +73,7 @@ function Background() {
           WebkitMaskImage: "radial-gradient(ellipse at 50% 50%, #000 20%, transparent 75%)",
         }}
       />
-      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, transparent 45%, #000 100%)", opacity: 0.8 }} />
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, transparent 45%, #04120b 100%)", opacity: 0.8 }} />
     </AbsoluteFill>
   );
 }
@@ -376,7 +376,7 @@ function Result() {
       <div
         style={{
           position: "absolute", left: 190, width: 700, top: 420, height: 980, borderRadius: 90,
-          background: "linear-gradient(160deg, #1d1d24, #0d0d11)", border: `6px solid #2f2f38`,
+          background: "linear-gradient(160deg, #1d3a2a, #0b1f15)", border: `6px solid #2c5240`,
           transform: `translateY(${(1 - phone) * 700}px)`, boxShadow: "0 60px 140px -40px #000",
           overflow: "hidden",
         }}
