@@ -11,6 +11,7 @@ export const BRAND = {
     website: 490, // € une fois : site vitrine 1 à 3 pages
     social: 149, // € par mois : réseaux sociaux, 8 publications
     socialPosts: 8,
+    socialSeats: 3, // nombre maximum de commerces suivis en même temps pour les réseaux sociaux
   },
 };
 

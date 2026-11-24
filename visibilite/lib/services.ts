@@ -25,7 +25,7 @@ export const SERVICES = [
     price: `${BRAND.offer.social} €`,
     unit: "par mois",
     desc: "Une page Facebook et Instagram vivante, sans y passer vos soirées.",
-    items: [`${BRAND.offer.socialPosts} publications par mois`, "Facebook et Instagram", "Textes et visuels préparés pour vous", "Vous validez avant publication", "Sans engagement"],
+    items: [`${BRAND.offer.socialPosts} publications par mois`, "Facebook et Instagram", "Textes et visuels préparés pour vous", "Vous validez avant publication", "Sans engagement", `${BRAND.offer.socialSeats} commerces maximum, pour bien m'en occuper`],
   },
   {
     id: "suivi",

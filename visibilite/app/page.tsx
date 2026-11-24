@@ -38,7 +38,7 @@ const FAQ = [
   },
   {
     q: `Et les réseaux sociaux à ${BRAND.offer.social} € par mois ?`,
-    a: `Je prépare ${BRAND.offer.socialPosts} publications par mois pour Facebook et Instagram (textes et visuels), à partir de vos photos et de vos actualités. Vous validez avant publication. Sans engagement : vous arrêtez quand vous voulez.`,
+    a: `Je prépare ${BRAND.offer.socialPosts} publications par mois pour Facebook et Instagram (textes et visuels), à partir de vos photos et de vos actualités. Vous validez avant publication. Sans engagement : vous arrêtez quand vous voulez. Je ne m'occupe que de ${BRAND.offer.socialSeats} commerces à la fois, pour bien le faire.`,
   },
   {
     q: "Je ne suis pas à l'aise avec l'informatique.",
