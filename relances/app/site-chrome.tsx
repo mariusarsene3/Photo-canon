@@ -13,7 +13,7 @@ export function SiteNav() {
         <Link href="/outils" className="lp-hide-sm">Outils gratuits</Link>
         <Link href="/guides" className="lp-hide-sm">Guides</Link>
         <Link href="/login">Connexion</Link>
-        <Link href={SIGNUP} className="lp-btn lp-btn-sm">Essai gratuit</Link>
+        <Link href={SIGNUP} className="lp-btn lp-btn-sm">Commencer</Link>
       </div>
     </nav>
   );
@@ -48,7 +48,7 @@ export function ProductCta() {
           votre client paie.
         </p>
       </div>
-      <Link href={SIGNUP} className="lp-btn">Essayer gratuitement {BRAND.trialDays} jours</Link>
+      <Link href={SIGNUP} className="lp-btn">Commencer gratuitement</Link>
     </aside>
   );
 }

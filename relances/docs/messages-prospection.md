@@ -18,7 +18,7 @@ Liens utiles :
 
 ### À un artisan, après un appel
 > Bonjour [prénom], c'est [ton prénom], on s'est parlé ce matin. Voici le site : [site]
-> Créez un compte (2 minutes), ajoutez une facture en retard : il relance votre client à votre place. Gratuit 14 jours, sans carte bancaire. Je vous rappelle dans 10 jours pour avoir votre avis. Merci !
+> Créez un compte (2 minutes), ajoutez une facture en retard : il relance votre client à votre place. Gratuit pour commencer, sans carte bancaire. Je vous rappelle dans 10 jours pour avoir votre avis. Merci !
 
 ### Le lendemain
 > Bonjour [prénom], vous avez pu créer votre compte ? Si quelque chose bloque, dites-moi, je vous aide.
@@ -69,7 +69,7 @@ Lis les règles du groupe avant : beaucoup interdisent la pub.
 >
 > Encaissez le fait à leur place : un rappel poli le lendemain de l'échéance, une relance plus ferme une semaine après, avec la facture en PDF et un lien pour payer. Dès que le client paie, tout s'arrête.
 >
-> Pour les 20 premiers clients : -50 % à vie. 👉 [site]/fondateur
+> Gratuit jusqu'à 3 factures en cours, et 3 mois de Pro offerts pour les 20 premiers. 👉 [site]/fondateur
 >
 > Vous connaissez un artisan ou un freelance qui court après ses factures ? Partagez-lui 🙏
 
@@ -112,5 +112,5 @@ Lis les règles du groupe avant : beaucoup interdisent la pub.
 | « Mes clients vont mal le prendre. » | « Le premier message est un simple rappel poli, qui dit "si le paiement est déjà parti, ne tenez pas compte de ce message". Et vous pouvez changer les textes. » |
 | « Je relance déjà moi-même. » | « Justement : ça vous prend combien de temps par semaine ? Là, c'est fait sans y penser. » |
 | « J'ai pas le temps. » | « 2 minutes pour créer le compte, 20 secondes par facture. Ensuite, plus rien à faire. » |
-| « C'est trop cher. » | « Une seule facture récupérée plus vite rembourse des mois d'abonnement. Et pour les premiers clients, c'est 14,50 € à vie. » |
+| « C'est trop cher. » | « Une seule facture récupérée plus vite rembourse des mois d'abonnement. Et vous pouvez commencer gratuitement, jusqu'à 3 factures en cours. » |
 | « Mon logiciel de facturation le fait déjà. » | « Il envoie des relances automatiques ? Avec la facture jointe et un lien de paiement ? Si oui, parfait ! » |

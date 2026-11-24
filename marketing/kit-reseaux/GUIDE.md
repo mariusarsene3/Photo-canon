@@ -61,7 +61,7 @@ Pour modifier un visuel : la photo de profil et les bannières sont dans `kit.ht
 ### `post-produit.png`
 > Relancer un client qui ne paie pas, c'est gênant, et on oublie. Encaissez le fait à votre place : un rappel poli avant l'échéance, puis plus ferme si besoin, avec la facture et un lien pour payer. Dès que le client paie, tout s'arrête.
 >
-> 14 jours d'essai gratuit, sans carte bancaire : encaissez.fr
+> Gratuit jusqu'à 3 factures en cours, sans carte bancaire : encaissez.fr
 
 ### Vidéo `encaissez-pub-vertical.mp4`
 > Votre client ne paie pas ? Encaissez le relance à votre place 📩✅ Essai gratuit sur encaissez.fr

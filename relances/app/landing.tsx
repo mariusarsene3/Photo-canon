@@ -1,6 +1,6 @@
 import "./landing.css";
 import Link from "next/link";
-import { BRAND } from "@/lib/brand";
+import { BRAND, founderOffer } from "@/lib/brand";
 import { founderSeatsLeft, showSeatCounter } from "@/lib/founder";
 import { LEGAL } from "@/lib/legal";
 import { siteUrl } from "@/lib/payment";
@@ -35,7 +35,7 @@ const features = [
 
 /** Comparaison avec les logiciels de recouvrement pour entreprises. */
 const compare = [
-  { label: "Prix", us: "29 € HT / mois", them: "De 130 à 700 € / mois, souvent sur devis" },
+  { label: "Prix", us: `Gratuit, puis ${BRAND.price} € HT / mois`, them: "De 130 à 700 € / mois, souvent sur devis" },
   { label: "Mise en route", us: "2 minutes, seul", them: "Démonstration commerciale, paramétrage" },
   { label: "Pour qui", us: "Artisans, indépendants, TPE", them: "PME avec un service comptable" },
   { label: "Engagement", us: "Aucun, résiliable en un clic", them: "Souvent annuel" },
@@ -91,12 +91,10 @@ function JsonLd() {
       inLanguage: "fr-FR",
       description:
         "Relance automatique des factures impayées pour artisans, indépendants et petites entreprises : rappel à J+1, relance à J+7, dernier avis à J+15, avec lien de paiement.",
-      offers: {
-        "@type": "Offer",
-        price: String(BRAND.price),
-        priceCurrency: "EUR",
-        description: `${BRAND.trialDays} jours d'essai gratuit, sans engagement`,
-      },
+      offers: [
+        { "@type": "Offer", name: "Gratuit", price: "0", priceCurrency: "EUR", description: `Jusqu'à ${BRAND.freeInvoices} factures en cours` },
+        { "@type": "Offer", name: "Pro", price: String(BRAND.price), priceCurrency: "EUR", description: "Factures illimitées, sans engagement" },
+      ],
     },
     {
       "@context": "https://schema.org",
@@ -114,7 +112,7 @@ export async function Landing() {
       <JsonLd />
       {seats > 0 && (
         <Link href="/fondateur" className="fd-banner">
-          <span><b>Offre fondateur</b> : -{BRAND.founder.discount} % à vie<span className="fd-long"> pour les {BRAND.founder.seats} premiers clients</span></span>
+          <span><b>Offre fondateur</b> : {founderOffer()}<span className="fd-long"> pour les {BRAND.founder.seats} premiers clients</span></span>
           <span>{showSeatCounter(seats) ? `${seats} place${seats > 1 ? "s" : ""} restante${seats > 1 ? "s" : ""}` : "En profiter"} →</span>
         </Link>
       )}
@@ -126,7 +124,7 @@ export async function Landing() {
           <Link href="/outils" className="lp-hide-sm">Outils gratuits</Link>
           <Link href="/guides" className="lp-hide-sm">Guides</Link>
           <Link href="/login">Connexion</Link>
-          <Link href={SIGNUP} className="lp-btn lp-btn-sm">Essai gratuit</Link>
+          <Link href={SIGNUP} className="lp-btn lp-btn-sm">Commencer</Link>
         </div>
       </nav>
 
@@ -138,10 +136,10 @@ export async function Landing() {
           pour payer. Vous n&apos;avez plus à relancer personne.
         </p>
         <div className="lp-actions" id="hero-cta">
-          <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
+          <Link href={SIGNUP} className="lp-btn">Commencer gratuitement</Link>
           <Link href="/demo" className="lp-btn lp-btn-ghost">Voir une démo</Link>
         </div>
-        <p className="lp-meta"><strong className="lp-meta-price">{BRAND.price} € HT/mois</strong> · {BRAND.trialDays} jours gratuits · Sans engagement</p>
+        <p className="lp-meta"><strong className="lp-meta-price">Gratuit jusqu&apos;à {BRAND.freeInvoices} factures</strong> · Pro {BRAND.price} € HT/mois · Sans carte bancaire</p>
       </header>
 
       <div className="lp-wrap lp-video-wrap">
@@ -234,7 +232,7 @@ export async function Landing() {
           <li>Vos données ne sont jamais revendues</li>
           <li>Support en français</li>
           <li>Sans engagement</li>
-          <li>{BRAND.trialDays} jours gratuits, sans carte bancaire</li>
+          <li>Gratuit pour commencer, sans carte bancaire</li>
         </ul>
       </section>
 
@@ -242,19 +240,34 @@ export async function Landing() {
         <div className="lp-head">
           <h2>Un prix simple.</h2>
         </div>
-        <div className="lp-price">
-          <div className="lp-price-top">
-            <p className="lp-plan">{BRAND.name}</p>
-            <p className="lp-amount"><strong>{BRAND.price} €</strong><span>HT / mois</span></p>
+        <div className="lp-prices">
+          <div className="lp-price">
+            <div className="lp-price-top">
+              <p className="lp-plan">Gratuit</p>
+              <p className="lp-amount"><strong>0 €</strong><span>pour toujours</span></p>
+            </div>
+            <ul>
+              <li>Jusqu&apos;à {BRAND.freeInvoices} factures en cours en même temps</li>
+              <li>Relances automatiques J-3, J+1, J+7, J+15</li>
+              <li>Facture PDF jointe et lien de paiement</li>
+              <li>Sans carte bancaire</li>
+            </ul>
+            <Link href={SIGNUP} className="lp-btn lp-btn-ghost lp-btn-full">Commencer gratuitement</Link>
           </div>
-          <ul>
-            <li>Factures et relances illimitées</li>
-            <li>Lien de paiement avec IBAN et QR code</li>
-            <li>Import Excel et CSV</li>
-            <li>Suivi des retenues de garantie</li>
-            <li>Sans engagement</li>
-          </ul>
-          <Link href={SIGNUP} className="lp-btn lp-btn-full">Commencer l&apos;essai gratuit</Link>
+          <div className="lp-price lp-price-pro">
+            <div className="lp-price-top">
+              <p className="lp-plan">Pro</p>
+              <p className="lp-amount"><strong>{BRAND.price} €</strong><span>HT / mois</span></p>
+            </div>
+            <ul>
+              <li>Factures et relances illimitées</li>
+              <li>Import Excel, CSV et PDF</li>
+              <li>Suivi des retenues de garantie</li>
+              <li>Résumé chaque lundi</li>
+              <li>Sans engagement</li>
+            </ul>
+            <Link href={SIGNUP} className="lp-btn lp-btn-full">Commencer gratuitement</Link>
+          </div>
         </div>
       </section>
 
@@ -275,7 +288,7 @@ export async function Landing() {
       <section className="lp-final lp-wrap">
         <h2>Récupérez ce qu&apos;on vous doit.</h2>
         <div className="lp-actions">
-          <Link href={SIGNUP} className="lp-btn">Commencer l&apos;essai gratuit</Link>
+          <Link href={SIGNUP} className="lp-btn">Commencer gratuitement</Link>
           <Link href="/demo" className="lp-btn lp-btn-ghost">Voir une démo</Link>
         </div>
       </section>
@@ -295,7 +308,7 @@ export async function Landing() {
       </footer>
 
       <StickyCta>
-        <Link href={SIGNUP} className="lp-btn lp-btn-full">Commencer l&apos;essai gratuit</Link>
+        <Link href={SIGNUP} className="lp-btn lp-btn-full">Commencer gratuitement</Link>
       </StickyCta>
     </div>
   );

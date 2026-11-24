@@ -7,7 +7,7 @@ import { runReminders } from "@/lib/reminders";
 import { cleanIban, isValidIban } from "@/lib/payment";
 import { pdfFromForm, savePdf } from "@/lib/invoice-pdf";
 import { getMyAccess } from "@/lib/billing";
-import { contactHint, invoiceLimitMessage, invoicesLeft, planOf } from "@/lib/limits";
+import { contactHint, freeLimitMessage, pendingLeft, planOf } from "@/lib/limits";
 
 // Toutes les requêtes passent par le client de l'utilisateur connecté :
 // les règles RLS de Supabase garantissent qu'il ne touche qu'à ses propres données.
@@ -22,7 +22,7 @@ export async function addInvoice(form: FormData) {
 
   const { supabase } = await requireUser();
   const plan = planOf(await getMyAccess(supabase));
-  if ((await invoicesLeft(supabase, plan)) < 1) redirect(`/?err=${encodeURIComponent(invoiceLimitMessage(plan))}`);
+  if ((await pendingLeft(supabase, plan)) < 1) redirect(`/?err=${encodeURIComponent(freeLimitMessage())}`);
   const { data: created } = await supabase
     .from("invoices")
     .insert({ number, client_name, client_email, amount_cents: Math.round(amount * 100), due_date })
@@ -65,7 +65,7 @@ export async function sendNow() {
     const { sent, errors, paused, limited } = await runReminders(supabase);
     if (paused) {
       kind = "err";
-      notice = "Votre essai gratuit est terminé : les relances sont en pause. Abonnez-vous depuis « Mon compte » pour les relancer.";
+      notice = "Certaines relances sont en pause. Passez au Pro depuis « Mon compte » pour les relancer.";
     } else if (errors.length) {
       kind = "err";
       notice =

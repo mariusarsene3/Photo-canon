@@ -98,7 +98,7 @@ export default async function DemoPage({ searchParams }: { searchParams: Promise
       <section className="card demo-end">
         <div>
           <h2>Prêt à essayer avec vos factures ?</h2>
-          <p className="muted">{BRAND.trialDays} jours gratuits, sans carte bancaire. Votre compte est prêt en 2 minutes.</p>
+          <p className="muted">Gratuit jusqu&apos;à {BRAND.freeInvoices} factures en cours, sans carte bancaire. Votre compte est prêt en 2 minutes.</p>
         </div>
         <Link href="/login?mode=signup" className="demo-cta">Créer mon compte gratuit</Link>
       </section>

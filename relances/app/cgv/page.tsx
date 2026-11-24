@@ -23,7 +23,7 @@ export default function CGV() {
       <p>
         <strong>Le service est réservé aux professionnels</strong> (entreprises, artisans, indépendants, associations)
         agissant dans le cadre de leur activité. Le droit de rétractation de 14 jours, réservé aux consommateurs, ne
-        s&apos;applique donc pas ; l&apos;essai gratuit permet de tester le service avant tout paiement.
+        s&apos;applique donc pas ; la version gratuite permet de tester le service avant tout paiement.
       </p>
 
       <h2>2. Description du service</h2>
@@ -38,16 +38,17 @@ export default function CGV() {
         sommes dues et n&apos;agit pas en qualité de société de recouvrement ni de conseil juridique.
       </p>
 
-      <h2>3. Essai gratuit</h2>
+      <h2>3. Version gratuite et formule Pro</h2>
       <p>
-        Chaque nouveau compte bénéficie d&apos;un essai gratuit de {BRAND.trialDays} jours, sans carte bancaire et sans
-        engagement. À la fin de l&apos;essai, les relances automatiques sont suspendues tant qu&apos;aucun abonnement
-        n&apos;est souscrit ; les données du Client restent accessibles.
+        Chaque compte peut utiliser gratuitement le service, sans carte bancaire et sans limite de durée, pour suivre
+        jusqu&apos;à {BRAND.freeInvoices} factures en cours (non payées) en même temps. La formule Pro, payante, permet de
+        suivre un nombre illimité de factures et donne accès à l&apos;ensemble des fonctionnalités. L&apos;Éditeur peut faire
+        évoluer le contenu de la version gratuite en prévenant les Clients au moins 30 jours à l&apos;avance.
       </p>
 
       <h2>4. Prix et paiement</h2>
       <p>
-        L&apos;abonnement est facturé <strong>{BRAND.price} € HT par mois</strong>. {v(LEGAL.vatMention)}. Le prix en vigueur
+        La formule Pro est facturée <strong>{BRAND.price} € HT par mois</strong>. {v(LEGAL.vatMention)}. Le prix en vigueur
         est celui affiché sur le site au moment de la souscription.
       </p>
       <p>

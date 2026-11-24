@@ -33,6 +33,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
   const invoices = (inv ?? []) as Invoice[];
   const profile = (prof ?? { company_name: "", iban: "" }) as Profile;
   const paid = invoices.filter((i) => i.status === "paid");
+  const pendingCount = invoices.filter((i) => i.status === "pending").length;
   const today = new Date().toISOString().slice(0, 10);
 
   // Premiers pas : la carte disparaît une fois tout fait.
@@ -55,15 +56,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
 
       <Toast message={ok} />
       {err && <p className="alert err">{err}</p>}
-      {access.reason === "trial" && access.daysLeft <= 14 && (
+      {access.reason === "free" && (
         <p className="alert trial">
-          Essai gratuit : encore <b>{access.daysLeft} jour{access.daysLeft > 1 ? "s" : ""}</b>. <Link href="/compte">S&apos;abonner</Link>
-        </p>
-      )}
-      {!access.ok && (
-        <p className="alert err">
-          Votre essai gratuit est terminé : les relances automatiques sont en pause. <Link href="/compte">Abonnez-vous</Link> pour
-          les relancer.
+          Version gratuite : <b>{pendingCount} / {BRAND.freeInvoices}</b> factures en cours.{" "}
+          <Link href="/compte">Passer au Pro</Link> pour en suivre autant que vous voulez ({BRAND.price} € HT/mois).
         </p>
       )}
 

@@ -36,7 +36,7 @@ export default async function Image() {
             <div style={{ fontSize: 60, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2, color: "#4ade80" }}>On les relance pour vous.</div>
             <div style={{ fontSize: 26, color: "#a1a1aa", marginTop: 24 }}>Rappel à J+1, relance à J+7, dernier avis à J+15.</div>
           </div>
-          <div style={{ fontSize: 24, color: "#d4d4d8" }}>{`${BRAND.price} € HT/mois · ${BRAND.trialDays} jours gratuits`}</div>
+          <div style={{ fontSize: 24, color: "#d4d4d8" }}>{`Gratuit jusqu'à ${BRAND.freeInvoices} factures · Pro ${BRAND.price} € HT/mois`}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", marginLeft: 48, width: 424 }}>
           <div style={{ display: "flex", flexDirection: "column", background: "#fff", color: "#111", borderRadius: 24, padding: 28 }}>
