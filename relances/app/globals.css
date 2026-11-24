@@ -724,3 +724,26 @@ input[type=file]::file-selector-button:hover { border-color: var(--text); }
 .alert.trial { background: color-mix(in srgb, #22c55e 9%, var(--card)); border-color: color-mix(in srgb, #15803d 22%, transparent); }
 .onboard { background: linear-gradient(var(--card), var(--card)) padding-box, linear-gradient(135deg, #15803d, #4ade80) border-box; }
 .onboard-bar i { background: linear-gradient(90deg, #15803d, #4ade80); }
+
+/* =====================================================================
+   Version blanche (application) : fond blanc, barre latérale blanche,
+   seule la carte « À encaisser » reste vert profond.
+   ===================================================================== */
+:root { --bg: #f7f8f7; --card: #ffffff; --border: #e6e9e6; --text: #14211a; --muted: #5f6b64; --accent: #0f2a1d; --accent-fg: #ffffff; --link: #0f2a1d; }
+.app { background: var(--bg); }
+.app-side { background: #ffffff; border-right-color: var(--border); color: var(--text); }
+.side-brand { color: var(--text); }
+.side-brand small, .side-email, .side-label { color: var(--muted); }
+.side-new { background: #0f2a1d; color: #ffffff; }
+.side-nav a { color: var(--muted); }
+.side-nav a:hover { color: var(--text); background: #f3f5f3; }
+.side-nav a.on { color: #0f2a1d; background: #ecf7ef; }
+.side-user { border-top-color: var(--border); }
+.side-logout { color: var(--muted); }
+.side-logout:hover { color: var(--text); background: #f3f5f3; }
+.app-top { background: color-mix(in srgb, #ffffff 92%, transparent); border-bottom-color: var(--border); }
+.app-brand { color: var(--text); }
+.app-nav a, .app-email, .app-top .link-btn { color: var(--muted); }
+.app-nav a:hover { color: var(--text); background: #f3f5f3; }
+.app-nav a.on, .app-nav a.on:hover { background: #0f2a1d; color: #ffffff; }
+.auth-wrap { background: #ffffff; }
