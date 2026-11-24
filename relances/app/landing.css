@@ -193,3 +193,28 @@
 /* Titres des encadrés de formulaire : à l'intérieur de la feuille, pas sur le bord */
 .tool-form legend { float: left; width: 100%; padding: 0; margin-bottom: 2px; color: var(--lp-muted); }
 .tool-form legend + * { clear: both; }
+
+/* =====================================================================
+   Version allégée : fond crème, vert profond seulement en haut, dans le bandeau final et en bas.
+   ===================================================================== */
+.lp {
+  --lp-bg: #f4f1ea; --lp-fg: #1c1917; --lp-muted: #6f6a60; --lp-line: #e3dccd; --lp-soft: #ebe5d8;
+  --lp-accent: #0f2a1d; --lp-accent-fg: #f3efe6; --lp-ok: #15803d; --lp-late: #b91c1c;
+  background: #f4f1ea; color-scheme: light;
+}
+/* Feuilles blanches sur le fond crème */
+.lp-email, .ps, .lp-price, .tool-result, .tool-card, .fd-card, .tool-form fieldset, .guide-steps li, .guide-tool {
+  --lp-bg: #fffdf8; box-shadow: 0 24px 50px -30px rgba(15, 42, 29, .35);
+}
+/* Bandes vert profond, sur toute la largeur de l'écran */
+.lp-nav, .lp-hero, .lp-final, .lp-footer {
+  --lp-bg: #0f2a1d; --lp-fg: #f3efe6; --lp-muted: #9fb5a7; --lp-line: #1f4231; --lp-soft: #163826;
+  --lp-accent: #f3efe6; --lp-accent-fg: #0f2a1d; --lp-ok: #4ade80; --lp-late: #f87171;
+  background: #0f2a1d; color: #f3efe6;
+  box-shadow: 0 0 0 100vmax #0f2a1d; clip-path: inset(0 -100vmax);
+}
+.lp-nav { border-bottom-color: #1f4231; }
+.lp-hero { padding-bottom: 64px; }
+.lp-final { padding-top: 64px; padding-bottom: 64px; margin-top: 48px; }
+.lp-hero h1 em, .lp-final h2 em { color: #4ade80; font-style: normal; }
+.fd-banner { background: #163826; color: #f3efe6; }
