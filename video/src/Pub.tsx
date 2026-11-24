@@ -345,11 +345,16 @@ function Chip({ start, text }: { start: number; text: string }) {
   );
 }
 
+/** Logo Encaissez : l'enveloppe validée (même dessin que le site). */
 function Logo({ size }: { size: number }) {
   return (
-    <div style={{ width: size, height: size, borderRadius: size * 0.26, background: "#1c2420", display: "grid", placeItems: "center", boxShadow: `0 0 60px ${C.green}55`, border: `3px solid ${C.green}55` }}>
-      <span style={{ fontFamily: FONT, fontWeight: 800, fontSize: size * 0.62, color: C.green, lineHeight: 1 }}>€</span>
-    </div>
+    <svg width={size} height={size} viewBox="0 0 64 64" style={{ flex: "none", filter: `drop-shadow(0 0 ${size * 0.35}px ${C.green}55)` }}>
+      <rect width="64" height="64" rx="16" fill={C.green} />
+      <rect x="12" y="18" width="40" height="29" rx="6" fill="#fff" />
+      <path d="M14 21l18 13 18-13" stroke={C.greenDeep} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <circle cx="47" cy="45" r="11" fill="#0a0a0b" />
+      <path d="M42 45l3.5 3.5 6.5-7" stroke={C.green} strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
   );
 }
 

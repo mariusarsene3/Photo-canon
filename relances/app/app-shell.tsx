@@ -29,7 +29,7 @@ export function AppShell({ active, email, children }: { active: Section; email?:
       {/* Barre latérale, sur ordinateur */}
       <aside className="app-side" aria-label="Navigation principale">
         <Link href="/" className="side-brand">
-          <span className="side-logo" aria-hidden>€</span>
+          <span className="side-logo" aria-hidden />
           <span>
             {BRAND.name}
             <small>Relance de factures</small>

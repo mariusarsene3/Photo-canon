@@ -307,7 +307,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--t
 /* Barre du haut */
 .app-top { background: color-mix(in srgb, var(--card) 72%, transparent); }
 .app-brand { display: flex; align-items: center; gap: 8px; }
-.app-brand::before { content: "€"; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: linear-gradient(145deg, #1f1f23, #0a0a0b); color: #4ade80; font-size: 15px; font-weight: 800; box-shadow: inset 0 1px 0 rgba(255,255,255,.12); }
+.app-brand::before { content: ""; width: 28px; height: 28px; flex: none; background: url(/logo-mark.svg) center / contain no-repeat; }
 .app-nav a { border-radius: 10px; transition: background .15s, color .15s; }
 .app-nav a.on { background: var(--text); color: var(--bg); box-shadow: none; }
 .app-nav a.on:hover { background: var(--text); color: var(--bg); }
@@ -407,7 +407,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--t
   .inv-client small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 .alert.trial { border-radius: 12px; background: color-mix(in srgb, #6366f1 8%, var(--card)); border-color: color-mix(in srgb, #6366f1 20%, transparent); font-size: 14px; }
-@media (prefers-color-scheme: dark) { .app-brand::before { box-shadow: inset 0 0 0 1px #2e2e35; } }
+
 
 /* Performance : graphique + indicateurs */
 :root { --series: #008300; --series-hover: #006b00; }
@@ -457,7 +457,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--t
 }
 @media (min-width: 960px) { .auth-brand { display: flex; } }
 .auth-logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -.4px; color: inherit; text-decoration: none; }
-.auth-logo::before { content: "€"; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(145deg, #27272a, #09090b); color: #4ade80; font-size: 17px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); }
+.auth-logo::before { content: ""; width: 32px; height: 32px; flex: none; background: url(/logo-mark.svg) center / contain no-repeat; }
 .auth-pitch h2 { font-size: 40px; line-height: 1.08; letter-spacing: -.04em; font-weight: 800; margin: 0 0 14px; max-width: 520px; }
 .auth-pitch p { color: rgba(245,245,247,.68); font-size: 17px; line-height: 1.55; max-width: 480px; margin: 0; }
 .auth-mock { position: relative; max-width: 420px; padding-bottom: 36px; }
@@ -640,7 +640,7 @@ input[type=file]::file-selector-button:hover { border-color: var(--text); }
 }
 .side-brand { display: flex; align-items: center; gap: 10px; padding: 4px 6px; color: var(--text); text-decoration: none; font-weight: 800; font-size: 17px; letter-spacing: -.4px; }
 .side-brand small { display: block; font-size: 11.5px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
-.side-logo { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(145deg, #1f1f23, #0a0a0b); color: #4ade80; font-weight: 800; box-shadow: inset 0 1px 0 rgba(255,255,255,.12); flex: none; }
+.side-logo { width: 34px; height: 34px; flex: none; background: url(/logo-mark.svg) center / contain no-repeat; }
 .side-new { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 12px; border-radius: 10px; background: var(--text); color: var(--bg); text-decoration: none; font-weight: 600; font-size: 14px; box-shadow: 0 6px 16px -8px rgba(0,0,0,.4); }
 .side-new span { font-size: 18px; line-height: 1; }
 .side-new:hover { opacity: .9; }

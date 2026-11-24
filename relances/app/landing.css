@@ -149,3 +149,11 @@
 .fd-banner { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 10px; padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); background: var(--lp-fg); color: var(--lp-bg); font-size: 13.5px; text-align: center; text-decoration: none; }
 .fd-banner b { font-weight: 700; }
 .fd-banner span:last-child { text-decoration: underline; text-underline-offset: 2px; }
+
+/* Logo (enveloppe validée) devant le nom, en haut et en bas des pages publiques */
+.lp-nav .lp-brand { display: grid; grid-template-columns: 32px auto; column-gap: 10px; align-items: center; }
+.lp-nav .lp-brand::before { content: ""; grid-row: span 2; width: 32px; height: 32px; background: url(/logo-mark.svg) center / contain no-repeat; }
+.lp-nav .lp-brand .lp-tagline { grid-column: 2; }
+.lp-footer .lp-brand { display: inline-flex; align-items: center; gap: 8px; }
+.lp-footer .lp-brand::before { content: ""; width: 22px; height: 22px; background: url(/logo-mark.svg) center / contain no-repeat; }
+@media (max-width: 420px) { .lp-nav .lp-brand { grid-template-columns: 26px auto; column-gap: 8px; } .lp-nav .lp-brand::before { width: 26px; height: 26px; } .lp-nav .lp-tagline { font-size: 10px; } .lp-nav-links { gap: 10px; } }
