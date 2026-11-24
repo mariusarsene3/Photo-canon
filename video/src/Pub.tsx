@@ -15,16 +15,18 @@ import { AbsoluteFill, Easing, Sequence, interpolate, random, spring, useCurrent
  */
 
 const C = {
-  bg: "#0f2a1d", // vert profond (DA Encaissez)
-  card: "#163826",
-  line: "#1f4231",
-  fg: "#f3efe6",
-  muted: "#9fb5a7",
+  bg: "#ffffff", // blanc, comme le site
+  card: "#f6f8f6",
+  line: "#e6e9e6",
+  fg: "#14211a",
+  muted: "#5f6b64",
   green: "#22c55e",
   greenDeep: "#15803d",
   red: "#ef4444",
   paper: "#fbfbf9",
   ink: "#111113",
+  cream: "#f3efe6", // textes dans le téléphone (qui reste sombre)
+  deep: "#0f2a1d",
 };
 const FONT = "Inter, system-ui, sans-serif";
 
@@ -59,7 +61,7 @@ function Background() {
   const redMix = lerp(f, [0, 20], [0, 1]) * (1 - lerp(f, [PUB_SCENES.solution[0] - 10, PUB_SCENES.solution[0] + 10], [0, 1]));
   return (
     <AbsoluteFill style={{ background: C.bg, overflow: "hidden" }}>
-      <div style={orb(300 + Math.sin(f / 45) * 90, 500 + Math.cos(f / 55) * 80, 1100, C.red, 0.22 * redMix)} />
+      <div style={orb(300 + Math.sin(f / 45) * 90, 500 + Math.cos(f / 55) * 80, 1100, C.red, 0.10 * redMix)} />
       <div style={orb(760 + Math.cos(f / 40) * 90, 1400 + Math.sin(f / 50) * 90, 1200, "#4ade80", 0.12 * (1 - redMix) * (1 - greenMix))} />
       <div style={orb(540 + Math.sin(f / 30) * 60, 900, 1300, C.green, 0.26 * greenMix)} />
       {/* Grille discrète */}
@@ -73,7 +75,7 @@ function Background() {
           WebkitMaskImage: "radial-gradient(ellipse at 50% 50%, #000 20%, transparent 75%)",
         }}
       />
-      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, transparent 45%, #04120b 100%)", opacity: 0.8 }} />
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, transparent 55%, #e6efe8 100%)", opacity: 0.8 }} />
     </AbsoluteFill>
   );
 }
@@ -114,7 +116,7 @@ function KWord({ start, t, c }: { start: number } & Word) {
         transform: `translateY(${(1 - p) * 80}px) rotateX(${(1 - p) * -80}deg) scale(${0.9 + p * 0.1})`,
         transformOrigin: "50% 100%",
         filter: `blur(${(1 - clear) * 16}px)`,
-        textShadow: c ? `0 0 50px ${c}77` : "none",
+        textShadow: "none",
       }}
     >
       {t}
@@ -169,7 +171,7 @@ function InvoiceCard() {
     </div>
   );
   return (
-    <div style={{ background: C.paper, color: C.ink, borderRadius: 28, padding: "48px 56px", fontFamily: FONT, boxShadow: "0 50px 120px -30px rgba(0,0,0,.8)" }}>
+    <div style={{ background: C.paper, color: C.ink, borderRadius: 28, padding: "48px 56px", fontFamily: FONT, boxShadow: "0 50px 100px -40px rgba(15,42,29,.35)", border: "2px solid #e6e9e6" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 26 }}>
         <span style={{ fontSize: 54, fontWeight: 800, letterSpacing: -1.5 }}>FACTURE</span>
         <span style={{ fontSize: 34, color: "#6b6b70", fontWeight: 600 }}>F-042</span>
@@ -252,7 +254,7 @@ function Solution() {
         <Logo size={120} />
         <span style={{ fontFamily: FONT, fontWeight: 800, fontSize: 118, letterSpacing: -4, color: C.fg }}>Encaissez</span>
       </div>
-      <Kinetic start={14} top={380} size={76} gap={3} words={[{ t: "relance" }, { t: "à" }, { t: "votre" }, { t: "place.", c: C.green }]} />
+      <Kinetic start={14} top={380} size={76} gap={3} words={[{ t: "relance" }, { t: "à" }, { t: "votre" }, { t: "place.", c: C.greenDeep }]} />
 
       {/* Frise */}
       <div style={{ position: "absolute", left: 120, right: 120, top: 640 }}>
@@ -299,9 +301,9 @@ function StepRow({ index, day, label }: { index: number; day: string; label: str
       <div
         style={{
           width: 124, height: 124, flex: "none", borderRadius: 999, display: "grid", placeItems: "center",
-          background: lit ? C.green : C.card, border: `4px solid ${lit ? C.green : C.line}`,
+          background: lit ? C.greenDeep : C.card, border: `4px solid ${lit ? C.greenDeep : C.line}`,
           boxShadow: lit ? `0 0 50px ${C.green}99` : "none",
-          fontFamily: FONT, fontWeight: 800, fontSize: day.length > 3 ? 36 : 40, color: lit ? "#052e14" : C.fg,
+          fontFamily: FONT, fontWeight: 800, fontSize: day.length > 3 ? 36 : 40, color: lit ? "#ffffff" : C.fg,
         }}
       >
         {day}
@@ -324,8 +326,8 @@ function StepRow({ index, day, label }: { index: number; day: string; label: str
 function Envelope() {
   return (
     <svg viewBox="0 0 96 70" width="96" height="70">
-      <rect x="2" y="2" width="92" height="66" rx="10" fill={C.fg} />
-      <path d="M6 8 L48 40 L90 8" stroke={C.ink} strokeWidth="6" fill="none" strokeLinejoin="round" />
+      <rect x="2" y="2" width="92" height="66" rx="10" fill="#ffffff" stroke={C.line} strokeWidth="3" />
+      <path d="M6 8 L48 40 L90 8" stroke={C.greenDeep} strokeWidth="6" fill="none" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -335,7 +337,7 @@ function Chip({ start, text }: { start: number; text: string }) {
   return (
     <div
       style={{
-        padding: "16px 28px", borderRadius: 999, border: `3px solid ${C.green}`, color: C.fg, background: "rgba(34,197,94,.12)",
+        padding: "16px 28px", borderRadius: 999, border: `3px solid ${C.green}`, color: C.greenDeep, background: "#ecf7ef",
         fontFamily: FONT, fontWeight: 700, fontSize: 36, whiteSpace: "nowrap",
         transform: `scale(${p})`, opacity: Math.min(1, p * 1.5),
       }}
@@ -370,7 +372,7 @@ function Result() {
   const exit = useExit(dur);
   return (
     <AbsoluteFill style={exit}>
-      <Kinetic start={2} top={190} size={100} words={[{ t: "Et" }, { t: "vous" }, { t: "êtes" }, { t: "payé.", c: C.green }]} />
+      <Kinetic start={2} top={190} size={100} words={[{ t: "Et" }, { t: "vous" }, { t: "êtes" }, { t: "payé.", c: C.greenDeep }]} />
 
       {/* Téléphone */}
       <div
@@ -382,9 +384,9 @@ function Result() {
         }}
       >
         <div style={{ position: "absolute", left: "50%", top: 26, width: 180, height: 44, marginLeft: -90, borderRadius: 30, background: "#000" }} />
-        <div style={{ position: "absolute", left: 0, right: 0, top: 150, textAlign: "center", fontFamily: FONT, color: C.fg }}>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 150, textAlign: "center", fontFamily: FONT, color: C.cream }}>
           <div style={{ fontSize: 150, fontWeight: 300, letterSpacing: -4 }}>9:41</div>
-          <div style={{ fontSize: 34, color: C.muted, marginTop: -6 }}>mardi 24 novembre</div>
+          <div style={{ fontSize: 34, color: "#9fb5a7", marginTop: -6 }}>mardi 24 novembre</div>
         </div>
         {/* Notification */}
         <div
@@ -396,8 +398,8 @@ function Result() {
           }}
         >
           <Logo size={84} />
-          <div style={{ fontFamily: FONT, color: C.fg, minWidth: 0 }}>
-            <div style={{ fontSize: 26, color: C.muted, fontWeight: 600 }}>ENCAISSEZ · maintenant</div>
+          <div style={{ fontFamily: FONT, color: C.cream, minWidth: 0 }}>
+            <div style={{ fontSize: 26, color: "#9fb5a7", fontWeight: 600 }}>ENCAISSEZ · maintenant</div>
             <div style={{ fontSize: 36, fontWeight: 700, marginTop: 4 }}>Facture payée ✓</div>
             <div style={{ fontSize: 31, color: "#d6d6dc", marginTop: 2 }}>Boulangerie Dupont a payé 1&nbsp;250,00&nbsp;€</div>
           </div>
@@ -407,7 +409,7 @@ function Result() {
       {/* Compteur */}
       <div style={{ position: "absolute", left: 0, right: 0, top: 1460, textAlign: "center", fontFamily: FONT }}>
         <div style={{ fontSize: 40, color: C.muted, fontWeight: 600 }}>Récupéré ce mois-ci</div>
-        <div style={{ fontSize: 170, fontWeight: 800, color: C.green, letterSpacing: -6, fontVariantNumeric: "tabular-nums", textShadow: `0 0 70px ${C.green}88` }}>
+        <div style={{ fontSize: 170, fontWeight: 800, color: C.greenDeep, letterSpacing: -6, fontVariantNumeric: "tabular-nums" }}>
           {amount.toLocaleString("fr-FR").replace(/ /g, " ")} €
         </div>
       </div>
@@ -469,9 +471,9 @@ function EndCard() {
       <div style={{ position: "absolute", left: 0, right: 0, top: 900, display: "flex", justifyContent: "center" }}>
         <div
           style={{
-            padding: "20px 40px", borderRadius: 999, background: C.green, color: "#052e14",
+            padding: "20px 40px", borderRadius: 999, background: C.greenDeep, color: "#ffffff",
             fontFamily: FONT, fontWeight: 800, fontSize: 46, letterSpacing: -0.5,
-            transform: `rotate(-2deg) scale(${badge})`, boxShadow: `0 0 60px ${C.green}88`,
+            transform: `rotate(-2deg) scale(${badge})`, boxShadow: "0 20px 40px -20px rgba(15,42,29,.4)",
           }}
         >
           -50 % à vie · 20 premiers clients
@@ -488,9 +490,9 @@ function EndCard() {
       <div style={{ position: "absolute", left: 0, right: 0, top: 1480, display: "flex", justifyContent: "center", opacity: Math.min(1, cta * 1.4), transform: `translateY(${(1 - cta) * 80}px)` }}>
         <div
           style={{
-            position: "relative", overflow: "hidden", padding: "42px 90px", borderRadius: 999, background: C.fg, color: C.ink,
+            position: "relative", overflow: "hidden", padding: "42px 90px", borderRadius: 999, background: C.deep, color: "#ffffff",
             fontFamily: FONT, fontWeight: 800, fontSize: 84, letterSpacing: -2.5, transform: `scale(${pulse})`,
-            boxShadow: "0 30px 90px -20px rgba(255,255,255,.35)",
+            boxShadow: "0 30px 60px -24px rgba(15,42,29,.45)",
           }}
         >
           encaissez.fr →

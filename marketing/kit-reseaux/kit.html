@@ -5,24 +5,24 @@
 @font-face { font-family: Inter; font-weight: 600; src: url("../../relances/node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2"); }
 @font-face { font-family: Inter; font-weight: 700; src: url("../../relances/node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2"); }
 @font-face { font-family: Inter; font-weight: 800; src: url("../../relances/node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2"); }
-:root { --g: #4ade80; --gd: #15803d; --gl: #bbf7d0; --ink: #0f2a1d; --ink2: #163826; --mut: #9fb5a7; --paper: #f3efe6; --cream: #f3efe6; --red: #ef4444; }
+:root { --g: #15803d; --gd: #15803d; --gl: #bbf7d0; --ink: #0f2a1d; --ink2: #163826; --mut: #5f6b64; --paper: #f3efe6; --cream: #f3efe6; --red: #ef4444; }
 * { box-sizing: border-box; margin: 0; }
 body { font-family: Inter, sans-serif; background: #ccc; display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; align-items: flex-start; }
 .a { position: relative; overflow: hidden; flex: none; }
-.dark { background: radial-gradient(900px 600px at 80% 8%, rgba(74,222,128,.16), transparent 60%), radial-gradient(800px 600px at 0% 100%, rgba(74,222,128,.07), transparent 60%), var(--ink); color: var(--cream); }
-.grid::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(#1f4231 1px, transparent 1px), linear-gradient(90deg, #1f4231 1px, transparent 1px); background-size: 64px 64px; opacity: .45; mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 70%); }
+.dark { background: radial-gradient(900px 600px at 85% 0%, #ecf7ef, transparent 60%), #ffffff; color: #14211a; }
+.grid::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(#eef1ee 1px, transparent 1px), linear-gradient(90deg, #eef1ee 1px, transparent 1px); background-size: 64px 64px; opacity: .45; mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 70%); }
 .word { font-weight: 800; letter-spacing: -.04em; line-height: 1; }
 .chip { display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; font-weight: 700; }
 .green { color: var(--g); }
-.card { background: var(--cream); color: #12231a; border-radius: 28px; box-shadow: 0 40px 90px -30px rgba(0,0,0,.6); }
+.card { background: #ffffff; border: 2px solid #e6e9e6; color: #14211a; border-radius: 28px; box-shadow: 0 40px 80px -40px rgba(15,42,29,.35); }
 .row { display: flex; justify-content: space-between; align-items: center; }
 .badge { border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: 20px; }
 .b-late { background: #fee2e2; color: #b91c1c; } .b-ok { background: #dcfce7; color: #15803d; } .b-next { background: #e4ece6; color: #3f3f46; }
 </style></head><body>
 
 <!-- 1. Photo de profil (1080x1080, recadrée en rond par les réseaux) -->
-<div class="a" id="profil" style="width:1080px;height:1080px;background:radial-gradient(circle at 50% 40%, #1d4a32, #0f2a1d 70%);display:grid;place-items:center">
-  <svg width="600" height="600" viewBox="0 0 64 64" style="filter:drop-shadow(0 30px 60px rgba(0,0,0,.45))"><rect width="64" height="64" rx="16" fill="#22c55e"/><rect x="12" y="18" width="40" height="29" rx="6" fill="#fff"/><path d="M14 21l18 13 18-13" stroke="#15803d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="47" cy="45" r="11" fill="#0f2a1d"/><path d="M42 45l3.5 3.5 6.5-7" stroke="#4ade80" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+<div class="a" id="profil" style="width:1080px;height:1080px;background:radial-gradient(circle at 50% 35%, #ecf7ef, #ffffff 70%);display:grid;place-items:center">
+  <svg width="600" height="600" viewBox="0 0 64 64" style="filter:drop-shadow(0 30px 50px rgba(15,42,29,.25))"><rect width="64" height="64" rx="16" fill="#22c55e"/><rect x="12" y="18" width="40" height="29" rx="6" fill="#fff"/><path d="M14 21l18 13 18-13" stroke="#15803d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="47" cy="45" r="11" fill="#0f2a1d"/><path d="M42 45l3.5 3.5 6.5-7" stroke="#22c55e" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
 </div>
 
 <!-- 2. Bannière Facebook (1640x624) : contenu centré, zone sûre sur mobile -->
@@ -45,23 +45,23 @@ body { font-family: Inter, sans-serif; background: #ccc; display: flex; flex-wra
   <div style="position:absolute;left:520px;top:92px">
     <div class="word" style="font-size:58px;line-height:1.08">Vos clients ne paient pas ?<br><span class="green">On les relance à votre place.</span></div>
     <div style="display:flex;gap:14px;margin-top:28px">
-      <span class="chip" style="background:rgba(34,197,94,.14);border:2px solid var(--g);padding:10px 20px;font-size:22px">J+1 rappel poli</span>
-      <span class="chip" style="background:rgba(34,197,94,.14);border:2px solid var(--g);padding:10px 20px;font-size:22px">J+7 relance ferme</span>
-      <span class="chip" style="background:var(--cream);color:#0f2a1d;padding:10px 22px;font-size:22px">encaissez.fr</span>
+      <span class="chip" style="background:#ecf7ef;border:2px solid #bfe5ca;color:#15803d;padding:10px 20px;font-size:22px">J+1 rappel poli</span>
+      <span class="chip" style="background:#ecf7ef;border:2px solid #bfe5ca;color:#15803d;padding:10px 20px;font-size:22px">J+7 relance ferme</span>
+      <span class="chip" style="background:#0f2a1d;color:#ffffff;padding:10px 22px;font-size:22px">encaissez.fr</span>
     </div>
   </div>
 </div>
 
 <!-- 4. Post « Le saviez-vous » (1080x1350, format 4:5) -->
 <div class="a dark grid" id="post-40-euros" style="width:1080px;height:1350px">
-  <div style="position:absolute;left:90px;top:100px"><span class="chip" style="background:var(--g);color:#0f2a1d;padding:14px 28px;font-size:34px">Le saviez-vous ?</span></div>
+  <div style="position:absolute;left:90px;top:100px"><span class="chip" style="background:#0f2a1d;color:#ffffff;padding:14px 28px;font-size:34px">Le saviez-vous ?</span></div>
   <div style="position:absolute;left:90px;right:90px;top:250px">
     <div class="word" style="font-size:86px;line-height:1.05">Un client pro qui paie en retard vous doit</div>
-    <div class="word green" style="font-size:330px;letter-spacing:-.06em;margin-top:10px;text-shadow:0 0 80px rgba(34,197,94,.45)">40 €</div>
+    <div class="word green" style="font-size:330px;letter-spacing:-.06em;margin-top:10px;">40 €</div>
     <div class="word" style="font-size:62px;line-height:1.1;margin-top:6px">d'indemnité. <span style="color:var(--mut)">En plus des pénalités de retard.</span></div>
   </div>
   <div style="position:absolute;left:90px;right:90px;bottom:90px;display:flex;justify-content:space-between;align-items:flex-end">
-    <div style="font-size:26px;color:var(--mut);font-weight:500;line-height:1.4">Art. L441-10 et D441-5 du Code de commerce.<br>Calcul gratuit : <b style="color:var(--cream)">encaissez.fr/outils</b></div>
+    <div style="font-size:26px;color:var(--mut);font-weight:500;line-height:1.4">Art. L441-10 et D441-5 du Code de commerce.<br>Calcul gratuit : <b style="color:#14211a">encaissez.fr/outils</b></div>
     <img src="logo.svg" width="92" height="92">
   </div>
 </div>
@@ -71,7 +71,7 @@ body { font-family: Inter, sans-serif; background: #ccc; display: flex; flex-wra
   <div style="position:absolute;left:90px;top:100px"><span class="chip" style="background:rgba(243,239,230,.1);color:var(--cream);border:2px solid rgba(243,239,230,.35);padding:14px 28px;font-size:34px">Artisans du bâtiment</span></div>
   <div style="position:absolute;left:90px;right:90px;top:250px">
     <div class="word" style="font-size:92px;line-height:1.04">Vos <span class="green">5 %</span> dorment chez vos clients.</div>
-    <div style="font-size:40px;color:var(--mut);margin-top:34px;line-height:1.35;font-weight:500">La retenue de garantie doit vous être rendue <b style="color:var(--cream)">un an après la réception des travaux</b>. Beaucoup oublient de la réclamer.</div>
+    <div style="font-size:40px;color:var(--mut);margin-top:34px;line-height:1.35;font-weight:500">La retenue de garantie doit vous être rendue <b style="color:#14211a">un an après la réception des travaux</b>. Beaucoup oublient de la réclamer.</div>
   </div>
   <div class="card" style="position:absolute;left:90px;right:90px;top:820px;padding:36px 44px;box-shadow:0 40px 90px -30px rgba(0,0,0,.6)">
     <div class="row" style="font-size:32px;font-weight:600;color:#71717a;padding-bottom:16px"><span>Réception des travaux</span><span style="color:#12231a">3 oct. 2025</span></div>
@@ -90,13 +90,13 @@ body { font-family: Inter, sans-serif; background: #ccc; display: flex; flex-wra
     <div class="word" style="font-size:96px;line-height:1.03">Vos relances partent <span class="green">toutes seules.</span></div>
   </div>
   <div style="position:absolute;left:90px;right:90px;top:440px;display:grid;gap:26px">
-    <div style="display:flex;align-items:center;gap:30px"><span class="chip" style="width:120px;height:120px;justify-content:center;background:var(--g);color:#0f2a1d;font-size:38px">J-3</span><div><div class="word" style="font-size:46px">Rappel avant échéance</div><div style="font-size:28px;color:var(--mut);margin-top:6px;font-weight:500">« Votre facture arrive à échéance vendredi »</div></div></div>
-    <div style="display:flex;align-items:center;gap:30px"><span class="chip" style="width:120px;height:120px;justify-content:center;background:var(--g);color:#0f2a1d;font-size:38px">J+1</span><div><div class="word" style="font-size:46px">Rappel amical</div><div style="font-size:28px;color:var(--mut);margin-top:6px;font-weight:500">Avec la facture PDF et un lien pour payer</div></div></div>
-    <div style="display:flex;align-items:center;gap:30px"><span class="chip" style="width:120px;height:120px;justify-content:center;background:var(--g);color:#0f2a1d;font-size:38px">J+7</span><div><div class="word" style="font-size:46px">Relance ferme</div><div style="font-size:28px;color:var(--mut);margin-top:6px;font-weight:500">Le ton monte, poliment</div></div></div>
-    <div style="display:flex;align-items:center;gap:30px"><span class="chip" style="width:120px;height:120px;justify-content:center;background:var(--g);color:#0f2a1d;font-size:34px">J+15</span><div><div class="word" style="font-size:46px">Dernier avis</div><div style="font-size:28px;color:var(--mut);margin-top:6px;font-weight:500">Puis tout s'arrête dès qu'il paie</div></div></div>
+    <div style="display:flex;align-items:center;gap:30px"><span class="chip" style="width:120px;height:120px;justify-content:center;background:#0f2a1d;color:#ffffff;font-size:38px">J-3</span><div><div class="word" style="font-size:46px">Rappel avant échéance</div><div style="font-size:28px;color:var(--mut);margin-top:6px;font-weight:500">« Votre facture arrive à échéance vendredi »</div></div></div>
+    <div style="display:flex;align-items:center;gap:30px"><span class="chip" style="width:120px;height:120px;justify-content:center;background:#0f2a1d;color:#ffffff;font-size:38px">J+1</span><div><div class="word" style="font-size:46px">Rappel amical</div><div style="font-size:28px;color:var(--mut);margin-top:6px;font-weight:500">Avec la facture PDF et un lien pour payer</div></div></div>
+    <div style="display:flex;align-items:center;gap:30px"><span class="chip" style="width:120px;height:120px;justify-content:center;background:#0f2a1d;color:#ffffff;font-size:38px">J+7</span><div><div class="word" style="font-size:46px">Relance ferme</div><div style="font-size:28px;color:var(--mut);margin-top:6px;font-weight:500">Le ton monte, poliment</div></div></div>
+    <div style="display:flex;align-items:center;gap:30px"><span class="chip" style="width:120px;height:120px;justify-content:center;background:#0f2a1d;color:#ffffff;font-size:34px">J+15</span><div><div class="word" style="font-size:46px">Dernier avis</div><div style="font-size:28px;color:var(--mut);margin-top:6px;font-weight:500">Puis tout s'arrête dès qu'il paie</div></div></div>
   </div>
   <div style="position:absolute;left:90px;right:90px;bottom:90px;display:flex;justify-content:space-between;align-items:center">
-    <span class="chip" style="background:var(--cream);color:#0f2a1d;padding:22px 38px;font-size:36px">Essai gratuit · encaissez.fr</span>
+    <span class="chip" style="background:#0f2a1d;color:#ffffff;padding:22px 38px;font-size:36px">Essai gratuit · encaissez.fr</span>
     <img src="logo.svg" width="92" height="92">
   </div>
 </div>
