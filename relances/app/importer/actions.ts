@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { MAX_ROWS, parseCsv, parseXlsx, tableToRows, validateRow, type ImportRow } from "@/lib/import";
 import { extractInvoiceFromPdf, pdfImportAvailable } from "@/lib/pdf-extract";
 import { getMyAccess } from "@/lib/billing";
-import { invoiceLimitMessage, invoicesLeft, planOf } from "@/lib/limits";
+import { freeLimitMessage, pendingLeft, planOf } from "@/lib/limits";
 import { isPdf, isText, isZip, zipUncompressedSize } from "@/lib/file-check";
 
 const MAX_FILE = 10 * 1024 * 1024; // 10 Mo par fichier
@@ -95,11 +95,12 @@ export async function commitImport(rows: ImportRow[]): Promise<{ imported: numbe
   if (!supabase) return { imported: 0, skipped: rows.length, error: "Session expirée, reconnectez-vous." };
   const clean = rows.slice(0, MAX_ROWS).map((r) => validateRow(r).clean).filter((c) => c !== undefined);
   if (!clean.length) return { imported: 0, skipped: rows.length, error: "Aucune ligne valide à importer." };
-  // Anti-abus : nombre de factures limité pendant l'essai.
+  // Version gratuite : nombre limité de factures en cours.
   const plan = planOf(await getMyAccess(supabase));
-  const room = await invoicesLeft(supabase, plan);
-  if (room < clean.length)
-    return { imported: 0, skipped: rows.length, error: room > 0 ? `Vous pouvez encore ajouter ${room} facture(s) pendant l'essai gratuit. ${invoiceLimitMessage(plan)}` : invoiceLimitMessage(plan) };
+  const room = await pendingLeft(supabase, plan);
+  const pendingRows = clean.length; // les factures importées sont toutes en attente de paiement
+  if (room < pendingRows)
+    return { imported: 0, skipped: rows.length, error: room > 0 ? `Vous pouvez encore ajouter ${room} facture(s) en cours. ${freeLimitMessage()}` : freeLimitMessage() };
   const { error } = await supabase.from("invoices").insert(clean);
   if (error) return { imported: 0, skipped: rows.length, error: "Erreur d'enregistrement : " + error.message };
   revalidatePath("/");

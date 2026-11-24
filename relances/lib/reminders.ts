@@ -189,7 +189,7 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
   if (error) throw error;
   let invoices = (data ?? []) as Invoice[];
 
-  // Seuls les comptes en essai ou abonnés sont relancés. Si la table billing n'existe pas encore
+  // Tous les comptes sont relancés (version gratuite comprise). Si la table billing n'existe pas encore
   // (migration 003 non appliquée), personne n'est bloqué.
   let paused = 0;
   const ids = [...new Set(invoices.map((i) => i.user_id))];
@@ -237,7 +237,7 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
     const profile = profiles.get(inv.user_id);
     const step = stepToSend(inv, today, profile);
     if (step === null) continue;
-    if (!(await takeEmailQuota(inv.user_id, plans.get(inv.user_id) ?? "trial", sentToday.get(inv.user_id) ?? 0))) {
+    if (!(await takeEmailQuota(inv.user_id, plans.get(inv.user_id) ?? "free", sentToday.get(inv.user_id) ?? 0))) {
       limited++; // reportée : quota d'envois du jour atteint
       continue;
     }

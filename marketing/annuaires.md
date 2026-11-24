@@ -34,7 +34,7 @@ Relance de factures · Recouvrement de créances · Gestion du poste client · F
 Relance automatique des factures impayées pour artisans et indépendants.
 
 ### Description courte (environ 250 caractères)
-Encaissez relance automatiquement vos clients qui ne paient pas : un rappel poli, puis plus ferme, avec la facture en PDF et un lien de paiement. Pensé pour les artisans, indépendants et TPE. 29 € HT/mois, sans engagement, essai gratuit de 14 jours.
+Encaissez relance automatiquement vos clients qui ne paient pas : un rappel poli, puis plus ferme, avec la facture en PDF et un lien de paiement. Pensé pour les artisans, indépendants et TPE. Gratuit jusqu'à 3 factures en cours, puis 9 € HT/mois en Pro, sans engagement.
 
 ### Description longue
 Encaissez est un logiciel en ligne qui relance automatiquement les factures impayées, pensé pour les artisans, les indépendants et les petites entreprises qui n'ont pas de service comptable.
@@ -47,7 +47,7 @@ Vous ajoutez une facture (ou vous les importez depuis Excel ou PDF), et Encaisse
 - un suivi des retenues de garantie pour les artisans du bâtiment ;
 - un résumé chaque lundi : ce qui a été payé, ce qui reste en retard.
 
-Dès que le client paie, les relances s'arrêtent. Le tout pour 29 € HT par mois, sans engagement, avec 14 jours d'essai gratuit sans carte bancaire. Une démo sans inscription est disponible sur encaissez.fr/demo.
+Dès que le client paie, les relances s'arrêtent. La version gratuite permet de suivre jusqu'à 3 factures en cours, sans carte bancaire ; la formule Pro (factures illimitées) coûte 9 € HT par mois, sans engagement. Une démo sans inscription est disponible sur encaissez.fr/demo.
 
 ### Fonctionnalités (liste)
 - Relances automatiques par e-mail (J-3, J+1, J+7, J+15)
@@ -62,8 +62,8 @@ Dès que le client paie, les relances s'arrêtent. Le tout pour 29 € HT par mo
 - Outils gratuits : lettre de relance, mise en demeure, calcul des pénalités de retard
 
 ### Tarif
-29 € HT / mois · sans engagement · essai gratuit 14 jours, sans carte bancaire
-(Offre de lancement : -50 % à vie pour les 20 premiers clients avec le code FONDATEUR)
+Gratuit jusqu'à 3 factures en cours · Pro 9 € HT / mois, factures illimitées · sans engagement, sans carte bancaire pour commencer
+(Offre de lancement : 3 mois de Pro offerts pour les 20 premiers clients avec le code FONDATEUR)
 
 ### Cible
 Artisans, indépendants, freelances, TPE (1 à 10 salariés)

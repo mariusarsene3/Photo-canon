@@ -14,17 +14,18 @@ export type Billing = {
 // pendant quelques jours ; on laisse l'accès pendant ce délai.
 const PAID = new Set(["active", "trialing", "past_due"]);
 
+/**
+ * Formule d'un compte. Il n'y a plus d'essai qui expire : sans abonnement, le compte est sur la version
+ * gratuite (nombre limité de factures en cours, voir BRAND.freeInvoices) ; avec un abonnement Stripe, c'est Pro.
+ */
 export type Access =
   | { ok: true; reason: "subscribed"; billing: Billing }
-  | { ok: true; reason: "trial"; daysLeft: number; billing: Billing }
-  | { ok: false; reason: "expired" | "unknown"; billing: Billing | null };
+  | { ok: true; reason: "free"; billing: Billing | null };
 
-export function accessFrom(b: Billing | null, now = new Date()): Access {
-  if (!b) return { ok: false, reason: "unknown", billing: null };
-  if (b.status && PAID.has(b.status)) return { ok: true, reason: "subscribed", billing: b };
-  const msLeft = new Date(b.trial_ends_at).getTime() - now.getTime();
-  if (msLeft > 0) return { ok: true, reason: "trial", daysLeft: Math.ceil(msLeft / 86_400_000), billing: b };
-  return { ok: false, reason: "expired", billing: b };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function accessFrom(b: Billing | null, _now = new Date()): Access {
+  if (b?.status && PAID.has(b.status)) return { ok: true, reason: "subscribed", billing: b };
+  return { ok: true, reason: "free", billing: b };
 }
 
 /** Abonnement de l'utilisateur connecté (lecture seule, via RLS). Null si la migration 003 n'est pas appliquée. */
@@ -35,15 +36,11 @@ export async function getMyBilling(supabase: SupabaseClient): Promise<Billing | 
 }
 
 /**
- * Accès de l'utilisateur connecté. Tant que la migration 003 n'est pas appliquée (table absente),
- * on laisse l'accès ouvert pour ne pas bloquer le service.
+ * Formule de l'utilisateur connecté (gratuite tant qu'aucun abonnement n'est actif).
  */
 export async function getMyAccess(supabase: SupabaseClient): Promise<Access> {
   const { data, error } = await supabase.from("billing").select("*").maybeSingle();
-  if (error) {
-    const open: Billing = { user_id: "", trial_ends_at: "2999-01-01", status: null, stripe_customer_id: null, stripe_subscription_id: null, current_period_end: null, cancel_at_period_end: false };
-    return { ok: true, reason: "trial", daysLeft: 999, billing: open };
-  }
+  if (error) return { ok: true, reason: "free", billing: null };
   return accessFrom((data as Billing | null) ?? null);
 }
 

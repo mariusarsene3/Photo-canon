@@ -476,14 +476,13 @@ function EndCard() {
             transform: `rotate(-2deg) scale(${badge})`, boxShadow: "0 20px 40px -20px rgba(15,42,29,.4)",
           }}
         >
-          -50 % à vie · 20 premiers clients
+          Gratuit pour commencer
         </div>
       </div>
 
       <div style={{ position: "absolute", left: 0, right: 0, top: 1060, textAlign: "center", fontFamily: FONT, opacity: Math.min(1, price * 1.4), transform: `translateY(${(1 - price) * 60}px)` }}>
-        <span style={{ fontSize: 60, color: C.muted, textDecoration: "line-through", marginRight: 26 }}>29 €</span>
-        <span style={{ fontSize: 150, fontWeight: 800, color: C.fg, letterSpacing: -5 }}>14,50 €</span>
-        <div style={{ fontSize: 44, color: C.muted, marginTop: 4 }}>HT / mois · 14 jours gratuits · sans carte</div>
+        <span style={{ fontSize: 150, fontWeight: 800, color: C.fg, letterSpacing: -5 }}>0 €</span>
+        <div style={{ fontSize: 44, color: C.muted, marginTop: 4 }}>jusqu&apos;à 3 factures · Pro 9 € HT / mois</div>
       </div>
 
       {/* Bouton */}

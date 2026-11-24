@@ -50,7 +50,6 @@ export async function sendClaim(form: FormData) {
   const { supabase, g } = await load(Number(form.get("id")));
   if (!g.client_email) back("Ajoutez l'e-mail du client pour lui envoyer la demande, ou imprimez la lettre.", "err");
   const access = await getMyAccess(supabase);
-  if (!access.ok) back("Votre essai est terminé : abonnez-vous depuis « Mon compte » pour envoyer des e-mails.", "err");
   // Anti-abus : les demandes de retenue comptent dans le plafond d'e-mails du jour, avec les relances.
   const since = startOfDay();
   const [claims, reminders] = await Promise.all([

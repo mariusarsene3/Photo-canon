@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Toast } from "../toast";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { BRAND, founderPrice } from "@/lib/brand";
+import { BRAND, founderOffer } from "@/lib/brand";
 import { founderSeatsLeft, showSeatCounter } from "@/lib/founder";
 import { STATUS_LABEL, accessFrom, getMyBilling } from "@/lib/billing";
 import { stripeConfigured } from "@/lib/stripe";
@@ -53,13 +53,11 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
       <section className="card">
         <h2>Abonnement</h2>
-        {!billing ? (
-          <p className="muted">Abonnement non configuré (migration 003 à appliquer).</p>
-        ) : access.reason === "subscribed" ? (
+        {access.reason === "subscribed" && billing ? (
           <>
             <p>
               <span className="badge ok">{STATUS_LABEL[billing.status!] ?? billing.status}</span>{" "}
-              {BRAND.name} — {BRAND.price} € HT / mois
+              {BRAND.name} Pro — {BRAND.price} € HT / mois
             </p>
             {billing.current_period_end && (
               <p className="muted">
@@ -74,28 +72,24 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           </>
         ) : (
           <>
-            {access.reason === "trial" ? (
-              <p>
-                <span className="badge">Essai gratuit</span> Il vous reste <b>{access.daysLeft} jour{access.daysLeft > 1 ? "s" : ""}</b>{" "}
-                (jusqu&apos;au {frDate(billing.trial_ends_at)}).
-              </p>
-            ) : (
-              <p>
-                <span className="badge late">Essai terminé</span> Vos relances automatiques sont en pause. Abonnez-vous pour
-                les relancer.
-              </p>
-            )}
-            {billing.status === "canceled" && <p className="muted">Votre précédent abonnement a été résilié.</p>}
-            <p className="muted">{BRAND.price} € HT / mois · sans engagement · résiliable à tout moment.</p>
+            <p>
+              <span className="badge">Version gratuite</span> Jusqu&apos;à <b>{BRAND.freeInvoices} factures en cours</b> en même
+              temps, relancées automatiquement.
+            </p>
+            {billing?.status === "canceled" && <p className="muted">Votre précédent abonnement a été résilié.</p>}
+            <p className="muted">
+              <b>Pro : {BRAND.price} € HT / mois</b> · factures illimitées, import Excel et PDF · sans engagement, résiliable à
+              tout moment.
+            </p>
             {payments && founderLeft > 0 && (
               <p className="founder-note">
-                <b>Offre fondateur</b> : entrez le code <code>{BRAND.founder.code}</code> sur la page de paiement pour payer{" "}
-                {founderPrice()} HT / mois à vie{showSeatCounter(founderLeft) ? ` (${founderLeft} place${founderLeft > 1 ? "s" : ""} restante${founderLeft > 1 ? "s" : ""})` : ""}.
+                <b>Offre fondateur</b> : entrez le code <code>{BRAND.founder.code}</code> sur la page de paiement pour profiter de{" "}
+                {founderOffer()}{showSeatCounter(founderLeft) ? ` (${founderLeft} place${founderLeft > 1 ? "s" : ""} restante${founderLeft > 1 ? "s" : ""})` : ""}.
               </p>
             )}
             {payments ? (
               <form action={subscribe}>
-                <SubmitButton pending="Ouverture du paiement…">S&apos;abonner</SubmitButton>
+                <SubmitButton pending="Ouverture du paiement…">Passer au Pro</SubmitButton>
               </form>
             ) : (
               <p className="muted small">Le paiement en ligne sera bientôt disponible.</p>
@@ -110,7 +104,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           <form action={savePreferences} className="prefs">
             <label className="check">
               <input type="checkbox" name="product_emails" defaultChecked={productEmails} />
-              <span>Recevoir les conseils pour bien démarrer et les rappels de fin d&apos;essai</span>
+              <span>Recevoir les conseils pour bien démarrer</span>
             </label>
             {hasWeekly && (
               <label className="check">

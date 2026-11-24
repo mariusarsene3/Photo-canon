@@ -39,8 +39,7 @@ export function nextEmail(u: UserState, now = new Date()): Exclude<Kind, "welcom
   const age = t - new Date(u.createdAt).getTime();
   const left = trialEnd - t;
 
-  if (left <= 0) return left > -7 * DAY && !u.sent.has("trial_ended") ? "trial_ended" : null;
-  if (left <= 3 * DAY) return u.sent.has("trial_ending") ? null : "trial_ending";
+  void left; // plus d'essai qui expire depuis la version gratuite : seuls le bienvenue et le coup de pouce partent
   if (age >= 2 * DAY && u.invoiceCount === 0 && !u.sent.has("nudge")) return "nudge";
   return null;
 }
@@ -63,7 +62,7 @@ export function renderLifecycle(kind: Kind, opts: { trialEndsAt?: string; stats?
       return {
         subject: `Bienvenue sur ${BRAND.name} 👋`,
         text:
-          `Bonjour,\n\nBienvenue sur ${BRAND.name} ! Vous avez ${BRAND.trialDays} jours pour l'essayer gratuitement, sans carte bancaire.\n\n` +
+          `Bonjour,\n\nBienvenue sur ${BRAND.name} ! La version gratuite vous permet de suivre jusqu'à ${BRAND.freeInvoices} factures en cours, sans carte bancaire et sans limite de durée.\n\n` +
           `Pour démarrer en 2 minutes :\n` +
           `1. Indiquez le nom de votre entreprise et votre IBAN dans « Paramètres » : ils apparaîtront dans les relances.\n` +
           `2. Ajoutez une facture en retard (ou importez-les depuis Excel).\n` +

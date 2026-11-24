@@ -1,6 +1,6 @@
 # Kit : trouver tes 10 premiers testeurs
 
-**Objectif :** 10 professionnels (artisans, indépendants, TPE) qui utilisent Encaissez pendant l'essai gratuit de 14 jours et qui te disent ce qu'ils en pensent.
+**Objectif :** 10 professionnels (artisans, indépendants, TPE) qui utilisent Encaissez avec la version gratuite (ou le Pro, offert aux testeurs) et qui te disent ce qu'ils en pensent.
 
 Ce n'est pas de la vente : tu cherches à **apprendre**. Les gens aident beaucoup plus volontiers quelqu'un qui demande un avis.
 
@@ -85,7 +85,7 @@ Si non : « Pas de souci, merci et bonne journée ! », et tu passes au suivant.
 > Bonjour [prénom], c'est [ton prénom], on s'est parlé ce matin au sujet des factures en retard.
 > Voici l'outil : [lien du site]
 > Créez un compte (2 minutes), ajoutez une ou deux factures en retard, et il s'occupe des relances.
-> C'est gratuit pendant 14 jours, sans carte bancaire à donner. Je vous rappelle dans 10 jours pour avoir votre avis. Merci !
+> C'est gratuit pour commencer, sans carte bancaire à donner. Je vous rappelle dans 10 jours pour avoir votre avis. Merci !
 
 **Le lendemain**, envoie un petit message : « Vous avez pu créer votre compte ? Si quelque chose bloque, dites-moi. » C'est souvent là que tu découvres les vrais problèmes.
 
@@ -93,13 +93,13 @@ Si non : « Pas de souci, merci et bonne journée ! », et tu passes au suivant.
 
 ## 5. Les questions à poser au bout de 10 jours
 
-(Avant la fin des 14 jours d'essai.)
+(Environ 10 jours après leur inscription.)
 
 1. « Vous l'avez utilisé ? Combien de factures vous avez mises dedans ? »
 2. « Un client a payé après une relance ? »
 3. « Qu'est-ce qui vous a agacé ou que vous n'avez pas compris ? »
 4. « Qu'est-ce qui manque pour que vous l'utilisiez tout le temps ? »
-5. « Vous le paieriez 29 €/mois ? Sinon, combien ? »
+5. « Vous passeriez au Pro à 9 €/mois pour des factures illimitées ? Sinon, combien ? »
 
 **Le signal qui compte :** quelqu'un qui l'utilise **sans que tu le relances**, ou qui demande « c'est quand que ça devient payant ? ».
 

@@ -29,9 +29,9 @@ function BrandPanel() {
         <div className="auth-mock-toast"><b>✓</b> Boulangerie Dupont a payé 1 250 €</div>
       </div>
       <ul className="auth-points">
-        <li>{BRAND.trialDays} jours gratuits, sans carte bancaire</li>
+        <li>Gratuit jusqu&apos;à {BRAND.freeInvoices} factures, sans carte bancaire</li>
         <li>Relances signées à votre nom, avec lien de paiement</li>
-        <li>Données hébergées en Europe</li>
+        <li>Vos données ne sont jamais revendues</li>
       </ul>
     </aside>
   );
@@ -63,7 +63,7 @@ export default async function LoginPage({
   const title = { login: "Bon retour 👋", signup: "Créez votre compte", reset: "Mot de passe oublié" }[view];
   const sub = {
     login: "Connectez-vous pour suivre vos factures.",
-    signup: `${BRAND.trialDays} jours gratuits, sans carte bancaire. Prêt en 2 minutes.`,
+    signup: `Gratuit jusqu'à ${BRAND.freeInvoices} factures en cours, sans carte bancaire. Prêt en 2 minutes.`,
     reset: "Indiquez votre e-mail : nous vous envoyons un lien pour choisir un nouveau mot de passe.",
   }[view];
 
@@ -113,9 +113,9 @@ export default async function LoginPage({
           )}
 
           <ul className="auth-trust">
-            <li>{BRAND.trialDays} jours gratuits, sans carte bancaire</li>
+            <li>Gratuit jusqu&apos;à {BRAND.freeInvoices} factures, sans carte bancaire</li>
             <li>Relances signées à votre nom</li>
-            <li>Données hébergées en Europe</li>
+            <li>Vos données ne sont jamais revendues</li>
           </ul>
 
           <p className="auth-switch">
@@ -124,7 +124,7 @@ export default async function LoginPage({
             ) : view === "reset" ? (
               <><Link href="/login">← Retour à la connexion</Link></>
             ) : (
-              <>Pas encore de compte ? <Link href="/login?mode=signup">Essai gratuit</Link></>
+              <>Pas encore de compte ? <Link href="/login?mode=signup">Créer un compte gratuit</Link></>
             )}
           </p>
         </div>

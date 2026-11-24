@@ -200,7 +200,7 @@ function End() {
       <div style={{ ...rise(t), fontSize: 110, fontWeight: 800, letterSpacing: -4, color: C.ink, marginTop: 30 }}>Encaissez</div>
       <div style={{ ...rise(t), fontSize: 38, color: C.muted, marginTop: 6 }}>Relance de factures impayées pour artisans et indépendants</div>
       <div style={{ ...rise(cta), display: "flex", gap: 22, alignItems: "center", marginTop: 56 }}>
-        <span style={{ background: C.deep, color: "#fff", borderRadius: 18, padding: "26px 46px", fontSize: 38, fontWeight: 700 }}>Essai gratuit 14 jours</span>
+        <span style={{ background: C.deep, color: "#fff", borderRadius: 18, padding: "26px 46px", fontSize: 38, fontWeight: 700 }}>Commencer gratuitement</span>
         <span style={{ fontSize: 38, fontWeight: 700, color: C.green }}>encaissez.fr</span>
       </div>
     </AbsoluteFill>
