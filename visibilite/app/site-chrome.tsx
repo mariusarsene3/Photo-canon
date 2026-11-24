@@ -34,11 +34,15 @@ export function Footer() {
   return (
     <footer className="foot">
       <div className="wrap foot-in">
-        <Logo />
-        <p>Être recommandé par ChatGPT et Google, pour les commerçants, artisans et indépendants.</p>
+        <div>
+          <Logo />
+          <p>Être recommandé par ChatGPT et Google, pour les commerçants, artisans et indépendants.</p>
+        </div>
         <p className="links">
-          <a href={`mailto:${BRAND.contactEmail}`}>{BRAND.contactEmail}</a> · <Link href="/exemple">Exemple de résultat</Link> ·{" "}
-          <Link href="/mentions-legales">Mentions légales</Link> · <Link href="/confidentialite">Confidentialité</Link>
+          <a href={`mailto:${BRAND.contactEmail}`}>{BRAND.contactEmail}</a>
+          <Link href="/exemple">Exemple de résultat</Link>
+          <Link href="/mentions-legales">Mentions légales</Link>
+          <Link href="/confidentialite">Confidentialité</Link>
         </p>
       </div>
     </footer>

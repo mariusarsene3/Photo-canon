@@ -37,17 +37,20 @@ export function CheckForm() {
           Nom de votre commerce
           <input name="business" defaultValue={v.business} placeholder="ex. : Les Fleurs de Marie" required maxLength={80} />
         </label>
-        <label>
-          Votre activité
-          <input name="trade" defaultValue={v.trade} placeholder="ex. : un fleuriste" required maxLength={60} />
-        </label>
-        <label>
-          Ville
-          <input name="city" defaultValue={v.city} placeholder="ex. : Nancy" required maxLength={60} />
-        </label>
+        <div className="form-row">
+          <label>
+            Votre activité
+            <input name="trade" defaultValue={v.trade} placeholder="ex. : un fleuriste" required maxLength={60} />
+          </label>
+          <label>
+            Ville
+            <input name="city" defaultValue={v.city} placeholder="ex. : Nancy" required maxLength={60} />
+          </label>
+        </div>
         <button type="submit" disabled={pending}>
-          {pending ? "Analyse en cours…" : "Vérifier gratuitement"}
+          {pending ? "Analyse en cours…" : "Est-ce que ChatGPT me recommande ?"}
         </button>
+        <p className="form-meta">Gratuit · sans inscription · résultat en 1 minute</p>
         {state.error && !pending && <p className="error">{state.error}</p>}
       </form>
       {pending && <Progress />}

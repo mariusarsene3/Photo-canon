@@ -24,16 +24,6 @@ const EXEMPLE: CheckResult = {
         "Voici quelques fleuristes bien notés à Nancy :\n\n1. Atelier Pivoine : très apprécié pour ses bouquets de mariage, plus de 200 avis à 4,8/5.\n2. La Petite Serre : compositions originales, livraison dans tout Nancy.\n3. Fleurs & Compagnie : bon rapport qualité-prix, ouvert le dimanche matin.\n4. Le Jardin d'Émile : spécialiste des plantes d'intérieur.\n\nJe vous conseille de regarder les avis récents sur Google avant de choisir.",
       sourceDomains: ["google.com", "pagesjaunes.fr", "tripadvisor.fr", "lest-eclair-exemple.fr"],
     },
-    {
-      label: "Claude",
-      ok: true,
-      cited: true,
-      position: 3,
-      recommended: ["La Petite Serre", "Atelier Pivoine", "Les Fleurs de Marie"],
-      answer:
-        "À Nancy, plusieurs fleuristes ont bonne réputation :\n\n- La Petite Serre, pour ses créations originales ;\n- Atelier Pivoine, souvent recommandé pour les mariages ;\n- Les Fleurs de Marie, un commerce de quartier apprécié pour son accueil.\n\nPensez à vérifier les horaires avant de vous déplacer.",
-      sourceDomains: ["pagesjaunes.fr", "google.com", "facebook.com"],
-    },
   ],
 };
 
@@ -41,7 +31,7 @@ export default function Exemple() {
   return (
     <>
     <Header />
-    <main className="wrap" style={{ paddingTop: 32, paddingBottom: 40 }}>
+    <main className="wrap" style={{ paddingTop: 40, paddingBottom: 64, maxWidth: 760 }}>
       <p className="notice">
         <strong>Exemple fictif</strong> : les noms de commerces sont inventés. <Link href="/">Faire le test pour votre commerce →</Link>
       </p>
