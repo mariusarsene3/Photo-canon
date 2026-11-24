@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { formatIban, paymentUrl } from "./payment";
 import { accessFrom, type Billing } from "./billing";
+import { planOf, startOfDay, takeEmailQuota, type Plan } from "./limits";
 import { sendEmail } from "./email";
 
 /** Espace de stockage Supabase des factures PDF (migration 007). */
@@ -192,11 +193,13 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
   // (migration 003 non appliquée), personne n'est bloqué.
   let paused = 0;
   const ids = [...new Set(invoices.map((i) => i.user_id))];
+  const plans = new Map<string, Plan>(); // formule de chaque compte, pour le plafond d'envois du jour
   if (ids.length) {
     const { data: bills, error: billErr } = await supabase.from("billing").select("*").in("user_id", ids);
     if (!billErr) {
       const byUser = new Map((bills as Billing[]).map((b) => [b.user_id, b]));
       const allowed = new Set(ids.filter((id) => accessFrom(byUser.get(id) ?? null, today).ok));
+      for (const id of ids) plans.set(id, planOf(accessFrom(byUser.get(id) ?? null, today)));
       paused = invoices.filter((i) => !allowed.has(i.user_id)).length;
       invoices = invoices.filter((i) => allowed.has(i.user_id));
     }
@@ -215,6 +218,18 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
     return owners.get(userId);
   };
 
+  // Anti-abus : e-mails déjà envoyés aujourd'hui par compte (repli si le compteur serveur est indisponible).
+  const sentToday = new Map<string, number>();
+  if (userIds.length) {
+    const { data: todays } = await supabase
+      .from("reminders")
+      .select("user_id")
+      .in("user_id", userIds)
+      .gte("sent_at", startOfDay(today));
+    for (const r of todays ?? []) sentToday.set(r.user_id, (sentToday.get(r.user_id) ?? 0) + 1);
+  }
+  let limited = 0;
+
   const sent: { invoice: string; step: number }[] = [];
   const errors: { invoice: string; error: string }[] = [];
 
@@ -222,6 +237,10 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
     const profile = profiles.get(inv.user_id);
     const step = stepToSend(inv, today, profile);
     if (step === null) continue;
+    if (!(await takeEmailQuota(inv.user_id, plans.get(inv.user_id) ?? "trial", sentToday.get(inv.user_id) ?? 0))) {
+      limited++; // reportée : quota d'envois du jour atteint
+      continue;
+    }
     const { subject, text } = renderEmail(inv, step, profile);
     try {
       // On réserve l'étape AVANT l'envoi : si deux passages tournent en même temps,
@@ -247,9 +266,10 @@ export async function runReminders(supabase: SupabaseClient, today = new Date())
         throw e;
       }
       sent.push({ invoice: inv.number, step });
+      sentToday.set(inv.user_id, (sentToday.get(inv.user_id) ?? 0) + 1);
     } catch (e) {
       errors.push({ invoice: inv.number, error: e instanceof Error ? e.message : JSON.stringify(e) });
     }
   }
-  return { sent, errors, paused };
+  return { sent, errors, paused, limited };
 }
