@@ -13,6 +13,8 @@
 | **Rouge** | `#EF4444` : seulement pour « impayé » ou « en retard », jamais ailleurs |
 | **Police** | Inter : très grasse (800) pour les titres, normale (500) pour le texte |
 
+**Sur le site :** le vert profond est une signature, pas un fond partout. Il n'apparaît qu'aux endroits clés : le haut des pages (menu et titre), le bandeau final, le bas de page, la barre latérale et la carte « À encaisser » du tableau de bord. Tout le reste est sur fond crème `#F4F1EA`, avec des feuilles blanches `#FFFDF8`.
+
 **Le ton :** simple, direct, rassurant. On parle comme un artisan à un autre artisan, sans jargon. On vouvoie. On ne culpabilise jamais le client qui paie en retard.
 
 **Une règle :** un message par visuel, en gros. Si on doit plisser les yeux, c'est raté.
