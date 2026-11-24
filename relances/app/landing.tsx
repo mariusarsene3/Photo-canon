@@ -21,6 +21,26 @@ const benefits = [
   { title: "Vos retenues de garantie récupérées", text: "Dans le bâtiment, Encaissez vous prévient au bout d'un an pour réclamer vos 5 %." },
 ];
 
+/** Fonctionnalités : icône (tracé SVG 24×24), titre, explication courte. */
+const features = [
+  { icon: "M4 6h16v12H4z M4 7l8 6 8-6", title: "Relances automatiques", text: "Rappel 3 jours avant l'échéance, puis à J+1, J+7 et J+15. Le ton monte poliment, tout seul." },
+  { icon: "M7 3h7l5 5v13H7z M14 3v5h5 M10 13h6 M10 17h4", title: "Facture PDF jointe", text: "Votre client reçoit sa facture avec chaque relance : plus besoin de vous la redemander." },
+  { icon: "M3 7h18v10H3z M3 11h18 M7 15h3", title: "Lien de paiement", text: "IBAN et QR code prêts à l'emploi : votre client paie en un clic depuis l'e-mail." },
+  { icon: "M12 4a8 8 0 100 16 8 8 0 000-16z M8 12h8 M12 8v8", title: "À votre nom", text: "L'e-mail vient de votre entreprise, et les réponses arrivent dans votre boîte mail." },
+  { icon: "M5 4h14v16H5z M9 8h6 M9 12h6 M9 16h3", title: "Textes modifiables", text: "Tutoiement, signature, numéro de téléphone : chaque relance à votre façon." },
+  { icon: "M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z M9 12l2 2 4-4", title: "Retenues de garantie", text: "Dans le bâtiment, on vous prévient au bout d'un an pour réclamer vos 5 %." },
+  { icon: "M12 4v11 M7 10l5 5 5-5 M5 20h14", title: "Import Excel et PDF", text: "Toutes vos factures en retard ajoutées d'un coup, sans tout retaper." },
+  { icon: "M4 20V10 M10 20V4 M16 20v-7 M22 20H2", title: "Résumé du lundi", text: "Chaque semaine : ce qui a été payé, ce qui reste en retard. Sans ouvrir le site." },
+];
+
+/** Comparaison avec les logiciels de recouvrement pour entreprises. */
+const compare = [
+  { label: "Prix", us: "29 € HT / mois", them: "De 130 à 700 € / mois, souvent sur devis" },
+  { label: "Mise en route", us: "2 minutes, seul", them: "Démonstration commerciale, paramétrage" },
+  { label: "Pour qui", us: "Artisans, indépendants, TPE", them: "PME avec un service comptable" },
+  { label: "Engagement", us: "Aucun, résiliable en un clic", them: "Souvent annuel" },
+];
+
 const faq = [
   { q: "Mes clients vont-ils mal le prendre ?", a: "Non : le premier message est un simple rappel poli, qui précise « si le paiement est déjà parti, ne tenez pas compte de ce message ». La plupart des retards sont des oublis." },
   { q: "Les e-mails partent-ils à mon nom ?", a: "Oui : votre client voit le nom de votre entreprise comme expéditeur, et le message est signé à votre nom. S'il répond, sa réponse arrive directement dans votre boîte mail." },
@@ -101,6 +121,7 @@ export async function Landing() {
       <nav className="lp-nav lp-wrap">
         <span className="lp-brand">{BRAND.name}<small className="lp-tagline">{BRAND.tagline}</small></span>
         <div className="lp-nav-links">
+          <a href="#fonctionnalites" className="lp-hide-sm">Fonctionnalités</a>
           <a href="#tarif" className="lp-hide-sm">Tarif</a>
           <Link href="/outils" className="lp-hide-sm">Outils gratuits</Link>
           <Link href="/guides" className="lp-hide-sm">Guides</Link>
@@ -170,6 +191,50 @@ export async function Landing() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="lp-section lp-wrap" id="fonctionnalites">
+        <div className="lp-head">
+          <h2>Tout ce qu&apos;il faut pour être payé</h2>
+        </div>
+        <div className="lp-feats">
+          {features.map((f) => (
+            <div key={f.title} className="lp-feat">
+              <span className="lp-feat-ico" aria-hidden>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={f.icon} /></svg>
+              </span>
+              <h3>{f.title}</h3>
+              <p>{f.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="lp-section lp-wrap">
+        <div className="lp-head">
+          <h2>Pourquoi {BRAND.name} ?</h2>
+          <p className="lp-sub">Les logiciels de relance existent, mais ils sont faits pour les grandes entreprises. {BRAND.name} est fait pour vous.</p>
+        </div>
+        <div className="lp-compare" role="table" aria-label="Comparaison">
+          <div className="lp-cmp-row lp-cmp-head" role="row">
+            <span role="columnheader" />
+            <span role="columnheader" className="lp-cmp-us">{BRAND.name}</span>
+            <span role="columnheader">Logiciels pour entreprises</span>
+          </div>
+          {compare.map((c) => (
+            <div key={c.label} className="lp-cmp-row" role="row">
+              <span role="rowheader">{c.label}</span>
+              <span role="cell" className="lp-cmp-us">✓ {c.us}</span>
+              <span role="cell">{c.them}</span>
+            </div>
+          ))}
+        </div>
+        <ul className="lp-trust">
+          <li>Données hébergées en Europe</li>
+          <li>Support en français</li>
+          <li>Sans engagement</li>
+          <li>{BRAND.trialDays} jours gratuits, sans carte bancaire</li>
+        </ul>
       </section>
 
       <section className="lp-section lp-wrap" id="tarif">
