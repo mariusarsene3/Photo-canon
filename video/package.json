@@ -5,6 +5,7 @@
     "studio": "remotion studio src/index.ts",
     "render": "remotion render src/index.ts Promo out/encaissez-promo-vertical.mp4 --browser-executable=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell",
     "render:pub": "remotion render src/index.ts Pub out/encaissez-pub-vertical.mp4 --browser-executable=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell",
+    "render:demo": "remotion render src/index.ts Demo out/encaissez-demo-horizontal.mp4 --muted --browser-executable=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell",
     "render:wide": "remotion render src/index.ts PromoWide out/encaissez-promo-horizontal.mp4 --browser-executable=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell"
   },
   "dependencies": {
