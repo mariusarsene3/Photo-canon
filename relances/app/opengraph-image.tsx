@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { BRAND } from "@/lib/brand";
+import { LOGO_DATA_URI } from "@/lib/logo";
 
 export const alt = `${BRAND.name} : vos factures impayées relancées automatiquement`;
 export const size = { width: 1200, height: 630 };
@@ -22,9 +23,13 @@ export default async function Image() {
     (
       <div style={{ width: "100%", height: "100%", display: "flex", background: "#0b0b0f", color: "#fff", padding: 64, fontFamily: "Inter" }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: 600 }}>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 36, fontWeight: 800, letterSpacing: -1 }}>{BRAND.name}</div>
-            <div style={{ fontSize: 20, color: "#a1a1aa" }}>{BRAND.tagline}</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={LOGO_DATA_URI} width={64} height={64} alt="" />
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ fontSize: 36, fontWeight: 800, letterSpacing: -1 }}>{BRAND.name}</div>
+              <div style={{ fontSize: 20, color: "#a1a1aa" }}>{BRAND.tagline}</div>
+            </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 60, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}>Vos clients ne paient pas ?</div>

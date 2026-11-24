@@ -432,6 +432,7 @@ function EndCard() {
   return (
     <AbsoluteFill style={{ opacity: o, alignItems: "center", justifyContent: "center", fontFamily: FONT, color: C.fg, textAlign: "center", perspective: 1400 }}>
       <div style={{ transform: `scale(${useLayout().endScale}) rotateY(${camY}deg) rotateX(8deg)`, transformStyle: "preserve-3d" }}>
+        <LogoMark start={S4 + 2} />
         <div style={{ fontSize: 168, fontWeight: 800, letterSpacing: -7, whiteSpace: "nowrap", position: "relative" }}>
           {letters.map((l, i) => (
             <Letter key={i} ch={l} start={S4 + 4 + i * 3} depth={depth} />
@@ -454,6 +455,22 @@ function EndCard() {
         </div>
       </div>
     </AbsoluteFill>
+  );
+}
+
+/** Logo Encaissez (enveloppe validée), qui tombe en place au-dessus du nom. */
+function LogoMark({ start }: { start: number }) {
+  const p = useEnter(start, 10, 0.7);
+  return (
+    <div style={{ display: "flex", justifyContent: "center", marginBottom: 34, opacity: Math.min(1, p * 1.4), transform: `translateY(${(1 - p) * -120}px) scale(${0.6 + p * 0.4}) rotate(${(1 - p) * -18}deg)` }}>
+      <svg width="150" height="150" viewBox="0 0 64 64" style={{ filter: `drop-shadow(0 0 40px ${C.green}66) drop-shadow(0 20px 30px #000)` }}>
+        <rect width="64" height="64" rx="16" fill={C.green} />
+        <rect x="12" y="18" width="40" height="29" rx="6" fill="#fff" />
+        <path d="M14 21l18 13 18-13" stroke="#15803d" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <circle cx="47" cy="45" r="11" fill="#0a0a0b" />
+        <path d="M42 45l3.5 3.5 6.5-7" stroke={C.green} strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      </svg>
+    </div>
   );
 }
 

@@ -149,3 +149,83 @@
 .fd-banner { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 10px; padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); background: var(--lp-fg); color: var(--lp-bg); font-size: 13.5px; text-align: center; text-decoration: none; }
 .fd-banner b { font-weight: 700; }
 .fd-banner span:last-child { text-decoration: underline; text-underline-offset: 2px; }
+
+/* Logo (enveloppe validée) devant le nom, en haut et en bas des pages publiques */
+.lp-nav .lp-brand { display: grid; grid-template-columns: 32px auto; column-gap: 10px; align-items: center; }
+.lp-nav .lp-brand::before { content: ""; grid-row: span 2; width: 32px; height: 32px; background: url(/logo-mark.svg) center / contain no-repeat; }
+.lp-nav .lp-brand .lp-tagline { grid-column: 2; }
+.lp-footer .lp-brand { display: inline-flex; align-items: center; gap: 8px; }
+.lp-footer .lp-brand::before { content: ""; width: 22px; height: 22px; background: url(/logo-mark.svg) center / contain no-repeat; }
+@media (max-width: 420px) { .lp-nav .lp-brand { grid-template-columns: 26px auto; column-gap: 8px; } .lp-nav .lp-brand::before { width: 26px; height: 26px; } .lp-nav .lp-tagline { font-size: 10px; } .lp-nav-links { gap: 10px; } }
+
+/* =====================================================================
+   DA « facture sur vert profond » (pages publiques)
+   Fond vert profond, textes crème, et les exemples / cartes en feuilles de papier.
+   ===================================================================== */
+.lp {
+  --lp-bg: #0f2a1d; --lp-fg: #f3efe6; --lp-muted: #9fb5a7; --lp-line: #1f4231; --lp-soft: #163826;
+  --lp-accent: #f3efe6; --lp-accent-fg: #0f2a1d; --lp-ok: #4ade80; --lp-late: #f87171;
+  background:
+    radial-gradient(1100px 600px at 85% -5%, rgba(74, 222, 128, .14), transparent 60%),
+    radial-gradient(900px 700px at 0% 45%, rgba(74, 222, 128, .05), transparent 60%),
+    #0f2a1d;
+  color-scheme: dark;
+}
+/* Feuilles de papier : mêmes composants, couleurs « facture » */
+.lp-email, .ps, .lp-price, .tool-result, .tool-card, .fd-card, .tool-form fieldset, .guide-steps li, .guide-tool {
+  --lp-bg: #f6f2e9; --lp-fg: #1c1917; --lp-muted: #6f6a60; --lp-line: #e3dccd; --lp-soft: #efe9dc;
+  --lp-ok: #15803d; --lp-late: #b91c1c; --lp-accent: #0f2a1d; --lp-accent-fg: #f3efe6;
+  background: var(--lp-bg); color: var(--lp-fg); color-scheme: light;
+  border-color: var(--lp-line); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .6);
+}
+.lp-duo figure:first-child .lp-email { transform: rotate(-1deg); }
+.lp-duo figure:last-child .ps { transform: rotate(.8deg); }
+.tool-card:hover, .guide-tool:hover { border-color: #0f2a1d; transform: translateY(-2px); }
+.tool-card, .guide-tool { transition: transform .15s, border-color .15s; }
+.lp h1 { text-wrap: balance; }
+/* Tampon sur la carte de prix */
+.lp-price { position: relative; }
+.lp-price::after {
+  content: "SANS ENGAGEMENT"; position: absolute; right: 18px; top: 18px; transform: rotate(8deg);
+  border: 3px solid #16a34a; color: #16a34a; border-radius: 8px; padding: 2px 10px;
+  font-size: 12px; font-weight: 800; letter-spacing: 1.5px; opacity: .9;
+}
+/* Titres des encadrés de formulaire : à l'intérieur de la feuille, pas sur le bord */
+.tool-form legend { float: left; width: 100%; padding: 0; margin-bottom: 2px; color: var(--lp-muted); }
+.tool-form legend + * { clear: both; }
+
+/* =====================================================================
+   Version allégée : fond crème, vert profond seulement en haut, dans le bandeau final et en bas.
+   ===================================================================== */
+.lp {
+  --lp-bg: #f4f1ea; --lp-fg: #1c1917; --lp-muted: #6f6a60; --lp-line: #e3dccd; --lp-soft: #ebe5d8;
+  --lp-accent: #0f2a1d; --lp-accent-fg: #f3efe6; --lp-ok: #15803d; --lp-late: #b91c1c;
+  background: #f4f1ea; color-scheme: light;
+}
+/* Feuilles blanches sur le fond crème */
+.lp-email, .ps, .lp-price, .tool-result, .tool-card, .fd-card, .tool-form fieldset, .guide-steps li, .guide-tool {
+  --lp-bg: #fffdf8; box-shadow: 0 24px 50px -30px rgba(15, 42, 29, .35);
+}
+/* Bandes vert profond, sur toute la largeur de l'écran */
+.lp-nav, .lp-hero, .lp-final, .lp-footer {
+  --lp-bg: #0f2a1d; --lp-fg: #f3efe6; --lp-muted: #9fb5a7; --lp-line: #1f4231; --lp-soft: #163826;
+  --lp-accent: #f3efe6; --lp-accent-fg: #0f2a1d; --lp-ok: #4ade80; --lp-late: #f87171;
+  background: #0f2a1d; color: #f3efe6;
+  box-shadow: 0 0 0 100vmax #0f2a1d; clip-path: inset(0 -100vmax);
+}
+.lp-nav { border-bottom-color: #1f4231; }
+.lp-hero { padding-bottom: 64px; }
+.lp-final { padding-top: 64px; padding-bottom: 64px; margin-top: 48px; }
+.lp-hero h1 em, .lp-final h2 em { color: #4ade80; font-style: normal; }
+.fd-banner { background: #163826; color: #f3efe6; }
+/* Téléphone : bandeau sur une ligne et haut de page plus court, pour voir la suite plus tôt */
+@media (max-width: 640px) {
+  .fd-long { display: none; }
+  .fd-banner { flex-wrap: nowrap; white-space: nowrap; font-size: 13px; padding-top: 8px; padding-bottom: 8px; }
+  .lp-nav { height: 60px; }
+  .lp-hero { padding-top: 36px; padding-bottom: 36px; }
+  .lp-hero h1 { font-size: 36px; }
+  .lp-lead { font-size: 16px; }
+  .lp-kicker { margin-bottom: 12px !important; }
+}
+@media (max-width: 359px) { .fd-banner { flex-wrap: wrap; white-space: normal; font-size: 12.5px; } }

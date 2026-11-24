@@ -94,7 +94,7 @@ export async function Landing() {
       <JsonLd />
       {seats > 0 && (
         <Link href="/fondateur" className="fd-banner">
-          <span><b>Offre fondateur</b> : -{BRAND.founder.discount} % à vie pour les {BRAND.founder.seats} premiers clients</span>
+          <span><b>Offre fondateur</b> : -{BRAND.founder.discount} % à vie<span className="fd-long"> pour les {BRAND.founder.seats} premiers clients</span></span>
           <span>{seats} place{seats > 1 ? "s" : ""} restante{seats > 1 ? "s" : ""} →</span>
         </Link>
       )}
