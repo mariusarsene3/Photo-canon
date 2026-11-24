@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BRAND } from "@/lib/brand";
 import { DEFAULT_TEMPLATES, PLACEHOLDERS, STEPS, dayLabel, templateFor, type Profile } from "@/lib/reminders";
 import { AppShell } from "../app-shell";
 import { Toast } from "../toast";
@@ -51,8 +50,8 @@ export function RelancesView({ email, ok, err, profile, ready, remindBefore, var
           </ol>
           <p className="muted small">
             Les relances s&apos;arrêtent dès que vous marquez la facture comme payée ou que vous les mettez en pause. Si vous avez
-            ajouté la facture en PDF, elle est jointe à chaque e-mail. Votre client voit « {profile.company_name || "votre entreprise"} via{" "}
-            {BRAND.name} » comme expéditeur, et s&apos;il répond, la réponse arrive dans votre boîte mail ({email ?? "l'adresse de votre compte"}).
+            ajouté la facture en PDF, elle est jointe à chaque e-mail. Votre client voit « {profile.company_name || "votre entreprise"} » comme expéditeur, et s&apos;il
+            répond, la réponse arrive dans votre boîte mail ({email ?? "l'adresse de votre compte"}).
           </p>
         </section>
 
