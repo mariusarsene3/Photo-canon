@@ -7,79 +7,38 @@ import { Header, Footer } from "./site-chrome";
 export const maxDuration = 120;
 
 const STEPS = [
-  { t: "Le test gratuit", d: "En 1 minute, vous voyez si ChatGPT vous recommande, et qui il cite à votre place." },
-  { t: "L'audit offert", d: "On regarde ce qui vous manque : fiche Google, avis, annuaires où l'IA va chercher." },
-  { t: "On corrige pour vous", d: "On s'occupe de tout. Vous n'avez rien de technique à faire." },
-  { t: "On vous montre le résultat", d: "Un mois après, on refait le test devant vous : l'avant et l'après." },
-];
-
-const COMPARE = [
-  { label: "Qui fait le travail ?", us: "Nous, à votre place", soft: "Vous, à partir d'un score", agency: "L'agence" },
-  { label: "Prix", us: `${BRAND.offer.setup} € une fois`, soft: "souvent 59 à 199 €/mois", agency: "souvent 100 €/mois et plus + mise en place" },
-  { label: "Abonnement obligatoire", us: "Non", soft: "Oui", agency: "Souvent" },
-  { label: "Pensé pour", us: "Petits commerces et artisans", soft: "Marques et PME", agency: "PME" },
-  { label: "On se voit", us: "Téléphone ou sur place", soft: "Non", agency: "Rarement" },
+  { t: "Vous faites le test", d: "Une minute, ici même. Vous voyez si ChatGPT vous cite, ou qui il cite à votre place." },
+  { t: "Je fais l'audit", d: "Gratuitement. Je regarde votre fiche Google, vos avis et les annuaires où l'IA va chercher, puis je vous explique ce qui manque." },
+  { t: "Je corrige pour vous", d: "Si vous êtes d'accord. Vous n'avez rien de technique à faire." },
+  { t: "On refait le test ensemble", d: "Un mois plus tard, pour voir la différence. Avant, après." },
 ];
 
 const FAQ = [
   {
-    q: "Pourquoi ChatGPT est important pour un commerce ?",
-    a: "De plus en plus de gens demandent directement à ChatGPT, à Gemini ou à Google (avec ses réponses d'IA) « un bon fleuriste à côté de chez moi ». L'IA ne donne que quelques noms. Si vous n'en faites pas partie, le client ne vous voit pas.",
+    q: "Pourquoi ChatGPT, ça compte pour un commerce ?",
+    a: "Parce que de plus en plus de gens lui demandent directement « un bon fleuriste près de chez moi », au lieu de chercher sur Google. Et Google lui-même affiche maintenant des réponses écrites par une IA. Dans ces réponses, il n'y a que deux ou trois noms. Si le vôtre n'y est pas, le client ne vous voit pas.",
   },
   {
-    q: "Vous garantissez que ChatGPT va me citer ?",
-    a: "Non, et personne ne peut le garantir honnêtement : personne ne contrôle ChatGPT. On corrige tout ce sur quoi l'IA se base pour choisir (fiche Google, avis, annuaires, informations claires), puis on refait le test un mois après pour vous montrer l'avant et l'après.",
+    q: "Vous me garantissez d'être cité ?",
+    a: "Non. Personne ne contrôle ChatGPT, et je préfère vous le dire. Ce que je fais, c'est remettre en ordre tout ce sur quoi il se base pour choisir. Puis on refait le test un mois après, et vous jugez vous-même.",
   },
   {
-    q: `Concrètement, vous faites quoi pour ${BRAND.offer.setup} € ?`,
-    a: "On complète votre fiche Google (catégories, horaires, photos, description), on crée ou corrige vos fiches sur les annuaires où l'IA cherche (Pages Jaunes, Bing, Apple Plans et ceux repérés pendant le test), on vous prépare un message tout prêt pour demander des avis à vos clients, et on refait le test un mois après. Payé une fois, sans abonnement obligatoire.",
+    q: `Pour ${BRAND.offer.setup} €, vous faites quoi exactement ?`,
+    a: "Je complète votre fiche Google (catégories, horaires, photos, description), je crée ou corrige vos fiches sur Pages Jaunes, Bing, Apple Plans et les sites repérés pendant le test. Je vous prépare un petit message pour demander des avis à vos clients. Et je refais le test un mois après. Vous payez une fois.",
   },
   {
     q: `Et le suivi à ${BRAND.offer.followUp} € par mois ?`,
-    a: "C'est facultatif. Chaque mois, on refait le test sur plusieurs questions de clients, on vous envoie un résumé (cité ou pas, à quelle place, qui sont vos concurrents) et on corrige ce qui a bougé. Sans engagement.",
+    a: "C'est en option. Chaque mois, je refais le test sur plusieurs questions de clients, je vous envoie un petit résumé, et je corrige ce qui a bougé. Vous arrêtez quand vous voulez.",
   },
   {
-    q: "Je n'ai pas de site internet, ce n'est pas grave ?",
-    a: "Non. Beaucoup de commerces de quartier n'en ont pas. L'essentiel, c'est une fiche Google complète et des avis.",
+    q: "Je n'ai pas de site internet.",
+    a: "Ce n'est pas un problème. Beaucoup de commerces n'en ont pas. Le plus important, c'est la fiche Google et les avis.",
   },
   {
-    q: "Je dois m'y connaître en informatique ?",
-    a: "Non. On fait le travail à votre place et on vous explique en mots simples, par téléphone ou sur place.",
+    q: "Je ne suis pas à l'aise avec l'informatique.",
+    a: "C'est justement pour ça que je le fais à votre place. Je vous explique tout avec des mots simples, au téléphone ou en passant vous voir.",
   },
 ];
-
-/** Aperçu illustratif d'une conversation (noms fictifs). */
-function ChatPreview() {
-  return (
-    <figure className="chat" aria-label="Exemple de réponse de ChatGPT">
-      <div className="chat-bar">
-        <b>Ce que voit votre client</b>
-        <span className="tag">Exemple</span>
-      </div>
-      <div className="chat-body">
-        <div className="bubble-user">Je cherche un fleuriste à Mortagne. Lesquels me conseilles-tu&nbsp;?</div>
-        <div className="bubble-ai">
-          Voici les fleuristes que je te conseille :
-          <ol>
-            <li>
-              <b>Atelier Pivoine</b> : très bien noté, livraison le jour même
-            </li>
-            <li>
-              <b>La Petite Serre</b> : ouvert le dimanche matin
-            </li>
-          </ol>
-        </div>
-        <div className="chat-verdict">
-          <span className="dot">!</span>
-          <div>
-            <strong>Votre boutique n&apos;est pas citée</strong>
-            <span>Le client part chez vos concurrents sans vous connaître.</span>
-          </div>
-        </div>
-      </div>
-    </figure>
-  );
-}
 
 export default function Home() {
   return (
@@ -89,147 +48,114 @@ export default function Home() {
         <section className="hero" id="test">
           <div className="wrap hero-grid">
             <div>
-              <span className="pill">
-                <i /> Test gratuit avec le vrai ChatGPT
-              </span>
               <h1>
-                Vos clients demandent à l&apos;IA. <span className="accent">Est-ce qu&apos;elle vous recommande&nbsp;?</span>
+                Quand vos clients demandent à ChatGPT, est-ce qu&apos;il parle <em>de vous</em>&nbsp;?
               </h1>
               <p className="lead">
-                On pose à ChatGPT la question d&apos;un vrai client, avec une vraie recherche sur Internet. Vous voyez tout de suite s&apos;il vous
-                cite, ou s&apos;il envoie vos clients chez vos concurrents.
+                Je travaille avec les commerces {BRAND.region}. Je regarde ce que l&apos;IA répond quand quelqu&apos;un cherche un commerce
+                comme le vôtre, et je corrige ce qui manque. Sans jargon.
               </p>
               <CheckForm />
-              <Link href="/exemple" className="example-link">
-                Voir un exemple de résultat →
-              </Link>
+              <p className="hero-note">
+                Gratuit, sans inscription. <Link href="/exemple">Voir un exemple de résultat</Link>
+              </p>
             </div>
-            <ChatPreview />
-          </div>
-          <div className="wrap">
-            <ul className="trust">
-              <li>Audit offert, sans engagement</li>
-              <li>Vous ne payez qu&apos;après l&apos;audit, si vous êtes d&apos;accord</li>
-              <li>Aucune promesse impossible</li>
-            </ul>
+
+            <figure className="note" aria-label="Exemple de réponse de ChatGPT, avec des noms inventés">
+              <p className="note-label">Exemple · noms inventés</p>
+              <p className="note-q">« Je cherche un fleuriste à Mortagne, lesquels me conseilles-tu ? »</p>
+              <p className="note-a">Voici les fleuristes que je te conseille :</p>
+              <ol>
+                <li>Atelier Pivoine</li>
+                <li>La Petite Serre</li>
+              </ol>
+              <p className="note-miss">
+                <span>Et votre boutique ?</span> Pas un mot. Le client ne saura jamais que vous existez.
+              </p>
+            </figure>
           </div>
         </section>
 
-        <section className="block soft" id="comment">
-          <div className="wrap">
-            <div className="head">
-              <p className="kicker">Comment ça marche</p>
-              <h2>Du test au résultat, en 4 étapes.</h2>
-            </div>
+        <section className="block" id="comment">
+          <div className="wrap narrow">
+            <h2>Comment je travaille</h2>
             <ol className="steps">
               {STEPS.map((s, i) => (
                 <li key={s.t}>
                   <span className="n">{i + 1}</span>
-                  <h3>{s.t}</h3>
-                  <p>{s.d}</p>
+                  <div>
+                    <h3>{s.t}</h3>
+                    <p>{s.d}</p>
+                  </div>
                 </li>
               ))}
             </ol>
           </div>
         </section>
 
-        <section className="block">
-          <div className="wrap">
-            <div className="head">
-              <p className="kicker">Pourquoi {BRAND.name}</p>
-              <h2>On fait le travail, pas juste un score.</h2>
-              <p className="sub">
-                Les logiciels vous montrent un tableau de bord, puis c&apos;est à vous de tout corriger. Nous, on s&apos;en occupe, à un prix de
-                petit commerce.
+        <section className="block paper">
+          <div className="wrap narrow">
+            <h2>Pourquoi je fais ça</h2>
+            <div className="prose">
+              <p>
+                J&apos;ai fait le test pour un commerce de ma famille. ChatGPT répondait qu&apos;il n&apos;y avait <em>aucun</em> fleuriste dans
+                son village, et envoyait tout le monde chez les deux concurrents de la ville d&apos;à côté.
+              </p>
+              <p>
+                Ce n&apos;était pas une question de qualité. Les concurrents avaient simplement une fiche Google bien remplie, des avis, et une
+                présence sur les annuaires. Tout ça, ça se corrige.
+              </p>
+              <p>
+                Il existe des logiciels pour ça, mais ils sont pensés pour les grandes marques, coûtent souvent plus de 100 € par mois, et vous
+                laissent tout faire vous-même. Moi, je viens vous voir et je m&apos;en occupe.
               </p>
             </div>
-            <div className="compare" role="table" aria-label="Comparaison">
-              <div className="cmp-row" role="row">
-                <span role="columnheader" />
-                <span role="columnheader" className="cmp-us">
-                  {BRAND.name}
-                </span>
-                <span role="columnheader">Logiciels</span>
-                <span role="columnheader">Agences</span>
-              </div>
-              {COMPARE.map((c) => (
-                <div className="cmp-row" role="row" key={c.label}>
-                  <span role="cell">{c.label}</span>
-                  <span role="cell" className="cmp-us">
-                    {c.us}
-                  </span>
-                  <span role="cell">{c.soft}</span>
-                  <span role="cell">{c.agency}</span>
-                </div>
-              ))}
-            </div>
-            <p className="cmp-note">Prix constatés en novembre 2026 sur des offres françaises publiques ; ils varient selon les prestataires.</p>
           </div>
         </section>
 
-        <section className="block soft" id="tarifs">
+        <section className="block" id="tarifs">
           <div className="wrap">
-            <div className="head">
-              <p className="kicker">Tarifs</p>
-              <h2>Des prix de petit commerce.</h2>
-            </div>
+            <h2 className="center">Les tarifs</h2>
+            <p className="sub center">Vous ne payez rien avant l&apos;audit, et seulement si vous êtes d&apos;accord.</p>
             <div className="prices">
               <div className="price">
-                <p className="p-name">Test</p>
-                <p className="p-amount">0 €</p>
-                <p className="p-desc">Est-ce que ChatGPT vous cite ? Qui cite-t-il à votre place ?</p>
-                <ul className="checks">
-                  <li>Résultat en 1 minute</li>
-                  <li>Sans inscription</li>
-                </ul>
+                <h3>Le test</h3>
+                <p className="p-amount">Gratuit</p>
+                <p>Est-ce que ChatGPT vous cite, et qui cite-t-il à votre place ?</p>
                 <a href="#test" className="btn ghost">
                   Faire le test
                 </a>
               </div>
               <div className="price main">
-                <div className="p-top">
-                  <p className="p-name">Audit + mise en place</p>
-                  <span className="p-badge">Recommandé</span>
-                </div>
+                <h3>Audit et mise en place</h3>
                 <p className="p-amount">
-                  {BRAND.offer.setup} €<small>une fois</small>
+                  {BRAND.offer.setup} €<small> une fois</small>
                 </p>
-                <p className="p-desc">On corrige tout ce sur quoi l&apos;IA se base.</p>
-                <ul className="checks">
-                  <li>Audit offert, sans engagement</li>
-                  <li>Fiche Google complète</li>
-                  <li>Annuaires où l&apos;IA cherche</li>
-                  <li>Message prêt pour obtenir des avis</li>
-                  <li>Nouveau test un mois après</li>
+                <ul className="list">
+                  <li>L&apos;audit, offert</li>
+                  <li>Votre fiche Google complète</li>
+                  <li>Vos fiches d&apos;annuaires corrigées</li>
+                  <li>Un message tout prêt pour demander des avis</li>
+                  <li>Un nouveau test un mois après</li>
                 </ul>
                 <a href="#test" className="btn">
                   Commencer par le test
                 </a>
               </div>
               <div className="price">
-                <p className="p-name">Suivi</p>
+                <h3>Le suivi</h3>
                 <p className="p-amount">
-                  {BRAND.offer.followUp} €<small>/ mois</small>
+                  {BRAND.offer.followUp} €<small> par mois</small>
                 </p>
-                <p className="p-desc">En option, après la mise en place.</p>
-                <ul className="checks">
-                  <li>Un test chaque mois sur plusieurs questions</li>
-                  <li>Un résumé clair</li>
-                  <li>Les corrections au fil de l&apos;eau</li>
-                  <li>Sans engagement</li>
-                </ul>
+                <p>En option. Un test chaque mois, un petit résumé, et les corrections. Sans engagement.</p>
               </div>
             </div>
-            <p className="price-note">Vous ne payez rien avant l&apos;audit, et seulement si vous êtes d&apos;accord.</p>
           </div>
         </section>
 
-        <section className="block">
-          <div className="wrap">
-            <div className="head">
-              <p className="kicker">Questions fréquentes</p>
-              <h2>Ce qu&apos;on nous demande.</h2>
-            </div>
+        <section className="block paper">
+          <div className="wrap narrow">
+            <h2>Vos questions</h2>
             <div className="faq-list">
               {FAQ.map((f) => (
                 <details key={f.q}>
@@ -241,10 +167,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="block soft final">
-          <div className="wrap">
-            <h2>Et vous, l&apos;IA vous recommande&nbsp;?</h2>
-            <p className="sub">C&apos;est gratuit, sans inscription, et ça prend une minute.</p>
+        <section className="block final">
+          <div className="wrap narrow center">
+            <h2>Une minute pour savoir.</h2>
+            <p className="sub center">Et si vous préférez en parler, écrivez-moi : {BRAND.contactEmail}</p>
             <a href="#test" className="btn">
               Faire le test gratuit
             </a>

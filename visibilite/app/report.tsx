@@ -81,18 +81,18 @@ export function Report({ result }: { result: CheckResult }) {
       ))}
 
       <div className={`card offer ${cited === ok.length && ok.length > 0 ? "" : "urgent"}`} id="audit">
-        <p className="eyebrow">Audit offert</p>
+        <p className="eyebrow">L&apos;audit est offert</p>
         <h3>
           {cited === 0
-            ? "Vos clients qui demandent à l'IA partent chez vos concurrents. On peut corriger ça."
-            : "Vous êtes cité : gardez votre place, et passez devant."}
+            ? "Vos clients qui demandent à l'IA partent chez vos concurrents. Ça se corrige."
+            : "Vous êtes cité. Gardez votre place, et passez devant."}
         </h3>
         <ul className="checks">
-          <li>On regarde ce qui manque : fiche Google, avis, annuaires où l&apos;IA cherche{sources.length ? ` (${sources.join(", ")})` : ""}.</li>
-          <li>On vous explique tout, simplement, par téléphone ou sur place.</li>
+          <li>Je regarde ce qui vous manque : fiche Google, avis, annuaires où l&apos;IA cherche{sources.length ? ` (${sources.join(", ")})` : ""}.</li>
+          <li>Je vous explique tout simplement, au téléphone ou en passant vous voir.</li>
           <li>
-            Si vous voulez, on s&apos;occupe de tout pour <strong>{BRAND.offer.setup} €</strong>, une seule fois. On refait le test un mois après
-            pour vous montrer le résultat.
+            Si vous voulez, je m&apos;occupe de tout pour <strong>{BRAND.offer.setup} €</strong>, une seule fois. On refait le test un mois après
+            pour voir la différence.
           </li>
         </ul>
         <LeadForm business={result.business} trade={result.trade} city={result.city} cited={ok.length ? cited > 0 : null} />

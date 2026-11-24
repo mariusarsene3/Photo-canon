@@ -31,7 +31,7 @@ export default function Exemple() {
   return (
     <>
     <Header />
-    <main className="wrap" style={{ paddingTop: 40, paddingBottom: 64, maxWidth: 760 }}>
+    <main className="wrap" style={{ paddingTop: 48, paddingBottom: 72, maxWidth: 720 }}>
       <p className="notice">
         <strong>Exemple fictif</strong> : les noms de commerces sont inventés. <Link href="/">Faire le test pour votre commerce →</Link>
       </p>

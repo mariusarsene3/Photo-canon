@@ -32,7 +32,7 @@ export function CheckForm() {
   const v = state.values ?? {};
   return (
     <>
-      <form action={action} className="card form">
+      <form action={action} className="form">
         <label>
           Nom de votre commerce
           <input name="business" defaultValue={v.business} placeholder="ex. : Les Fleurs de Marie" required maxLength={80} />
@@ -48,9 +48,8 @@ export function CheckForm() {
           </label>
         </div>
         <button type="submit" disabled={pending}>
-          {pending ? "Analyse en cours…" : "Est-ce que ChatGPT me recommande ?"}
+          {pending ? "Je pose la question à ChatGPT…" : "Faire le test gratuit"}
         </button>
-        <p className="form-meta">Gratuit · sans inscription · résultat en 1 minute</p>
         {state.error && !pending && <p className="error">{state.error}</p>}
       </form>
       {pending && <Progress />}

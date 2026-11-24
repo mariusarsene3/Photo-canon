@@ -11,7 +11,7 @@ export function LeadForm({ business, trade, city, cited }: Props) {
     return (
       <div className="lead-done" role="status">
         <strong>C&apos;est noté ✅</strong>
-        <p>On vous recontacte sous 48 h pour votre audit offert. Pas de démarchage, pas d&apos;engagement.</p>
+        <p>Je vous recontacte sous 48 h pour votre audit. Sans engagement.</p>
       </div>
     );
   }
@@ -46,11 +46,11 @@ export function LeadForm({ business, trade, city, cited }: Props) {
         <textarea name="message" rows={2} maxLength={1000} placeholder="ex. : on fait aussi les mariages, on livre autour de…" />
       </label>
       <button type="submit" disabled={pending}>
-        {pending ? "Envoi…" : "Recevoir mon audit offert"}
+        {pending ? "Envoi…" : "Je veux mon audit gratuit"}
       </button>
       {state.error && <p className="error">{state.error}</p>}
       <p className="fine">
-        Vos coordonnées servent uniquement à vous recontacter pour l&apos;audit. <a href="/confidentialite">Confidentialité</a> ·
+        Vos coordonnées servent uniquement à ce que je vous recontacte. <a href="/confidentialite">Confidentialité</a> ·
         Mise en place ensuite : {BRAND.offer.setup} € une fois, si vous le souhaitez.
       </p>
     </form>
