@@ -39,17 +39,18 @@ export function CheckForm({ defaultTrade }: { defaultTrade?: string } = {}) {
         </label>
         <div className="form-row">
           <label>
-            Votre activité
-            <input name="trade" defaultValue={v.trade ?? defaultTrade} placeholder="ex. : un fleuriste" required maxLength={60} />
+            Activité
+            <input name="trade" defaultValue={v.trade ?? defaultTrade} placeholder="ex. : fleuriste" required maxLength={60} />
           </label>
           <label>
             Ville
             <input name="city" defaultValue={v.city} placeholder="ex. : Nancy" required maxLength={60} />
           </label>
         </div>
-        <button type="submit" disabled={pending}>
-          {pending ? "Je pose la question à ChatGPT…" : "Faire le test gratuit"}
+        <button type="submit" disabled={pending} className="go">
+          {pending ? "Je pose la question à ChatGPT…" : "Est-ce que ChatGPT me recommande ?"}
         </button>
+        <p className="form-meta">Gratuit · sans inscription · résultat en 1 minute</p>
         {state.error && !pending && <p className="error">{state.error}</p>}
       </form>
       {pending && <Progress />}

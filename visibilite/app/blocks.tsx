@@ -1,73 +1,87 @@
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { SERVICES } from "@/lib/services";
-import { METIERS } from "@/lib/metiers";
 import { GUIDES } from "@/lib/guides";
+import { CheckForm } from "./check-form";
 
-/** Exemple de réponse de ChatGPT présenté comme une note papier (noms inventés). */
-export function Note({ question, names = ["Atelier Pivoine", "La Petite Serre"] }: { question: string; names?: string[] }) {
+/** Le haut de page jaune : la question, le test, les 3 étapes. */
+export function TestHero({ title, lead, defaultTrade, crumb }: { title: React.ReactNode; lead: string; defaultTrade?: string; crumb?: React.ReactNode }) {
   return (
-    <figure className="note" aria-label="Exemple de réponse de ChatGPT, avec des noms inventés">
-      <p className="note-label">Exemple · noms inventés</p>
-      <p className="note-q">« {question} »</p>
-      <p className="note-a">Voici ce que je te conseille :</p>
-      <ol>
-        {names.map((n) => (
-          <li key={n}>{n}</li>
-        ))}
-      </ol>
-      <p className="note-miss">
-        <span>Et votre commerce ?</span> Pas un mot. Le client ne saura jamais que vous existez.
-      </p>
-    </figure>
+    <section className="hero" id="test">
+      <div className="wrap">
+        {crumb && <p className="crumb">{crumb}</p>}
+        <h1>{title}</h1>
+        <p className="lead">{lead}</p>
+        <CheckForm defaultTrade={defaultTrade} />
+        <ol className="how">
+          <li>
+            <b>1</b>Vous faites le test
+          </li>
+          <li>
+            <b>2</b>Vous voyez qui ChatGPT recommande
+          </li>
+          <li>
+            <b>3</b>Pas cité ? Je m&apos;en occupe
+          </li>
+        </ol>
+      </div>
+    </section>
   );
 }
 
-export function Services() {
+export function Offers() {
   return (
-    <section className="block" id="services">
+    <section className="block" id="offres">
       <div className="wrap">
-        <h2 className="center">Ce que je peux faire pour vous</h2>
-        <p className="sub center">Vous ne payez rien avant d&apos;avoir parlé avec moi, et seulement si vous êtes d&apos;accord.</p>
-        <div className="prices four">
-          {SERVICES.map((s) => (
-            <div className={`price ${"main" in s && s.main ? "main" : ""}`} key={s.id}>
-              <h3>{s.name}</h3>
-              <p className="p-amount">
-                {s.price}
-                <small> {s.unit}</small>
-              </p>
-              <p>{s.desc}</p>
-              <ul className="list">
-                {s.items.map((i) => (
-                  <li key={i}>{i}</li>
-                ))}
-              </ul>
-              {s.id !== "suivi" && (
-                <Link href={s.id === "visibilite" ? "/#test" : `/contact?service=${s.id}`} className={`btn ${"main" in s && s.main ? "" : "ghost"}`}>
-                  {s.id === "visibilite" ? "Commencer par le test" : "En parler"}
+        <h2>Pas cité ? Je m&apos;en occupe.</h2>
+        <p className="sub">Je travaille avec des commerçants {BRAND.area}. Vous ne payez rien avant qu&apos;on en ait parlé.</p>
+        <div className="offers">
+          {SERVICES.map((s) => {
+            const star = "star" in s && s.star;
+            return (
+              <div className={`offer${star ? " star" : ""}`} key={s.id}>
+                {star && <span className="badge">Le plus complet</span>}
+                <h3>{s.name}</h3>
+                <p className="price">
+                  {s.price} <small>{s.unit}</small>
+                </p>
+                <p className="desc">{s.desc}</p>
+                <ul className="ticks">
+                  {s.items.map((i) => (
+                    <li key={i}>{i}</li>
+                  ))}
+                </ul>
+                <Link href={`/contact?service=${s.id}`} className={`btn${star ? "" : " alt"}`}>
+                  Ça m&apos;intéresse
                 </Link>
-              )}
-            </div>
-          ))}
+              </div>
+            );
+          })}
+        </div>
+        <div className="test-band">
+          <span>Pas sûr ? Faites d&apos;abord le test gratuit : est-ce que ChatGPT vous recommande ?</span>
+          <a href="#test" className="btn">
+            Faire le test
+          </a>
         </div>
       </div>
     </section>
   );
 }
 
-export function MetierLinks() {
+export function Faq({ items }: { items: { q: string; a: string }[] }) {
   return (
-    <section className="block paper">
+    <section className="block soft">
       <div className="wrap narrow">
-        <h2>Le test, métier par métier</h2>
-        <ul className="link-list">
-          {METIERS.map((m) => (
-            <li key={m.slug}>
-              <Link href={`/test/${m.slug}`}>Est-ce que ChatGPT recommande votre {m.name} ?</Link>
-            </li>
+        <h2>Vos questions</h2>
+        <div className="faq-list">
+          {items.map((f) => (
+            <details key={f.q}>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );
@@ -90,5 +104,3 @@ export function GuideLinks({ exclude, asPage }: { exclude?: string; asPage?: boo
     </section>
   );
 }
-
-export const AREA = BRAND.area;

@@ -80,7 +80,7 @@ export function Report({ result }: { result: CheckResult }) {
         <Verdict key={r.label} r={r} business={result.business} />
       ))}
 
-      <div className={`card offer ${cited === ok.length && ok.length > 0 ? "" : "urgent"}`} id="audit">
+      <div className="offer" id="audit">
         <p className="eyebrow">L&apos;audit est offert</p>
         <h3>
           {cited === 0
@@ -89,7 +89,7 @@ export function Report({ result }: { result: CheckResult }) {
         </h3>
         <ul className="checks">
           <li>Je regarde ce qui vous manque : fiche Google, avis, annuaires où l&apos;IA cherche{sources.length ? ` (${sources.join(", ")})` : ""}.</li>
-          <li>Je vous explique tout simplement, au téléphone ou en passant vous voir.</li>
+          <li>Je vous explique tout simplement, au téléphone ou en visio.</li>
           <li>
             Si vous voulez, je m&apos;occupe de tout pour <strong>{BRAND.offer.setup} €</strong>, une seule fois. On refait le test un mois après
             pour voir la différence.
