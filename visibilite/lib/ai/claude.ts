@@ -1,6 +1,8 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
+import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { dedupeSources, type AiAnswer } from "./types";
+import { Analysis, ANALYSIS_SYSTEM, analysisPrompt } from "../analysis";
 
 let client: Anthropic | null = null;
 export const getClaude = () => (client ??= new Anthropic()); // lit ANTHROPIC_API_KEY
@@ -49,4 +51,19 @@ export async function askClaude(question: string, city: string): Promise<AiAnswe
   }
 
   return { provider: "claude", label: "Claude", answer: text.trim(), sources: dedupeSources(sources) };
+}
+
+/** Repère les commerces recommandés par une IA et si le commerce vérifié en fait partie. */
+export async function analyseWithClaude(answer: string, business: string, city: string): Promise<Analysis> {
+  const response = await getClaude().beta.messages.parse({
+    model: MODEL,
+    max_tokens: 4000,
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+    system: ANALYSIS_SYSTEM,
+    output_config: { effort: "low", format: betaZodOutputFormat(Analysis) },
+    messages: [{ role: "user", content: analysisPrompt(answer, business, city) }],
+  });
+  if (response.stop_reason === "refusal" || !response.parsed_output) throw new Error("analyse impossible");
+  return response.parsed_output;
 }

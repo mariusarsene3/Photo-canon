@@ -12,7 +12,8 @@ function Verdict({ r, business }: { r: ProviderResult; business: string }) {
       </div>
     );
   }
-  const others = r.recommended.filter((_, i) => i + 1 !== r.position);
+  // On garde le vrai rang de chaque concurrent dans la réponse de l'IA.
+  const others = r.recommended.map((name, i) => ({ name, rank: i + 1 })).filter((o) => o.rank !== r.position);
   return (
     <div className={`verdict ${r.cited ? "good" : "bad"}`}>
       <span className="tag">{r.label}</span>
@@ -25,8 +26,10 @@ function Verdict({ r, business }: { r: ProviderResult; business: string }) {
         <>
           <p className="small">{r.cited ? "Il cite aussi :" : "Il recommande à la place :"}</p>
           <ol className="names">
-            {others.slice(0, 6).map((n) => (
-              <li key={n}>{n}</li>
+            {others.slice(0, 6).map((o) => (
+              <li key={o.rank} value={o.rank}>
+                {o.name}
+              </li>
             ))}
           </ol>
         </>

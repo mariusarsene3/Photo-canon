@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { CheckForm } from "./check-form";
 
@@ -31,6 +32,7 @@ export default function Home() {
           L&apos;IA ne cite que 3 ou 4 noms. Vérifiez si le vôtre en fait partie, ou si ce sont vos concurrents.
         </p>
         <CheckForm />
+        <Link href="/exemple" className="example-link">Voir un exemple de résultat →</Link>
       </section>
 
       <footer className="foot wrap">

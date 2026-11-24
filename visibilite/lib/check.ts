@@ -51,7 +51,7 @@ function cached(key: string, run: () => Promise<AiAnswer>) {
   return answer;
 }
 
-export const providersAvailable = () => claudeAvailable();
+export const providersAvailable = () => claudeAvailable() || chatgptAvailable();
 
 export async function runCheck(business: string, trade: string, city: string): Promise<CheckResult> {
   const question = questionFor(trade, city);
@@ -59,7 +59,7 @@ export async function runCheck(business: string, trade: string, city: string): P
 
   const providers: { label: string; run: () => Promise<AiAnswer> }[] = [];
   if (chatgptAvailable()) providers.push({ label: "ChatGPT", run: () => cached(`gpt:${key}`, () => askChatGPT(question, city)) });
-  providers.push({ label: "Claude", run: () => cached(`claude:${key}`, () => askClaude(question, city)) });
+  if (claudeAvailable()) providers.push({ label: "Claude", run: () => cached(`claude:${key}`, () => askClaude(question, city)) });
 
   const results = await Promise.all(
     providers.map(async (p): Promise<ProviderResult> => {
