@@ -75,6 +75,7 @@ export default function Confidentialite() {
           <tr><td>Supabase</td><td>Base de données et authentification</td><td>{LEGAL.databaseRegion}</td></tr>
           <tr><td>Vercel</td><td>Hébergement du site</td><td>États-Unis / réseau mondial</td></tr>
           <tr><td>Resend</td><td>Envoi des e-mails de relance</td><td>États-Unis</td></tr>
+          <tr><td>Stripe</td><td>Paiement des abonnements (vos données de carte bancaire ne passent jamais par nos serveurs)</td><td>Irlande / États-Unis</td></tr>
           <tr><td>Anthropic</td><td>Lecture des factures PDF (uniquement si vous utilisez l&apos;import PDF)</td><td>États-Unis</td></tr>
         </tbody>
       </table>

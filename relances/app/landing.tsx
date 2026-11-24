@@ -231,7 +231,7 @@ export async function Landing() {
           ))}
         </div>
         <ul className="lp-trust">
-          <li>Données hébergées en Europe</li>
+          <li>Vos données ne sont jamais revendues</li>
           <li>Support en français</li>
           <li>Sans engagement</li>
           <li>{BRAND.trialDays} jours gratuits, sans carte bancaire</li>

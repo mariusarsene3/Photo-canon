@@ -22,7 +22,8 @@ export default function CGV() {
       </p>
       <p>
         <strong>Le service est réservé aux professionnels</strong> (entreprises, artisans, indépendants, associations)
-        agissant dans le cadre de leur activité.
+        agissant dans le cadre de leur activité. Le droit de rétractation de 14 jours, réservé aux consommateurs, ne
+        s&apos;applique donc pas ; l&apos;essai gratuit permet de tester le service avant tout paiement.
       </p>
 
       <h2>2. Description du service</h2>
