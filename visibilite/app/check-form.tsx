@@ -27,26 +27,28 @@ function Progress() {
   );
 }
 
-export function CheckForm() {
+export function CheckForm({ defaultTrade }: { defaultTrade?: string } = {}) {
   const [state, action, pending] = useActionState<CheckState, FormData>(checkAction, {});
   const v = state.values ?? {};
   return (
     <>
-      <form action={action} className="card form">
+      <form action={action} className="form">
         <label>
           Nom de votre commerce
           <input name="business" defaultValue={v.business} placeholder="ex. : Les Fleurs de Marie" required maxLength={80} />
         </label>
-        <label>
-          Votre activité
-          <input name="trade" defaultValue={v.trade} placeholder="ex. : un fleuriste" required maxLength={60} />
-        </label>
-        <label>
-          Ville
-          <input name="city" defaultValue={v.city} placeholder="ex. : Nancy" required maxLength={60} />
-        </label>
+        <div className="form-row">
+          <label>
+            Votre activité
+            <input name="trade" defaultValue={v.trade ?? defaultTrade} placeholder="ex. : un fleuriste" required maxLength={60} />
+          </label>
+          <label>
+            Ville
+            <input name="city" defaultValue={v.city} placeholder="ex. : Nancy" required maxLength={60} />
+          </label>
+        </div>
         <button type="submit" disabled={pending}>
-          {pending ? "Analyse en cours…" : "Vérifier gratuitement"}
+          {pending ? "Je pose la question à ChatGPT…" : "Faire le test gratuit"}
         </button>
         {state.error && !pending && <p className="error">{state.error}</p>}
       </form>

@@ -32,7 +32,8 @@ export default function MentionsLegales() {
           {BRAND.name} ({siteUrl().replace(/^https?:\/\//, "")}) propose un test gratuit qui interroge un assistant d&apos;intelligence
           artificielle (ChatGPT, d&apos;OpenAI) avec la question qu&apos;un client pourrait poser, puis affiche les commerces qu&apos;il
           recommande. Les réponses des IA varient d&apos;une fois à l&apos;autre et ne reflètent ni un classement officiel, ni un avis de{" "}
-          {BRAND.name}. Les noms de commerces affichés sont ceux cités par l&apos;IA.
+          {BRAND.name}. Les noms de commerces affichés sont ceux cités par l&apos;IA. {BRAND.name} propose aussi des prestations
+          (visibilité en ligne, création de site vitrine, gestion de réseaux sociaux), réalisées à distance après accord sur un devis.
         </p>
         <p className="fine">Dernière mise à jour : {LEGAL.lastUpdate}.</p>
       </main>

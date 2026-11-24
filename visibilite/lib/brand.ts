@@ -3,10 +3,14 @@ export const BRAND = {
   domain: "reperez.fr",
   tagline: "Est-ce que ChatGPT recommande votre commerce ?",
   contactEmail: "contact@encaissez.fr", // provisoire, en attendant une adresse @reperez.fr
+  area: "partout en France, par téléphone et en visio",
   offer: {
     audit: "offert",
-    setup: 149, // € une fois : mise en place
+    setup: 149, // € une fois : visibilité Google + IA
     followUp: 19, // € par mois : suivi, sans engagement
+    website: 490, // € une fois : site vitrine 1 à 3 pages
+    social: 149, // € par mois : réseaux sociaux, 8 publications
+    socialPosts: 8,
   },
 };
 
