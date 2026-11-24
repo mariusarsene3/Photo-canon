@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 import type { CheckResult } from "@/lib/check";
 import { Report } from "../report";
+import { Header, Footer } from "../site-chrome";
 
 export const metadata: Metadata = { title: `Exemple de résultat — ${BRAND.name}` };
 
@@ -38,11 +39,15 @@ const EXEMPLE: CheckResult = {
 
 export default function Exemple() {
   return (
+    <>
+    <Header />
     <main className="wrap" style={{ paddingTop: 32, paddingBottom: 40 }}>
       <p className="notice">
         <strong>Exemple fictif</strong> : les noms de commerces sont inventés. <Link href="/">Faire le test pour votre commerce →</Link>
       </p>
       <Report result={EXEMPLE} />
     </main>
+    <Footer />
+    </>
   );
 }

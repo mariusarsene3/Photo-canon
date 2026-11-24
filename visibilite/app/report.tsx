@@ -1,5 +1,6 @@
 import type { CheckResult, ProviderResult } from "@/lib/check";
 import { BRAND } from "@/lib/brand";
+import { LeadForm } from "./lead-form";
 
 const plain = (md: string) => md.replace(/\*\*|__|^#+\s*/gm, "");
 
@@ -60,7 +61,7 @@ export function Report({ result }: { result: CheckResult }) {
     <section className="report">
       <div className="card summary">
         <p className="eyebrow">Question posée à l&apos;IA</p>
-        <p className="question">« {result.question} »</p>
+        <p className="question">«&nbsp;{result.question}&nbsp;»</p>
         <p className="score">
           {cited === 0 ? (
             <strong>Aucune IA ne vous recommande pour l&apos;instant.</strong>
@@ -79,30 +80,23 @@ export function Report({ result }: { result: CheckResult }) {
         <Verdict key={r.label} r={r} business={result.business} />
       ))}
 
-      <div className="card todo">
-        <h3>Ce qui fait qu&apos;une IA vous cite</h3>
-        <ol>
+      <div className={`card offer ${cited === ok.length && ok.length > 0 ? "" : "urgent"}`} id="audit">
+        <p className="eyebrow">Audit offert</p>
+        <h3>
+          {cited === 0
+            ? "Vos clients qui demandent à l'IA partent chez vos concurrents. On peut corriger ça."
+            : "Vous êtes cité : gardez votre place, et passez devant."}
+        </h3>
+        <ul className="checks">
+          <li>On regarde ce qui manque : fiche Google, avis, annuaires où l&apos;IA cherche{sources.length ? ` (${sources.join(", ")})` : ""}.</li>
+          <li>On vous explique tout, simplement, par téléphone ou sur place.</li>
           <li>
-            <strong>Une fiche Google complète</strong> : horaires, photos récentes, description qui dit clairement ce que vous
-            faites et où.
+            Si vous voulez, on s&apos;occupe de tout pour <strong>{BRAND.offer.setup} €</strong>, une seule fois. On refait le test un mois après
+            pour vous montrer le résultat.
           </li>
-          <li>
-            <strong>Des avis récents et réguliers</strong> : l&apos;IA lit les avis pour choisir qui recommander.
-          </li>
-          <li>
-            <strong>Être présent là où l&apos;IA cherche</strong>
-            {sources.length ? ` : ici, ${sources.join(", ")}.` : "."}
-          </li>
-        </ol>
-        <p className="small">
-          Les réponses des IA varient un peu d&apos;une fois à l&apos;autre : ce test est une photo à un instant donné.
-        </p>
-        <a
-          className="btn"
-          href={`mailto:${BRAND.contactEmail}?subject=${encodeURIComponent(`Être recommandé par l'IA : ${result.business} (${result.city})`)}`}
-        >
-          Je veux qu&apos;on s&apos;en occupe pour moi
-        </a>
+        </ul>
+        <LeadForm business={result.business} trade={result.trade} city={result.city} cited={ok.length ? cited > 0 : null} />
+        <p className="fine">Les réponses des IA varient un peu d&apos;une fois à l&apos;autre : ce test est une photo à un instant donné.</p>
       </div>
     </section>
   );
