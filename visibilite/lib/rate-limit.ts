@@ -18,3 +18,17 @@ export async function allowCheck(): Promise<boolean> {
   if (hits.size > 10_000) hits.clear();
   return true;
 }
+
+// Demandes d'audit : 3 par heure et par adresse IP.
+const leadHits = new Map<string, number[]>();
+export async function allowLead(): Promise<boolean> {
+  const h = await headers();
+  const ip = h.get("x-real-ip") || h.get("x-forwarded-for")?.split(",")[0]?.trim() || "inconnue";
+  const now = Date.now();
+  const list = (leadHits.get(ip) ?? []).filter((t) => t > now - WINDOW);
+  if (list.length >= 3) return false;
+  list.push(now);
+  leadHits.set(ip, list);
+  if (leadHits.size > 10_000) leadHits.clear();
+  return true;
+}

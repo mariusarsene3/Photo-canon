@@ -27,7 +27,7 @@ const withArticle = (trade: string) =>
   /^(un|une|des|le|la|les|l')\s?/i.test(trade) ? trade : `un ${trade}`;
 
 export const questionFor = (trade: string, city: string) =>
-  `Je cherche ${withArticle(trade)} à ${city}. Lesquels me conseilles-tu ?`;
+  `Je cherche ${withArticle(trade)} à ${city}. Lesquels me conseilles-tu\u00a0?`;
 
 const domainOf = (url: string) => {
   try {
