@@ -229,3 +229,10 @@
   .lp-kicker { margin-bottom: 12px !important; }
 }
 @media (max-width: 359px) { .fd-banner { flex-wrap: wrap; white-space: normal; font-size: 12.5px; } }
+/* Haut de page : bandeau fondateur crème (une étiquette, pas une 2e bande verte), sans trait sous le menu */
+.fd-banner { background: #f3efe6; color: #0f2a1d; }
+.fd-banner b { color: #15803d; }
+.lp-nav { border-bottom-color: transparent; }
+.lp-nav { border-bottom: 0; }
+.lp-hero { margin-top: -1px; } /* évite un fin trait clair entre le menu et le titre (arrondi au demi-pixel) */
+.fd-banner .fd-long { text-decoration: none; }
