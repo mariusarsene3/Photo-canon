@@ -6,6 +6,8 @@ import { requireUser } from "@/lib/auth";
 import { runReminders } from "@/lib/reminders";
 import { cleanIban, isValidIban } from "@/lib/payment";
 import { pdfFromForm, savePdf } from "@/lib/invoice-pdf";
+import { getMyAccess } from "@/lib/billing";
+import { contactHint, invoiceLimitMessage, invoicesLeft, planOf } from "@/lib/limits";
 
 // Toutes les requêtes passent par le client de l'utilisateur connecté :
 // les règles RLS de Supabase garantissent qu'il ne touche qu'à ses propres données.
@@ -19,6 +21,8 @@ export async function addInvoice(form: FormData) {
   if (!number || !client_name || !client_email.includes("@") || !(amount > 0) || !due_date) return;
 
   const { supabase } = await requireUser();
+  const plan = planOf(await getMyAccess(supabase));
+  if ((await invoicesLeft(supabase, plan)) < 1) redirect(`/?err=${encodeURIComponent(invoiceLimitMessage(plan))}`);
   const { data: created } = await supabase
     .from("invoices")
     .insert({ number, client_name, client_email, amount_cents: Math.round(amount * 100), due_date })
@@ -58,7 +62,7 @@ export async function sendNow() {
   let notice: string;
   let kind = "ok";
   try {
-    const { sent, errors, paused } = await runReminders(supabase);
+    const { sent, errors, paused, limited } = await runReminders(supabase);
     if (paused) {
       kind = "err";
       notice = "Votre essai gratuit est terminé : les relances sont en pause. Abonnez-vous depuis « Mon compte » pour les relancer.";
@@ -67,8 +71,13 @@ export async function sendNow() {
       notice =
         `${sent.length} relance(s) envoyée(s), ${errors.length} en échec. ` +
         errors.map((e) => `${e.invoice} : ${e.error}`).join(" · ");
-    } else if (sent.length) {
-      notice = `${sent.length} relance(s) envoyée(s) : ${sent.map((s) => s.invoice).join(", ")}.`;
+    } else if (sent.length || limited) {
+      notice =
+        (sent.length ? `${sent.length} relance(s) envoyée(s) : ${sent.map((s) => s.invoice).join(", ")}.` : "") +
+        (limited
+          ? ` ${limited} relance(s) reportée(s) à demain : limite d'envois du jour atteinte.${contactHint()}`
+          : "");
+      notice = notice.trim();
     } else {
       notice =
         "Aucune relance à envoyer pour l'instant. Les relances partent le lendemain de l'échéance (J+1), puis à J+7 et J+15 (et 3 jours avant l'échéance si ce rappel est activé).";

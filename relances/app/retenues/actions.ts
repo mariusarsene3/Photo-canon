@@ -7,6 +7,7 @@ import { MAX_RATE, claimLetter, type Guarantee } from "@/lib/guarantees";
 import { parseAmount, parseDate } from "@/lib/import";
 import { sendEmail } from "@/lib/email";
 import { getMyAccess } from "@/lib/billing";
+import { contactHint, planOf, startOfDay, takeEmailQuota } from "@/lib/limits";
 
 const back = (msg: string, kind: "ok" | "err" = "ok"): never => redirect(`/retenues?${kind}=${encodeURIComponent(msg)}`);
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -50,11 +51,19 @@ export async function sendClaim(form: FormData) {
   if (!g.client_email) back("Ajoutez l'e-mail du client pour lui envoyer la demande, ou imprimez la lettre.", "err");
   const access = await getMyAccess(supabase);
   if (!access.ok) back("Votre essai est terminé : abonnez-vous depuis « Mon compte » pour envoyer des e-mails.", "err");
+  // Anti-abus : les demandes de retenue comptent dans le plafond d'e-mails du jour, avec les relances.
+  const since = startOfDay();
+  const [claims, reminders] = await Promise.all([
+    supabase.from("guarantees").select("id", { count: "exact", head: true }).gte("claimed_at", since),
+    supabase.from("reminders").select("id", { count: "exact", head: true }).gte("sent_at", since),
+  ]);
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!(await takeEmailQuota(user!.id, planOf(access), (claims.count ?? 0) + (reminders.count ?? 0))))
+    back(`Limite d'envois du jour atteinte : réessayez demain.${contactHint()}`, "err");
 
   const { data: prof } = await supabase.from("profiles").select("company_name, iban").maybeSingle();
   const { subject, body } = claimLetter(g, prof?.company_name ?? "", prof?.iban ?? "");
   try {
-    const { data: { user } } = await supabase.auth.getUser();
     await sendEmail(g.client_email, subject, body, {
       fromName: prof?.company_name || undefined,
       replyTo: user?.email ?? undefined,
