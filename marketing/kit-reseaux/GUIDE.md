@@ -4,23 +4,23 @@
 
 | Élément | Valeur |
 |---|---|
-| **Style** | **La facture sur vert profond** : chaque post est une feuille de facture crème, numérotée, posée sur un fond vert profond, avec un tampon vert |
+| **Style** | **Blanc, comme le site** : feuilles de facture blanches, numérotées, avec un tampon vert. Le vert est un accent, pas un fond |
 | **Logo** | L'enveloppe validée (`logo.svg`) : une relance qui a abouti |
-| **Fond** | Vert profond `#0F2A1D`, avec un léger halo vert en haut |
-| **Vert vif** | `#4ADE80` : chiffres clés, mots importants, « payé ». Le vert du logo reste `#22C55E` |
-| **Crème** | `#F3EFE6` : textes et cartes (au lieu du blanc pur, plus chaleureux) |
-| **Texte secondaire** | Vert-gris `#9FB5A7` |
+| **Fond** | Blanc `#FFFFFF`, avec un léger halo vert clair `#ECF7EF` en haut |
+| **Texte** | Vert presque noir `#14211A` ; texte secondaire gris-vert `#5F6B64` |
+| **Vert accent** | `#15803D` : mots importants, tampons, « payé ». Le vert du logo reste `#22C55E` |
+| **Boutons** | Vert profond `#0F2A1D`, texte blanc |
 | **Rouge** | `#EF4444` : seulement pour « impayé » ou « en retard », jamais ailleurs |
 | **Police** | Inter : très grasse (800) pour les titres, normale (500) pour le texte |
 
-**Sur le site :** le vert profond est une signature, pas un fond partout. Il n'apparaît qu'aux endroits clés : le haut des pages (menu et titre), le bandeau final, le bas de page, la barre latérale et la carte « À encaisser » du tableau de bord. Tout le reste est sur fond crème `#F4F1EA`, avec des feuilles blanches `#FFFDF8`.
+**Site et réseaux, même règle :** fond blanc, feuilles blanches avec un fin contour `#E6E9E6`, vert en accent. Le vert profond `#0F2A1D` est réservé aux boutons et à la carte « À encaisser » du tableau de bord.
 
 **Le ton :** simple, direct, rassurant. On parle comme un artisan à un autre artisan, sans jargon. On vouvoie. On ne culpabilise jamais le client qui paie en retard.
 
 **Une règle :** un message par visuel, en gros. Si on doit plisser les yeux, c'est raté.
 
 **Comment faire un nouveau post :**
-1. Une feuille de facture crème (`#F6F2E9`), légèrement penchée, sur le fond vert profond.
+1. Une feuille de facture blanche, légèrement penchée, sur fond blanc avec un léger halo vert clair.
 2. En haut à gauche, le sujet en petites capitales (« LE SAVIEZ-VOUS ? », « ARTISANS DU BÂTIMENT »…). En haut à droite, le **numéro du post** (N° 004, N° 005…) : ça crée une série.
 3. Un titre très gras, puis le chiffre ou le contenu, si possible présenté comme des lignes de facture.
 4. **Un tampon vert** qui résume l'action : « À RÉCLAMER », « À RÉCUPÉRER », « PAYÉE ✓ », « J+7 »…

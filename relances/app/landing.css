@@ -300,3 +300,7 @@
   .lp-feat h3 { margin-bottom: 2px !important; font-size: 15px; }
   .lp-feat p { font-size: 13.5px; }
 }
+/* Cadre de la vidéo de démo : blanc, comme la vidéo */
+.lp-video { background: #ffffff; border: 1px solid #e6e9e6; box-shadow: 0 30px 60px -36px rgba(15, 42, 29, .35); }
+.lp-video-btn { border-color: #e6e9e6; background: rgba(255, 255, 255, .9); color: #14211a; }
+.lp-video-btn:focus-visible { outline-color: #0f2a1d; }
