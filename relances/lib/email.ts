@@ -7,14 +7,15 @@ export type Attachment = { filename: string; content: string }; // contenu en ba
 const cleanName = (s: string) => s.replace(/["<>\\\r\n]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 60);
 
 /**
- * Adresse d'expédition. Avec fromName, le client voit « Plomberie Martin via Encaissez »,
+ * Adresse d'expédition. Avec fromName, le client voit seulement « Plomberie Martin » (pas notre marque :
+ * un e-mail qui vient de l'artisan lui-même ménage la relation client),
  * mais l'adresse technique reste celle d'EMAIL_FROM (seule autorisée à envoyer pour le domaine).
  */
 export function fromHeader(emailFrom: string, fromName?: string) {
   const name = fromName ? cleanName(fromName) : "";
   if (!name) return emailFrom;
   const address = emailFrom.match(/<([^>]+)>/)?.[1] ?? emailFrom.trim();
-  return `"${name} via ${BRAND.name}" <${address}>`;
+  return `"${name}" <${address}>`;
 }
 
 export async function sendEmail(
