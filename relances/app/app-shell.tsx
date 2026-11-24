@@ -22,8 +22,48 @@ function Icon({ d }: { d: string }) {
 
 /** Structure commune des pages de l'application (utilisateur connecté). */
 export function AppShell({ active, email, children }: { active: Section; email?: string; children: React.ReactNode }) {
+  const main = NAV.filter((n) => n.id !== "compte");
+  const account = NAV.find((n) => n.id === "compte")!;
   return (
     <div className="app">
+      {/* Barre latérale, sur ordinateur */}
+      <aside className="app-side" aria-label="Navigation principale">
+        <Link href="/" className="side-brand">
+          <span className="side-logo" aria-hidden>€</span>
+          <span>
+            {BRAND.name}
+            <small>Relance de factures</small>
+          </span>
+        </Link>
+
+        <Link href="/?nouvelle#nouvelle" className="side-new">
+          <span aria-hidden>+</span> Nouvelle facture
+        </Link>
+
+        <nav className="side-nav">
+          <p className="side-label">Gérer</p>
+          {main.map((n) => (
+            <Link key={n.id} href={n.href} className={active === n.id ? "on" : ""} aria-current={active === n.id ? "page" : undefined}>
+              <Icon d={n.icon} />
+              {n.label}
+            </Link>
+          ))}
+          <p className="side-label">Réglages</p>
+          <Link href={account.href} className={active === account.id ? "on" : ""} aria-current={active === account.id ? "page" : undefined}>
+            <Icon d={account.icon} />
+            Mon compte
+          </Link>
+        </nav>
+
+        <form action={logout} className="side-user">
+          <span className="side-avatar" aria-hidden>{(email ?? "?").charAt(0).toUpperCase()}</span>
+          <span className="side-email" title={email}>{email}</span>
+          <button className="side-logout" title="Se déconnecter" aria-label="Se déconnecter">
+            <Icon d="M15 4h4v16h-4 M10 8l-4 4 4 4 M6 12h10" />
+          </button>
+        </form>
+      </aside>
+
       <header className="app-top">
         <div className="app-top-in">
           <Link href="/" className="app-brand">{BRAND.name}</Link>
@@ -41,7 +81,7 @@ export function AppShell({ active, email, children }: { active: Section; email?:
         </div>
       </header>
 
-      <main className="app-main">{children}</main>
+      <main className="app-main"><div className="app-main-in">{children}</div></main>
 
       {/* Barre du bas, sur téléphone */}
       <nav className="app-tabbar" aria-label="Navigation">

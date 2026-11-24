@@ -45,8 +45,9 @@ function toRow(i: Invoice, profile: Profile): Row {
   };
 }
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ ok?: string; err?: string }> }) {
-  const { ok, err } = await searchParams;
+export default async function Home({ searchParams }: { searchParams: Promise<{ ok?: string; err?: string; nouvelle?: string }> }) {
+  const { ok, err, nouvelle } = await searchParams;
+  const wantsNew = nouvelle !== undefined; // bouton « Nouvelle facture » de la barre latérale
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return <Landing />;
@@ -184,12 +185,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
         );
       })()}
 
-      <details className="card new-inv" id="nouvelle" open={invoices.length === 0}>
+      <details className="card new-inv" id="nouvelle" open={invoices.length === 0 || wantsNew}>
         <summary>
           <span className="new-inv-plus" aria-hidden>+</span> Nouvelle facture
         </summary>
         <form action={addInvoice} className="form-grid">
-          <label>N° de facture<input name="number" placeholder="F-2026-042" required /></label>
+          <label>N° de facture<input name="number" placeholder="F-2026-042" required autoFocus={wantsNew} /></label>
           <label>Client<input name="client_name" placeholder="Boulangerie Dupont" required /></label>
           <label>E-mail du client<input name="client_email" type="email" placeholder="contact@client.fr" required /></label>
           <label>Montant TTC (€)<input name="amount" inputMode="decimal" placeholder="1250" required /></label>
