@@ -4,7 +4,7 @@ import "./fondateur.css";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BRAND, founderPrice } from "@/lib/brand";
-import { founderSeatsLeft } from "@/lib/founder";
+import { founderSeatsLeft, showSeatCounter } from "@/lib/founder";
 import { SiteFooter, SiteNav } from "../site-chrome";
 
 export const revalidate = 300; // le compteur de places se met à jour toutes les 5 minutes
@@ -42,12 +42,12 @@ export default async function Fondateur() {
           <section className="fd-card fd-price" aria-label="Prix fondateur">
             <p className="fd-old">{BRAND.price} € HT / mois</p>
             <p className="fd-new"><strong>{founderPrice()}</strong> HT / mois, à vie</p>
-            <div className="fd-seats">
+            {showSeatCounter(left) && <div className="fd-seats">
               <div className="fd-bar" role="progressbar" aria-valuemin={0} aria-valuemax={F.seats} aria-valuenow={taken} aria-label="Places prises">
                 <i style={{ width: `${Math.max(4, (taken / F.seats) * 100)}%` }} />
               </div>
               <p>{left > 0 ? <><b>{left} place{left > 1 ? "s" : ""}</b> restante{left > 1 ? "s" : ""} sur {F.seats}</> : <b>Toutes les places sont prises</b>}</p>
-            </div>
+            </div>}
             {left > 0 ? (
               <>
                 <Link href="/login?mode=signup" className="lp-btn lp-btn-full">Commencer l&apos;essai gratuit</Link>

@@ -6,7 +6,7 @@ export const BRAND = {
   trialDays: 14,
   // Offre de lancement : réduction à vie pour les premiers abonnés.
   // Le code se crée dans Stripe (coupon -50 % « pour toujours » + code promo FONDATEUR limité à 20 utilisations).
-  founder: { code: "FONDATEUR", discount: 50, seats: 20 },
+  founder: { code: "FONDATEUR", discount: 50, seats: 20, showCounterFrom: 5 }, // compteur affiché à partir de 5 places prises
 };
 
 /** Prix fondateur affiché : « 14,50 € ». */

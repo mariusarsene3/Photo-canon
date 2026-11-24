@@ -1,7 +1,7 @@
 import "./landing.css";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
-import { founderSeatsLeft } from "@/lib/founder";
+import { founderSeatsLeft, showSeatCounter } from "@/lib/founder";
 import { LEGAL } from "@/lib/legal";
 import { siteUrl } from "@/lib/payment";
 import { StickyCta } from "./sticky-cta";
@@ -115,7 +115,7 @@ export async function Landing() {
       {seats > 0 && (
         <Link href="/fondateur" className="fd-banner">
           <span><b>Offre fondateur</b> : -{BRAND.founder.discount} % à vie<span className="fd-long"> pour les {BRAND.founder.seats} premiers clients</span></span>
-          <span>{seats} place{seats > 1 ? "s" : ""} restante{seats > 1 ? "s" : ""} →</span>
+          <span>{showSeatCounter(seats) ? `${seats} place${seats > 1 ? "s" : ""} restante${seats > 1 ? "s" : ""}` : "En profiter"} →</span>
         </Link>
       )}
       <nav className="lp-nav lp-wrap">

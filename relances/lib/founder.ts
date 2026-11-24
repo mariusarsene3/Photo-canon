@@ -21,3 +21,6 @@ async function countSeatsLeft(): Promise<number> {
 
 /** Résultat gardé en cache 5 minutes : la page d'accueil n'interroge pas la base à chaque visite. */
 export const founderSeatsLeft = unstable_cache(countSeatsLeft, ["founder-seats"], { revalidate: 300 });
+
+/** Le compteur de places n'est affiché qu'à partir de quelques abonnés : « 20 places sur 20 » montrerait qu'il n'y en a aucun. */
+export const showSeatCounter = (left: number) => BRAND.founder.seats - left >= BRAND.founder.showCounterFrom;
