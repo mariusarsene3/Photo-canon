@@ -218,3 +218,14 @@
 .lp-final { padding-top: 64px; padding-bottom: 64px; margin-top: 48px; }
 .lp-hero h1 em, .lp-final h2 em { color: #4ade80; font-style: normal; }
 .fd-banner { background: #163826; color: #f3efe6; }
+/* Téléphone : bandeau sur une ligne et haut de page plus court, pour voir la suite plus tôt */
+@media (max-width: 640px) {
+  .fd-long { display: none; }
+  .fd-banner { flex-wrap: nowrap; white-space: nowrap; font-size: 13px; padding-top: 8px; padding-bottom: 8px; }
+  .lp-nav { height: 60px; }
+  .lp-hero { padding-top: 36px; padding-bottom: 36px; }
+  .lp-hero h1 { font-size: 36px; }
+  .lp-lead { font-size: 16px; }
+  .lp-kicker { margin-bottom: 12px !important; }
+}
+@media (max-width: 359px) { .fd-banner { flex-wrap: wrap; white-space: normal; font-size: 12.5px; } }
