@@ -6,6 +6,7 @@ import { GUIDES, guideBySlug } from "@/lib/guides";
 import { siteUrl } from "@/lib/site";
 import { Header, Footer } from "../../site-chrome";
 import { GuideLinks } from "../../blocks";
+import { JsonLd, breadcrumbLd } from "@/lib/seo";
 
 export const dynamicParams = false;
 export const generateStaticParams = () => GUIDES.map((g) => ({ slug: g.slug }));
@@ -15,7 +16,7 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const g = guideBySlug((await params).slug);
   if (!g) return {};
-  return { title: `${g.title} — ${BRAND.name}`, description: g.description, alternates: { canonical: `/guides/${g.slug}` } };
+  return { title: g.title, description: g.description, alternates: { canonical: `/guides/${g.slug}` } };
 }
 
 const dateFr = (d: string) => new Date(d + "T12:00:00Z").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
@@ -29,13 +30,17 @@ export default async function GuidePage({ params }: Props) {
     headline: g.title,
     description: g.description,
     datePublished: g.date,
+    dateModified: g.date,
+    inLanguage: "fr-FR",
+    mainEntityOfPage: `${siteUrl()}/guides/${g.slug}`,
     author: { "@type": "Organization", name: BRAND.name, url: siteUrl() },
   };
   return (
     <>
       <Header />
       <main>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <JsonLd data={jsonLd} />
+        <JsonLd data={breadcrumbLd([{ name: "Accueil", path: "/" }, { name: "Guides", path: "/guides" }, { name: g.title, path: `/guides/${g.slug}` }])} />
         <article className="wrap narrow article">
           <p className="crumb">
             <Link href="/">Accueil</Link> › <Link href="/guides">Guides</Link>
@@ -50,7 +55,7 @@ export default async function GuidePage({ params }: Props) {
                 <p key={p}>{p}</p>
               ))}
               {s.list && (
-                <ul className="list big">
+                <ul className="ticks big">
                   {s.list.map((l) => (
                     <li key={l}>{l}</li>
                   ))}

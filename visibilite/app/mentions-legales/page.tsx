@@ -3,7 +3,7 @@ import { BRAND, LEGAL, v } from "@/lib/brand";
 import { siteUrl } from "@/lib/site";
 import { Header, Footer } from "../site-chrome";
 
-export const metadata: Metadata = { title: `Mentions légales — ${BRAND.name}` };
+export const metadata: Metadata = { title: "Mentions légales", robots: { index: false, follow: true } };
 
 export default function MentionsLegales() {
   return (

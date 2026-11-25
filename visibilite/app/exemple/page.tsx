@@ -5,7 +5,8 @@ import type { CheckResult } from "@/lib/check";
 import { Report } from "../report";
 import { Header, Footer } from "../site-chrome";
 
-export const metadata: Metadata = { title: `Exemple de résultat — ${BRAND.name}` };
+// Exemple fictif : utile aux visiteurs, mais rien à faire dans les résultats Google.
+export const metadata: Metadata = { title: "Exemple de résultat", robots: { index: false, follow: true } };
 
 // Exemple FICTIF : noms de commerces inventés, pour montrer à quoi ressemble un rapport.
 const EXEMPLE: CheckResult = {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { BRAND, LEGAL, v } from "@/lib/brand";
 import { Header, Footer } from "../site-chrome";
 
-export const metadata: Metadata = { title: `Confidentialité — ${BRAND.name}` };
+export const metadata: Metadata = { title: "Confidentialité", robots: { index: false, follow: true } };
 
 export default function Confidentialite() {
   return (
@@ -26,7 +26,7 @@ export default function Confidentialite() {
         </p>
         <h2>Sous-traitants</h2>
         <ul>
-          <li>Vercel (hébergement du site)</li>
+          <li>Vercel (hébergement du site et mesure d&apos;audience anonyme)</li>
           <li>Supabase (base de données des demandes d&apos;audit)</li>
           <li>OpenAI (réponse de ChatGPT au test)</li>
           <li>Resend (e-mail de notification d&apos;une nouvelle demande)</li>
@@ -37,7 +37,7 @@ export default function Confidentialite() {
           Vous pouvez demander l&apos;accès, la rectification ou la suppression de vos données en écrivant à{" "}
           <a href={`mailto:${BRAND.contactEmail}`}>{BRAND.contactEmail}</a>. Vous pouvez aussi saisir la CNIL (cnil.fr).
         </p>
-        <p className="fine">Ce site n&apos;utilise pas de cookies publicitaires ni de mesure d&apos;audience. Dernière mise à jour : {LEGAL.lastUpdate}.</p>
+        <p className="fine">Ce site n&apos;utilise aucun cookie. La fréquentation est mesurée de façon anonyme et sans cookies par Vercel Web Analytics (nombre de visites, pages vues, pays), sans identifier les visiteurs. Dernière mise à jour : {LEGAL.lastUpdate}.</p>
       </main>
       <Footer />
     </>

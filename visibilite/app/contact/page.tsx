@@ -4,7 +4,8 @@ import { Header, Footer } from "../site-chrome";
 import { LeadForm } from "../lead-form";
 
 export const metadata: Metadata = {
-  title: `Me contacter — ${BRAND.name}`,
+  title: "Me contacter",
+  alternates: { canonical: "/contact" },
   description: "Visibilité Google et ChatGPT, site vitrine, réseaux sociaux : parlons de votre commerce. Premier échange gratuit et sans engagement.",
 };
 
