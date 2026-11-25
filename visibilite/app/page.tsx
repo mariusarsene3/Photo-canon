@@ -5,6 +5,7 @@ import { TestHero, Offers, Faq } from "./blocks";
 
 // Une analyse (recherche web + lecture de la réponse) prend jusqu'à une minute.
 export const maxDuration = 120;
+export const metadata = { alternates: { canonical: "/" } };
 
 const FAQ = [
   {

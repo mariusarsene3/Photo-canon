@@ -22,6 +22,6 @@ export const LEGAL = {
   editorAddress: "", // TODO
   editorSiret: "", // TODO
   host: { name: "Vercel Inc.", address: "440 N Barranca Ave #4133, Covina, CA 91723, États-Unis" },
-  lastUpdate: "24 novembre 2026",
+  lastUpdate: "25 novembre 2026",
 };
 export const v = (value: string) => value || "[en cours d'immatriculation]";
